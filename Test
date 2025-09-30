@@ -1,46 +1,406 @@
-const CACHE_NAME = "tlt-v1";
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./manifest.webmanifest",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
-];
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Tight–Loose–Tight Kalkulator</title>
 
-// Install: cache app-shell
-self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(ASSETS)));
-  self.skipWaiting();
-});
+  <!-- iPhone homescreen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TLT Kalkulator">
+  <!-- Enkelt SVG-ikon. Du kan bytte til egen PNG ved å legge inn apple-touch-icon.png -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-// Activate: rydde gamle cache
-self.addEventListener("activate", (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
-  );
-  self.clients.claim();
-});
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0a7cff" />
 
-// Fetch: network-first for html, ellers cache-first
-self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  if (req.mode === "navigate" || (req.destination === "document")) {
-    e.respondWith(
-      fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE_NAME).then((c) => c.put(req, copy));
-        return res;
-      }).catch(() => caches.match(req).then(r => r || caches.match("./index.html")))
-    );
-  } else {
-    e.respondWith(
-      caches.match(req).then((cached) => cached || fetch(req).then((res) => {
-        const copy = res.clone();
-        caches.open(CACHE_NAME).then((c) => c.put(req, copy));
-        return res;
-      }))
-    );
-  }
-});
+  <style>
+    :root {
+      /* Endre bare disse to for egen profil */
+      --brand: #0a7cff;      /* primærfarge */
+      --brand-2:#5cc8ff;     /* gradient-variant */
+      /* Øvrige farger */
+      --bg: #0a0f1a;
+      --card: #101828;
+      --muted: #9aa4b2;
+      --text: #eef2f7;
+      --ok:#10b981;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 600px at 90% -10%, color-mix(in oklab, var(--brand) 35%, transparent), transparent 60%),
+        radial-gradient(1000px 600px at 10% 110%, color-mix(in oklab, var(--brand-2) 35%, transparent), transparent 60%),
+        linear-gradient(180deg, #0b1220 0%, #0a0f1a 60%, #070b12 100%);
+      min-height: 100%;
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 28px) 64px; }
+    header { display: grid; gap: 10px; margin-bottom: 18px; }
+    .title { font-size: clamp(26px, 4.6vw, 36px); font-weight: 800; letter-spacing: 0.2px; }
+    .subtitle { color: var(--muted); line-height: 1.5; }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+    }
+    .card-inner { padding: clamp(16px, 2.8vw, 24px); }
+    .row { display: grid; gap: 12px; }
+    .grid-2 { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 860px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+    label.small { font-size: 14px; color: var(--muted); }
+    input[type="text"] {
+      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+      background: #0b1322; color: var(--text); outline: none;
+    }
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 8px 0 8px; }
+    .tab {
+      padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1);
+      background: #0b1322; color: var(--muted); cursor: pointer; user-select: none; transition: 160ms ease;
+      font-weight: 600; font-size: 14px;
+    }
+    .tab.active { background: linear-gradient(180deg, var(--brand), var(--brand-2)); color: #041123; border-color: transparent; }
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .q { padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: #0c1527; }
+    .q p { margin: 0 0 10px 0; }
+    .scale { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 42px; padding: 8px 10px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #0b1322; color: var(--text); cursor: pointer; transition: 140ms ease; user-select: none;
+    }
+    .pill.active { background: color-mix(in oklab, var(--brand) 30%, transparent); border-color: var(--brand); }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .btn { padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, #0e1a33, #0b1322); color: var(--text); cursor: pointer; font-weight: 700; }
+    .btn.primary { background: linear-gradient(180deg, var(--brand), var(--brand-2)); color: #041123; border-color: transparent; }
+
+    .scorebox { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
+    .score { text-align: center; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #0c1527; }
+    .score h3 { margin: 2px 0 6px 0; font-size: 15px; color: var(--muted); font-weight: 600; }
+    .score .big { font-size: 28px; font-weight: 900; letter-spacing: 0.5px; }
+    .badge { font-weight: 800; padding: 2px 8px; border-radius: 999px; }
+    .ok { background: rgba(16,185,129,0.2); color: #d1fae5; border: 1px solid rgba(16,185,129,0.4); }
+    .warn { background: rgba(245,158,11,0.2); color: #fef3c7; border: 1px solid rgba(245,158,11,0.4); }
+    .bad { background: rgba(239,68,68,0.2); color: #fee2e2; border: 1px solid rgba(239,68,68,0.4); }
+
+    footer { margin-top: 28px; color: var(--muted); font-size: 13px; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="title">Tight–Loose–Tight kalkulator</div>
+      <div class="subtitle">
+        En refleksjonsstarter om hvorvidt din lederstil følger T-L-T. Svar på utsagn (1=helt uenig → 5=helt enig).
+        Resultatet lagres kun på din enhet.
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="card-inner row">
+        <div class="grid-2">
+          <div>
+            <label class="small" for="name">Ditt navn</label>
+            <input id="name" type="text" placeholder="Skriv navnet ditt…" />
+          </div>
+          <div>
+            <div class="small">Hurtigvalg</div>
+            <div class="actions">
+              <button class="btn" id="btnT1">Gå til Tight (1)</button>
+              <button class="btn" id="btnL">Gå til Loose</button>
+              <button class="btn" id="btnT2">Gå til Tight (2)</button>
+              <button class="btn" id="btnRes">Vis resultater</button>
+              <button class="btn" id="btnShare">Del resultat</button>
+              <button class="btn" id="btnReset" title="Nullstill alle svar">Nullstill</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs" id="tabs"></div>
+
+      <div class="card-inner">
+        <div id="sec-intro" class="section active">
+          <p class="muted">Velg en fane under for å svare. Hver del har tre utsagn. Du kan når som helst bytte fane – svarene beholdes.</p>
+        </div>
+
+        <div id="sec-t1" class="section"></div>
+        <div id="sec-loose" class="section"></div>
+        <div id="sec-t2" class="section"></div>
+
+        <div id="sec-results" class="section">
+          <h2>Resultater</h2>
+          <div class="scorebox" style="margin: 10px 0 16px 0;">
+            <div class="score" id="score-t1">
+              <h3>Tight (1)</h3>
+              <div class="big">–</div>
+              <div class="muted" id="badge-t1"></div>
+            </div>
+            <div class="score" id="score-loose">
+              <h3>Loose</h3>
+              <div class="big">–</div>
+              <div class="muted" id="badge-loose"></div>
+            </div>
+            <div class="score" id="score-t2">
+              <h3>Tight (2)</h3>
+              <div class="big">–</div>
+              <div class="muted" id="badge-t2"></div>
+            </div>
+          </div>
+          <p id="res-text" class="muted"></p>
+          <div class="actions">
+            <button class="btn" id="btnBack">Tilbake til spørsmål</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Tips: På iPhone kan du legge denne på hjem-skjerm via <em>Del</em> → <strong>Legg til på Hjem-skjerm</strong>.
+    </footer>
+  </div>
+
+  <script>
+    // --- Spørsmål ---
+    const QUESTIONS = {
+      t1: [
+        "Jeg sikrer at teamet forstår mål, prioriteringer og forventede leveranser.",
+        "Jeg definerer roller og ansvar slik at alle vet sitt bidrag.",
+        "Jeg kommuniserer standarder, frister og kvalitetskrav tydelig."
+      ],
+      loose: [
+        "Jeg gir frihet til å løse oppgaver innenfor avtalte rammer.",
+        "Jeg skaper trygghet for å eksperimentere, ta risiko og foreslå nye ideer.",
+        "Jeg stoler på at teamet tar beslutninger selvstendig, og griper kun inn ved behov."
+      ],
+      t2: [
+        "Jeg følger opp progresjon systematisk og gir konstruktive tilbakemeldinger.",
+        "Jeg sikrer at leveranser holder avtalte standarder, og adresserer avvik raskt.",
+        "Jeg feirer prestasjoner og bruker utfordringer til læring og forbedring."
+      ]
+    };
+
+    const STATE_KEY = "tlt_calc_v1";
+    const $ = (q) => document.querySelector(q);
+    const $$ = (q) => Array.from(document.querySelectorAll(q));
+
+    // Tabs
+    const tabs = [
+      { id: "sec-intro", label: "Start" },
+      { id: "sec-t1", label: "Tight (1)" },
+      { id: "sec-loose", label: "Loose" },
+      { id: "sec-t2", label: "Tight (2)" },
+      { id: "sec-results", label: "Resultater" },
+    ];
+
+    const tabsEl = $("#tabs");
+    tabs.forEach((t, i) => {
+      const b = document.createElement("button");
+      b.className = "tab" + (i===0 ? " active":"");
+      b.dataset.target = t.id;
+      b.textContent = t.label;
+      tabsEl.appendChild(b);
+    });
+
+    // Render spørsmål
+    function renderSection(targetId, key) {
+      const host = document.getElementById(targetId);
+      const arr = QUESTIONS[key];
+      if (!host || !arr) return;
+      host.innerHTML = "";
+      arr.forEach((text, idx) => {
+        const qId = `${key}-${idx}`;
+        const w = document.createElement("div");
+        w.className = "q";
+        w.innerHTML = `
+          <p><strong>${idx+1}.</strong> ${text}</p>
+          <div class="scale" role="group" aria-label="Skala for ${qId}">
+            ${[1,2,3,4,5].map(v => `
+              <span class="pill" data-q="${qId}" data-v="${v}" tabindex="0" role="button" aria-pressed="false">${v}</span>
+            `).join("")}
+          </div>
+        `;
+        host.appendChild(w);
+      });
+      const actions = document.createElement("div");
+      actions.className = "actions";
+      actions.innerHTML = `
+        <button class="btn primary" data-action="calc">Regn ut delscore</button>
+        <button class="btn" data-action="toResults">Gå til resultater</button>
+      `;
+      host.appendChild(actions);
+    }
+
+    renderSection("sec-t1", "t1");
+    renderSection("sec-loose", "loose");
+    renderSection("sec-t2", "t2");
+
+    // State
+    let state = {
+      name: "",
+      answers: { t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] }
+    };
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STATE_KEY);
+        if (raw) { state = JSON.parse(raw); }
+      } catch {}
+      $("#name").value = state.name || "";
+      Object.entries(state.answers).forEach(([key, arr]) => {
+        arr.forEach((v, i) => {
+          if (v) {
+            const el = document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`);
+            if (el) el.classList.add("active");
+          }
+        });
+      });
+    }
+    function save() {
+      state.name = $("#name").value.trim();
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    }
+
+    // Interactions
+    document.body.addEventListener("click", (e) => {
+      const pill = e.target.closest(".pill");
+      if (pill) {
+        const q = pill.dataset.q; const v = Number(pill.dataset.v);
+        $$(`.pill[data-q="${q}"]`).forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        const [key, idx] = q.split("-");
+        state.answers[key][Number(idx)] = v;
+        save();
+        return;
+      }
+      const tab = e.target.closest(".tab");
+      if (tab) { switchTo(tab.dataset.target); return; }
+
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      if (btn.id === "btnT1") switchTo("sec-t1");
+      if (btn.id === "btnL") switchTo("sec-loose");
+      if (btn.id === "btnT2") switchTo("sec-t2");
+      if (btn.id === "btnRes") { computeAndShow(); switchTo("sec-results"); }
+      if (btn.id === "btnBack") switchTo("sec-t1");
+      if (btn.id === "btnReset") { if (confirm("Nullstill alle svar?")) resetAll(); }
+      if (btn.id === "btnShare") { shareResults(); }
+
+      if (btn.dataset.action === "calc") { computeAndToast(); }
+      if (btn.dataset.action === "toResults") { computeAndShow(); switchTo("sec-results"); }
+    });
+
+    $("#name").addEventListener("input", save);
+
+    function switchTo(id) {
+      $$(".tab").forEach(t => t.classList.toggle("active", t.dataset.target === id));
+      $$(".section").forEach(s => s.classList.toggle("active", s.id === id));
+      save();
+    }
+
+    function sum(arr) { return arr.reduce((a,v)=>a+(Number(v)||0),0); }
+    function badge(score) {
+      if (score >= 12) return { text:"Sterk", cls:"ok" };
+      if (score >= 8)  return { text:"Balansert", cls:"warn" };
+      return { text:"Svak", cls:"bad" };
+    }
+
+    function computeAndShow() {
+      save();
+      const s1 = sum(state.answers.t1);
+      const sL = sum(state.answers.loose);
+      const s2 = sum(state.answers.t2);
+
+      $("#score-t1 .big").textContent = s1 || "–";
+      $("#score-loose .big").textContent = sL || "–";
+      $("#score-t2 .big").textContent = s2 || "–";
+
+      const b1 = badge(s1), bL = badge(sL), b2 = badge(s2);
+      $("#badge-t1").innerHTML = `<span class="badge ${b1.cls}">${b1.text}</span>`;
+      $("#badge-loose").innerHTML = `<span class="badge ${bL.cls}">${bL.text}</span>`;
+      $("#badge-t2").innerHTML = `<span class="badge ${b2.cls}">${b2.text}</span>`;
+
+      const name = state.name ? `${state.name}, ` : "";
+      const insight = [
+        `${name}Tight (1) = ${s1}/15, Loose = ${sL}/15, Tight (2) = ${s2}/15.`,
+        interpret(s1, sL, s2)
+      ].join(" ");
+      $("#res-text").textContent = insight;
+    }
+
+    function computeAndToast() {
+      computeAndShow();
+      const msg = document.createElement("div");
+      msg.textContent = "Delscore oppdatert";
+      Object.assign(msg.style, {
+        position:"fixed", left:"50%", bottom:"28px", transform:"translateX(-50%)",
+        padding:"10px 14px", background:"#0c1527", color:"#eef2f7",
+        border:"1px solid rgba(255,255,255,0.15)", borderRadius:"10px",
+        boxShadow:"0 10px 25px rgba(0,0,0,0.35)", zIndex:9999
+      });
+      document.body.appendChild(msg);
+      setTimeout(()=>msg.remove(), 1400);
+    }
+
+    function interpret(t1, l, t2) {
+      const parts = [];
+      if (t1 < 8) parts.push("Stram opp start-Tight: forsterk tydelige mål, roller og standarder.");
+      if (l  < 8) parts.push("Gi mer reell autonomi og trygghet til å eksperimentere i Loose-fasen.");
+      if (t2 < 8) parts.push("Forsterk oppfølging, kvalitetssikring og læring i slutt-Tight.");
+      if (parts.length === 0) return "God balanse gjennom hele T-L-T – fortsett å kalibrere etter kontekst.";
+      return parts.join(" ");
+    }
+
+    async function shareResults() {
+      // Del enkel tekst-oppsummering via Web Share API (Safari/iOS støtter dette i nettleser & homescreen)
+      const s1 = $("#score-t1 .big").textContent;
+      const sL = $("#score-loose .big").textContent;
+      const s2 = $("#score-t2 .big").textContent;
+      if (!s1 || s1 === "–") computeAndShow();
+      const text = $("#res-text").textContent || "Mine TLT-resultater er oppdatert i appen.";
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "Mine TLT-resultater", text });
+        } catch(e) { /* avbrutt */ }
+      } else {
+        // fallback: kopier til utklippstavle
+        try {
+          await navigator.clipboard.writeText(text);
+          alert("Resultatet er kopiert til utklippstavlen.");
+        } catch {
+          alert(text);
+        }
+      }
+    }
+
+    function resetAll() {
+      state = { name: "", answers:{ t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] } };
+      localStorage.removeItem(STATE_KEY);
+      location.reload();
+    }
+
+    // Service worker registrering (PWA/offline)
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(()=>{});
+      });
+    }
+
+    load();
+  </script>
+</body>
+</html>
