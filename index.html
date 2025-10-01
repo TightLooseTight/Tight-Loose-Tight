@@ -5,177 +5,268 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Tight–Loose–Tight Kalkulator</title>
 
-  <!-- iPhone homescreen -->
+  <!-- iPhone homescreen / PWA hooks (manifest & SW from earlier setup) -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TLT Kalkulator">
-  <!-- Enkelt SVG-ikon. Du kan bytte til egen PNG ved å legge inn apple-touch-icon.png -->
   <link rel="apple-touch-icon" href="icons/icon-192.png">
-
-  <!-- PWA manifest -->
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#0a7cff" />
 
   <style>
     :root {
-      /* Endre bare disse to for egen profil */
-      --brand: #0a7cff;      /* primærfarge */
-      --brand-2:#5cc8ff;     /* gradient-variant */
-      /* Øvrige farger */
+      --brand: #0a7cff;
+      --brand-2:#5cc8ff;
       --bg: #0a0f1a;
       --card: #101828;
       --muted: #9aa4b2;
       --text: #eef2f7;
-      --ok:#10b981;
-      --warn:#f59e0b;
-      --bad:#ef4444;
+      --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
       --radius: 16px;
+      --disabled: #1a2234;
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color: var(--text);
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      color:var(--text);
       background:
         radial-gradient(1000px 600px at 90% -10%, color-mix(in oklab, var(--brand) 35%, transparent), transparent 60%),
         radial-gradient(1000px 600px at 10% 110%, color-mix(in oklab, var(--brand-2) 35%, transparent), transparent 60%),
         linear-gradient(180deg, #0b1220 0%, #0a0f1a 60%, #070b12 100%);
-      min-height: 100%;
+      min-height:100%;
     }
-    .wrap { max-width: 920px; margin: 0 auto; padding: 24px clamp(16px, 4vw, 28px) 64px; }
-    header { display: grid; gap: 10px; margin-bottom: 18px; }
-    .title { font-size: clamp(26px, 4.6vw, 36px); font-weight: 800; letter-spacing: 0.2px; }
-    .subtitle { color: var(--muted); line-height: 1.5; }
-    .card {
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      backdrop-filter: blur(6px);
-    }
-    .card-inner { padding: clamp(16px, 2.8vw, 24px); }
-    .row { display: grid; gap: 12px; }
-    .grid-2 { display: grid; gap: 16px; grid-template-columns: 1fr; }
-    @media (min-width: 860px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
-    label.small { font-size: 14px; color: var(--muted); }
-    input[type="text"] {
-      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
-      background: #0b1322; color: var(--text); outline: none;
-    }
-    .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 8px 0 8px; }
-    .tab {
-      padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.1);
-      background: #0b1322; color: var(--muted); cursor: pointer; user-select: none; transition: 160ms ease;
-      font-weight: 600; font-size: 14px;
-    }
-    .tab.active { background: linear-gradient(180deg, var(--brand), var(--brand-2)); color: #041123; border-color: transparent; }
-    .section { display: none; }
-    .section.active { display: block; }
+    .wrap{max-width:980px;margin:0 auto;padding:24px clamp(16px,4vw,28px) 80px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .logo{width:44px;height:44px;border-radius:8px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .logo img{max-width:100%;max-height:100%;object-fit:contain}
+    .title{font-size:clamp(26px,4.8vw,38px);font-weight:800}
+    .subtitle{color:var(--muted);line-height:1.5}
 
-    .q { padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.08); background: #0c1527; }
-    .q p { margin: 0 0 10px 0; }
-    .scale { display: flex; gap: 8px; flex-wrap: wrap; }
-    .pill {
-      display: inline-flex; align-items: center; justify-content: center;
-      min-width: 42px; padding: 8px 10px; border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: #0b1322; color: var(--text); cursor: pointer; transition: 140ms ease; user-select: none;
-    }
-    .pill.active { background: color-mix(in oklab, var(--brand) 30%, transparent); border-color: var(--brand); }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
-    .btn { padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
-      background: linear-gradient(180deg, #0e1a33, #0b1322); color: var(--text); cursor: pointer; font-weight: 700; }
-    .btn.primary { background: linear-gradient(180deg, var(--brand), var(--brand-2)); color: #041123; border-color: transparent; }
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+    .card-inner{padding:clamp(16px,2.8vw,24px)}
+    .row{display:grid;gap:12px}
 
-    .scorebox { display: grid; gap: 10px; grid-template-columns: repeat(3, 1fr); }
-    .score { text-align: center; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: #0c1527; }
-    .score h3 { margin: 2px 0 6px 0; font-size: 15px; color: var(--muted); font-weight: 600; }
-    .score .big { font-size: 28px; font-weight: 900; letter-spacing: 0.5px; }
-    .badge { font-weight: 800; padding: 2px 8px; border-radius: 999px; }
-    .ok { background: rgba(16,185,129,0.2); color: #d1fae5; border: 1px solid rgba(16,185,129,0.4); }
-    .warn { background: rgba(245,158,11,0.2); color: #fef3c7; border: 1px solid rgba(245,158,11,0.4); }
-    .bad { background: rgba(239,68,68,0.2); color: #fee2e2; border: 1px solid rgba(239,68,68,0.4); }
+    .lang{display:flex;gap:10px;align-items:center}
+    .flag{width:36px;height:24px;border-radius:4px;border:1px solid rgba(255,255,255,.2);cursor:pointer;opacity:.8}
+    .flag.active{outline:2px solid var(--brand);opacity:1}
 
-    footer { margin-top: 28px; color: var(--muted); font-size: 13px; text-align: center; }
+    .nav-arrows{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
+    .arrow{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0b1322;color:var(--text);cursor:pointer}
+
+    .btn{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#0e1a33,#0b1322);color:var(--text);cursor:pointer;font-weight:700}
+    .btn.primary{background:linear-gradient(180deg,var(--brand),var(--brand-2));color:#041123;border-color:transparent}
+    .btn.ghost{background:transparent;border-color:rgba(255,255,255,.2)}
+    .btn[disabled]{opacity:.5;cursor:not-allowed}
+
+    .field{display:grid;gap:8px}
+    input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1322;color:var(--text);outline:none}
+    .name-row{display:flex;gap:10px;align-items:center}
+    .pencil{cursor:pointer;opacity:.8}
+
+    .accordion{display:grid;gap:12px}
+    .acc-item{border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0c1527}
+    .acc-hd{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
+    .acc-hd h3{margin:0;font-size:16px}
+    .acc-bd{display:none;padding:0 16px 16px 16px}
+    .acc-item.open .acc-bd{display:block}
+
+    .q{padding:12px;border-radius:12px;border:1px dashed rgba(255,255,255,.12);margin-top:10px}
+    .q p{margin:0 0 10px 0}
+    .scale{display:flex;gap:8px;flex-wrap:wrap}
+    .pill{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#0b1322;color:var(--text);cursor:pointer}
+    .pill.active{background:color-mix(in oklab, var(--brand) 30%, transparent);border-color:var(--brand)}
+
+    .scorebox{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
+    .score{ text-align:center;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0c1527}
+    .score.disabled{background:var(--disabled);opacity:.7}
+    .score h4{margin:2px 0 6px 0;color:var(--muted);font-weight:600}
+    .score .big{font-size:28px;font-weight:900}
+    .badge{font-weight:800;padding:2px 8px;border-radius:999px}
+    .ok{background:rgba(16,185,129,.2);color:#d1fae5;border:1px solid rgba(16,185,129,.4)}
+    .warn{background:rgba(245,158,11,.2);color:#fef3c7;border:1px solid rgba(245,158,11,.4)}
+    .bad{background:rgba(239,68,68,.2);color:#fee2e2;border:1px solid rgba(239,68,68,.4)}
+
+    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <div class="title">Tight–Loose–Tight kalkulator</div>
-      <div class="subtitle">
-        En refleksjonsstarter om hvorvidt din lederstil følger T-L-T. Svar på utsagn (1=helt uenig → 5=helt enig).
-        Resultatet lagres kun på din enhet.
+      <div class="logo" title="Bytt ut logo.png i repoet for firmalogo">
+        <img id="logo" src="logo.png" alt="Company Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'44\' height=\'44\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%230b1322\'/%3E%3Ctext x=\'50%25\' y=\'56%25\' text-anchor=\'middle\' font-size=\'20\' fill=\'%239aa4b2\' font-family=\'Arial\'%3ELOGO%3C/text%3E%3C/svg%3E'">
+      </div>
+      <div>
+        <div class="title">Tight–Loose–Tight</div>
+        <div class="subtitle" id="subtitle">Refleksjonsverktøy for lederstil</div>
       </div>
     </header>
 
     <div class="card">
-      <div class="card-inner row">
-        <div class="grid-2">
-          <div>
-            <label class="small" for="name">Ditt navn</label>
-            <input id="name" type="text" placeholder="Skriv navnet ditt…" />
-          </div>
-          <div>
-            <div class="small">Hurtigvalg</div>
-            <div class="actions">
-              <button class="btn" id="btnT1">Gå til Tight (1)</button>
-              <button class="btn" id="btnL">Gå til Loose</button>
-              <button class="btn" id="btnT2">Gå til Tight (2)</button>
-              <button class="btn" id="btnRes">Vis resultater</button>
-              <button class="btn" id="btnShare">Del resultat</button>
-              <button class="btn" id="btnReset" title="Nullstill alle svar">Nullstill</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tabs" id="tabs"></div>
-
       <div class="card-inner">
-        <div id="sec-intro" class="section active">
-          <p class="muted">Velg en fane under for å svare. Hver del har tre utsagn. Du kan når som helst bytte fane – svarene beholdes.</p>
-        </div>
-
-        <div id="sec-t1" class="section"></div>
-        <div id="sec-loose" class="section"></div>
-        <div id="sec-t2" class="section"></div>
-
-        <div id="sec-results" class="section">
-          <h2>Resultater</h2>
-          <div class="scorebox" style="margin: 10px 0 16px 0;">
-            <div class="score" id="score-t1">
-              <h3>Tight (1)</h3>
-              <div class="big">–</div>
-              <div class="muted" id="badge-t1"></div>
+        <!-- PAGE CONTAINER -->
+        <div id="page-1" class="page">
+          <div class="row" style="gap:14px">
+            <div class="lang">
+              <img id="flag-no" class="flag" src="https://flagcdn.com/w40/no.png" alt="Norsk" title="Norsk">
+              <img id="flag-dk" class="flag" src="https://flagcdn.com/w40/dk.png" alt="Dansk" title="Dansk">
             </div>
-            <div class="score" id="score-loose">
-              <h3>Loose</h3>
-              <div class="big">–</div>
-              <div class="muted" id="badge-loose"></div>
-            </div>
-            <div class="score" id="score-t2">
-              <h3>Tight (2)</h3>
-              <div class="big">–</div>
-              <div class="muted" id="badge-t2"></div>
+            <p id="p1-text" class="subtitle">Velg språk og gå videre.</p>
+            <div class="nav-arrows">
+              <button class="arrow" id="p1-prev" disabled>← Tilbake</button>
+              <button class="arrow" id="p1-next">Neste →</button>
             </div>
           </div>
-          <p id="res-text" class="muted"></p>
-          <div class="actions">
-            <button class="btn" id="btnBack">Tilbake til spørsmål</button>
+        </div>
+
+        <div id="page-2" class="page hidden">
+          <div class="row" style="gap:14px">
+            <div class="field">
+              <label for="name" id="lbl-name">Skriv inn ditt navn</label>
+              <div class="name-row">
+                <input id="name" type="text" placeholder="Skriv navnet ditt…" />
+                <button class="btn ghost" id="btn-ok">OK</button>
+                <span id="btn-edit" class="pencil" title="Rediger" aria-label="Rediger navn">✎</span>
+              </div>
+              <small class="subtitle" id="p2-help">Navnet lagres lokalt på enheten og brukes i resultatene.</small>
+            </div>
+            <div class="nav-arrows">
+              <button class="arrow" id="p2-prev">← Tilbake</button>
+              <button class="arrow" id="p2-next">Neste →</button>
+            </div>
           </div>
         </div>
+
+        <div id="page-3" class="page hidden">
+          <h2 id="p3-title">Test deg selv</h2>
+          <div class="accordion" id="acc">
+            <!-- Sections injected by JS -->
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+            <button class="btn primary" id="btn-calc">Oppdater resultater</button>
+            <button class="btn" id="btn-readmore">Les mer</button>
+            <button class="btn ghost" id="btn-reset">Nullstill</button>
+          </div>
+          <div class="scorebox" style="margin-top:14px">
+            <div class="score disabled" id="sb-t1">
+              <h4>Tight (1)</h4>
+              <div class="big" id="sbv-t1">–</div>
+              <div class="muted" id="sbb-t1">–</div>
+            </div>
+            <div class="score disabled" id="sb-loose">
+              <h4>Loose</h4>
+              <div class="big" id="sbv-loose">–</div>
+              <div class="muted" id="sbb-loose">–</div>
+            </div>
+            <div class="score disabled" id="sb-t2">
+              <h4>Tight (2)</h4>
+              <div class="big" id="sbv-t2">–</div>
+              <div class="muted" id="sbb-t2">–</div>
+            </div>
+          </div>
+          <div class="nav-arrows">
+            <button class="arrow" id="p3-prev">← Tilbake</button>
+            <button class="arrow" id="p3-next">Neste →</button>
+          </div>
+        </div>
+
+        <div id="page-4" class="page hidden">
+          <h2 id="p4-title">Her er dine resultater <span id="userNameInline"></span></h2>
+          <div class="scorebox" style="margin:10px 0 16px 0;grid-template-columns:1fr">
+            <div class="score disabled" id="r-t1">
+              <h4>Tight (1)</h4>
+              <div class="big" id="rv-t1">–</div>
+              <div class="muted" id="rb-t1">–</div>
+              <p id="rt-t1" class="subtitle" style="margin-top:8px"></p>
+            </div>
+            <div class="score disabled" id="r-loose">
+              <h4>Loose</h4>
+              <div class="big" id="rv-loose">–</div>
+              <div class="muted" id="rb-loose">–</div>
+              <p id="rt-loose" class="subtitle" style="margin-top:8px"></p>
+            </div>
+            <div class="score disabled" id="r-t2">
+              <h4>Tight (2)</h4>
+              <div class="big" id="rv-t2">–</div>
+              <div class="muted" id="rb-t2">–</div>
+              <p id="rt-t2" class="subtitle" style="margin-top:8px"></p>
+            </div>
+          </div>
+          <div class="nav-arrows">
+            <button class="arrow" id="p4-prev">← Tilbake</button>
+            <button class="arrow" id="p4-next">Neste →</button>
+          </div>
+        </div>
+
+        <div id="page-5" class="page hidden">
+          <h2 id="p5-title">Kort om TLT</h2>
+          <div class="card" style="margin:10px 0">
+            <div class="card-inner">
+              <div id="info-text" class="subtitle"></div>
+              <div style="overflow:auto;margin-top:14px">
+                <table id="info-table" style="width:100%;border-collapse:separate;border-spacing:0 8px">
+                  <!-- rows injected -->
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="nav-arrows">
+            <button class="arrow" id="p5-prev">← Tilbake</button>
+            <button class="arrow" id="p5-next" disabled>Neste →</button>
+          </div>
+        </div>
+        <!-- END PAGES -->
       </div>
     </div>
 
-    <footer>
-      Tips: På iPhone kan du legge denne på hjem-skjerm via <em>Del</em> → <strong>Legg til på Hjem-skjerm</strong>.
-    </footer>
+    <footer id="ft">Tips: Legg på hjem-skjerm via Del → «Legg til på Hjem‑skjerm».</footer>
   </div>
 
   <script>
-    // --- Spørsmål ---
+    // ---- Localization (NO/DK) ----
+    const L = {
+      no: {
+        subtitle: "Refleksjonsverktøy for lederstil",
+        p1: "Velg språk og gå videre.",
+        nameLbl: "Skriv inn ditt navn",
+        nameHelp: "Navnet lagres lokalt på enheten og brukes i resultatene.",
+        testYourself: "Test deg selv",
+        update: "Oppdater resultater",
+        readmore: "Les mer",
+        reset: "Nullstill",
+        resultsTitle: (n)=>`Her er dine resultater${n?` (${n})`:''}`,
+        infoTitle: "Kort om TLT",
+        badges:{ strong:"Sterk", balanced:"Balansert", weak:"Svak" },
+        table:[
+          ["Fase","Hva betyr det?","Ditt fokus"],
+          ["Tight (start)","Tydelig retning, mål, roller og standarder.","Klare mål, prioriteringer og forventninger."],
+          ["Loose (midt)","Autonomi og eierskap i teamet.","Skap trygghet, psykologisk sikkerhet og frihet i rammene."],
+          ["Tight (slutt)","Oppfølging, kvalitet og læring.","Hyppig review, korrigering og feiring av fremdrift."]
+        ],
+      },
+      dk: {
+        subtitle: "Refleksionsværktøj for lederstil",
+        p1: "Vælg sprog og gå videre.",
+        nameLbl: "Skriv dit navn",
+        nameHelp: "Navnet gemmes lokalt på enheden og bruges i resultaterne.",
+        testYourself: "Test dig selv",
+        update: "Opdater resultater",
+        readmore: "Læs mere",
+        reset: "Nulstil",
+        resultsTitle: (n)=>`Her er dine resultater${n?` (${n})`:''}`,
+        infoTitle: "Kort om TLT",
+        badges:{ strong:"Stærk", balanced:"Afbalanceret", weak:"Svæk" },
+        table:[
+          ["Fase","Hvad betyder det?","Dit fokus"],
+          ["Tight (start)","Tydelig retning, mål, roller og standarder.","Klarhed i mål, prioriteringer og forventninger."],
+          ["Loose (midt)","Autonomi og ejerskab i teamet.","Skab tryghed og frihed inden for rammerne."],
+          ["Tight (slut)","Opfølgning, kvalitet og læring.","Hyppig review, korrektion og fejring af fremdrift."]
+        ],
+      }
+    }
+
+    // ---- Questions model ----
     const QUESTIONS = {
       t1: [
         "Jeg sikrer at teamet forstår mål, prioriteringer og forventede leveranser.",
@@ -194,213 +285,222 @@
       ]
     };
 
-    const STATE_KEY = "tlt_calc_v1";
-    const $ = (q) => document.querySelector(q);
-    const $$ = (q) => Array.from(document.querySelectorAll(q));
-
-    // Tabs
-    const tabs = [
-      { id: "sec-intro", label: "Start" },
-      { id: "sec-t1", label: "Tight (1)" },
-      { id: "sec-loose", label: "Loose" },
-      { id: "sec-t2", label: "Tight (2)" },
-      { id: "sec-results", label: "Resultater" },
-    ];
-
-    const tabsEl = $("#tabs");
-    tabs.forEach((t, i) => {
-      const b = document.createElement("button");
-      b.className = "tab" + (i===0 ? " active":"");
-      b.dataset.target = t.id;
-      b.textContent = t.label;
-      tabsEl.appendChild(b);
-    });
-
-    // Render spørsmål
-    function renderSection(targetId, key) {
-      const host = document.getElementById(targetId);
-      const arr = QUESTIONS[key];
-      if (!host || !arr) return;
-      host.innerHTML = "";
-      arr.forEach((text, idx) => {
-        const qId = `${key}-${idx}`;
-        const w = document.createElement("div");
-        w.className = "q";
-        w.innerHTML = `
-          <p><strong>${idx+1}.</strong> ${text}</p>
-          <div class="scale" role="group" aria-label="Skala for ${qId}">
-            ${[1,2,3,4,5].map(v => `
-              <span class="pill" data-q="${qId}" data-v="${v}" tabindex="0" role="button" aria-pressed="false">${v}</span>
-            `).join("")}
-          </div>
-        `;
-        host.appendChild(w);
-      });
-      const actions = document.createElement("div");
-      actions.className = "actions";
-      actions.innerHTML = `
-        <button class="btn primary" data-action="calc">Regn ut delscore</button>
-        <button class="btn" data-action="toResults">Gå til resultater</button>
-      `;
-      host.appendChild(actions);
+    // ---- Evaluation texts (9) ----
+    function evalText(section, score, name, lang='no'){
+      // thresholds: weak <8, balanced 8-11, strong >=12
+      const weak = score < 8, strong = score >= 12;
+      const n = name || "Du";
+      const T = {
+        no: {
+          t1: {
+            weak: `${n}, start‑Tight trenger å strammes inn. Gjør målene tydelige, avklar roller/ansvar og sett konkrete kvalitetskrav. Tips: begynn hvert sprint med 3–5 klare prioriteringer og skriv «eierskap pr. leveranse».`,
+            mid: `${n}, grunnmuren er der. Forsterk presisjonen: tydeligere prioritering, «definition of done», og en enkel sjekkliste før oppstart.`,
+            strong: `${n}, meget tydelig retning. Pass på at presis styring ikke kveler initiativ – sjekk at teamet forstår «hvorfor», ikke bare «hva».`
+          },
+          loose: {
+            weak: `${n}, gi reell autonomi: la teamet velge metode og rekkefølge innenfor rammene. Skap trygghet for eksperimenter og små feil. Tips: innfør «beslutningsrammer» i stedet for detaljkontroll.`,
+            mid: `${n}, balanse på vei. Utvid psykologisk sikkerhet: spør «hva trenger dere av meg for å lykkes?» og fjern 1–2 friksjoner hver uke.`,
+            strong: `${n}, sterk autonomi og tillit. Sikre at friheten kobles til effekt: korte læringssløyfer, demoer og tydelig verdihypotese per tiltak.`
+          },
+          t2: {
+            weak: `${n}, styrk avslutningen: jevnlige reviews, måling mot mål, rask håndtering av avvik og læringspunkter. Tips: innfør 30‑min «fredagsreview» og synliggjør forbedringer.`,
+            mid: `${n}, god oppfølging. Løft kvaliteten ytterligere med standardiserte leveranse‑kriterier og tydelig «neste steg» etter hver review.`,
+            strong: `${n}, eksemplarisk oppfølging og læring. Vokt deg for overkontroll – hold fokus på læring, effekt og kontinuerlig forbedring.`
+          }
+        },
+        dk: {
+          t1: {
+            weak: `${n}, start‑Tight skal skærpes. Gør mål tydelige, afklar roller/ansvar og sæt konkrete kvalitetskrav. Tip: start hvert sprint med 3–5 klare prioriteter og «definition of done».`,
+            mid: `${n}, grundlaget er der. Skru op for præcisionen: tydelig prioritering og en kort checklist før opstart.`,
+            strong: `${n}, meget tydelig retning. Pas på, at styringen ikke kvæler initiativ – sikre at teamet forstår «hvorfor», ikke kun «hvad».`
+          },
+          loose: {
+            weak: `${n}, giv reel autonomi: lad teamet vælge metode og rækkefølge inden for rammerne. Skab tryghed for eksperimenter og små fejl. Tip: brug «beslutningsrammer» i stedet for detaljekontrol.`,
+            mid: `${n}, balancen er på vej. Udvid psykologisk tryghed: spørg «hvad har I brug for fra mig?» og fjern 1–2 friktioner hver uge.`,
+            strong: `${n}, stærk autonomi og tillid. Sørg for at friheden kobles til effekt: korte læringsloops, demoer og tydelig værdihypotese per tiltag.`
+          },
+          t2: {
+            weak: `${n}, styrk afslutningen: faste reviews, måling mod mål, hurtig håndtering af afvigelser og læringspunkter. Tip: indfør 30‑min «fredagsreview».`,
+            mid: `${n}, god opfølgning. Hæv kvaliteten med standardiserede leverance‑kriterier og klare «næste skridt» efter hver review.`,
+            strong: `${n}, forbilledlig opfølgning og læring. Undgå overkontrol – hold fokus på læring, effekt og løbende forbedring.`
+          }
+        }
+      };
+      const key = weak? 'weak' : (strong? 'strong':'mid');
+      return T[lang][section][key];
     }
 
-    renderSection("sec-t1", "t1");
-    renderSection("sec-loose", "loose");
-    renderSection("sec-t2", "t2");
-
-    // State
-    let state = {
-      name: "",
-      answers: { t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] }
+    // ---- App state ----
+    const STATE_KEY = 'tlt_calc_v2_multi';
+    let st = {
+      lang: 'no',
+      name: '',
+      answers: { t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] },
+      expanded: { t1:false, loose:false, t2:false }
     };
 
-    function load() {
-      try {
-        const raw = localStorage.getItem(STATE_KEY);
-        if (raw) { state = JSON.parse(raw); }
-      } catch {}
-      $("#name").value = state.name || "";
-      Object.entries(state.answers).forEach(([key, arr]) => {
-        arr.forEach((v, i) => {
-          if (v) {
-            const el = document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`);
-            if (el) el.classList.add("active");
-          }
-        });
-      });
-    }
-    function save() {
-      state.name = $("#name").value.trim();
-      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    const $ = q=>document.querySelector(q);
+    const $$ = q=>Array.from(document.querySelectorAll(q));
+
+    function save(){ localStorage.setItem(STATE_KEY, JSON.stringify(st)); }
+    function load(){
+      try{ const raw = localStorage.getItem(STATE_KEY); if(raw) st = JSON.parse(raw); }catch{}
+      // apply lang
+      applyLang();
+      // name
+      $('#name').value = st.name || '';
+      $('#userNameInline').textContent = st.name? st.name : '';
+      // render acc
+      renderAccordion();
+      // restore selected pills
+      Object.entries(st.answers).forEach(([k,arr])=>{
+        arr.forEach((v,i)=>{ if(v){ const el = document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } });
+      })
+      updateScoreboxes(false);
     }
 
-    // Interactions
-    document.body.addEventListener("click", (e) => {
-      const pill = e.target.closest(".pill");
-      if (pill) {
-        const q = pill.dataset.q; const v = Number(pill.dataset.v);
-        $$(`.pill[data-q="${q}"]`).forEach(p => p.classList.remove("active"));
-        pill.classList.add("active");
-        const [key, idx] = q.split("-");
-        state.answers[key][Number(idx)] = v;
-        save();
+    function applyLang(){
+      const t = L[st.lang];
+      $('#subtitle').textContent = t.subtitle;
+      $('#p1-text').textContent = t.p1;
+      $('#lbl-name').textContent = t.nameLbl;
+      $('#p2-help').textContent = t.nameHelp;
+      $('#p3-title').textContent = t.testYourself;
+      $('#btn-calc').textContent = t.update;
+      $('#btn-readmore').textContent = t.readmore;
+      $('#btn-reset').textContent = t.reset;
+      $('#p5-title').textContent = t.infoTitle;
+      // Info text & table
+      const info = {
+        no: `<p><strong>Hva er Tight–Loose–Tight?</strong> En enkel modell for å balansere tydelig retning, autonomi og oppfølging i team.</p>`,
+        dk: `<p><strong>Hvad er Tight–Loose–Tight?</strong> En enkel model til at balancere tydelig retning, autonomi og opfølgning i teams.</p>`
+      };
+      $('#info-text').innerHTML = info[st.lang];
+      const tbl = $('#info-table'); tbl.innerHTML = '';
+      L[st.lang].table.forEach((row,ri)=>{
+        const tr = document.createElement('tr');
+        row.forEach((cell,ci)=>{
+          const td = document.createElement(ri===0?'th':'td');
+          td.textContent = cell;
+          td.style.padding = '10px 12px';
+          td.style.border = '1px solid rgba(255,255,255,.08)';
+          td.style.background = ri===0? '#0b1322':'#0c1527';
+          td.style.color = ri===0? '#9aa4b2':'#eef2f7';
+          td.style.textAlign = ci===0? 'left': 'left';
+          td.style.borderRadius = ri===0? '8px':'8px';
+          tr.appendChild(td);
+        });
+        tbl.appendChild(tr);
+      });
+    }
+
+    // Navigation between pages
+    function showPage(i){ $$('.page').forEach((p,idx)=>p.classList.toggle('hidden', idx!==i-1)); }
+
+    // Language flags
+    $('#flag-no').addEventListener('click',()=>{ st.lang='no'; save(); applyLang(); $('#flag-no').classList.add('active'); $('#flag-dk').classList.remove('active'); })
+    $('#flag-dk').addEventListener('click',()=>{ st.lang='dk'; save(); applyLang(); $('#flag-dk').classList.add('active'); $('#flag-no').classList.remove('active'); })
+    // set active flag initial
+    function setFlag(){ $('#flag-no').classList.toggle('active', st.lang==='no'); $('#flag-dk').classList.toggle('active', st.lang==='dk'); }
+
+    // Page nav buttons
+    $('#p1-next').addEventListener('click', ()=> showPage(2));
+    $('#p2-prev').addEventListener('click', ()=> showPage(1));
+    $('#p2-next').addEventListener('click', ()=> showPage(3));
+    $('#p3-prev').addEventListener('click', ()=> showPage(2));
+    $('#p3-next').addEventListener('click', ()=> showPage(4));
+    $('#p4-prev').addEventListener('click', ()=> showPage(3));
+    $('#p4-next').addEventListener('click', ()=> showPage(5));
+    $('#p5-prev').addEventListener('click', ()=> showPage(4));
+
+    // Name entry
+    $('#btn-ok').addEventListener('click', ()=>{ st.name = $('#name').value.trim(); save(); $('#userNameInline').textContent = st.name? st.name : ''; toast(st.lang==='dk'? 'Navn opdateret':'Navn oppdatert'); });
+    $('#btn-edit').addEventListener('click', ()=>{ $('#name').focus(); $('#name').select(); });
+
+    // Accordion render
+    function renderAccordion(){
+      const acc = $('#acc'); acc.innerHTML='';
+      const groups = [ ['t1','Tight (1)'], ['loose','Loose'], ['t2','Tight (2)'] ];
+      groups.forEach(([key,label])=>{
+        const it = document.createElement('div'); it.className='acc-item'+(st.expanded[key]? ' open':'');
+        it.innerHTML = `
+          <div class="acc-hd" data-key="${key}">
+            <h3>${label}</h3>
+            <span>${st.expanded[key]? '−' : '+'}</span>
+          </div>
+          <div class="acc-bd">
+            ${QUESTIONS[key].map((text,idx)=>`
+              <div class="q">
+                <p><strong>${idx+1}.</strong> ${text}</p>
+                <div class="scale" role="group" aria-label="Skala for ${key}-${idx}">
+                  ${[1,2,3,4,5].map(v=>`<span class="pill" data-q="${key}-${idx}" data-v="${v}" tabindex="0">${v}</span>`).join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>`;
+        acc.appendChild(it);
+      })
+    }
+
+    document.body.addEventListener('click', (e)=>{
+      const hd = e.target.closest('.acc-hd');
+      if(hd){ const k = hd.dataset.key; st.expanded[k] = !st.expanded[k]; save(); renderAccordion(); // re-bind selections
+        // re-apply selected pills after re-render
+        Object.entries(st.answers).forEach(([key,arr])=>{ arr.forEach((v,i)=>{ if(v){ const el = document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }); });
         return;
       }
-      const tab = e.target.closest(".tab");
-      if (tab) { switchTo(tab.dataset.target); return; }
+      const pill = e.target.closest('.pill');
+      if(pill){ const q = pill.dataset.q; const v = Number(pill.dataset.v);
+        $$(`.pill[data-q="${q}"]`).forEach(p=>p.classList.remove('active'));
+        pill.classList.add('active');
+        const [key,idx] = q.split('-'); st.answers[key][Number(idx)] = v; save(); return; }
+    })
 
-      const btn = e.target.closest("button");
-      if (!btn) return;
-      if (btn.id === "btnT1") switchTo("sec-t1");
-      if (btn.id === "btnL") switchTo("sec-loose");
-      if (btn.id === "btnT2") switchTo("sec-t2");
-      if (btn.id === "btnRes") { computeAndShow(); switchTo("sec-results"); }
-      if (btn.id === "btnBack") switchTo("sec-t1");
-      if (btn.id === "btnReset") { if (confirm("Nullstill alle svar?")) resetAll(); }
-      if (btn.id === "btnShare") { shareResults(); }
+    // Compute & score boxes
+    function sum(a){ return a.reduce((x,v)=>x+(Number(v)||0),0); }
+    function badge(score){ if(score>=12) return {t:L[st.lang].badges.strong, cls:'ok'}; if(score>=8) return {t:L[st.lang].badges.balanced, cls:'warn'}; return {t:L[st.lang].badges.weak, cls:'bad'}; }
 
-      if (btn.dataset.action === "calc") { computeAndToast(); }
-      if (btn.dataset.action === "toResults") { computeAndShow(); switchTo("sec-results"); }
-    });
-
-    $("#name").addEventListener("input", save);
-
-    function switchTo(id) {
-      $$(".tab").forEach(t => t.classList.toggle("active", t.dataset.target === id));
-      $$(".section").forEach(s => s.classList.toggle("active", s.id === id));
-      save();
-    }
-
-    function sum(arr) { return arr.reduce((a,v)=>a+(Number(v)||0),0); }
-    function badge(score) {
-      if (score >= 12) return { text:"Sterk", cls:"ok" };
-      if (score >= 8)  return { text:"Balansert", cls:"warn" };
-      return { text:"Svak", cls:"bad" };
-    }
-
-    function computeAndShow() {
-      save();
-      const s1 = sum(state.answers.t1);
-      const sL = sum(state.answers.loose);
-      const s2 = sum(state.answers.t2);
-
-      $("#score-t1 .big").textContent = s1 || "–";
-      $("#score-loose .big").textContent = sL || "–";
-      $("#score-t2 .big").textContent = s2 || "–";
-
-      const b1 = badge(s1), bL = badge(sL), b2 = badge(s2);
-      $("#badge-t1").innerHTML = `<span class="badge ${b1.cls}">${b1.text}</span>`;
-      $("#badge-loose").innerHTML = `<span class="badge ${bL.cls}">${bL.text}</span>`;
-      $("#badge-t2").innerHTML = `<span class="badge ${b2.cls}">${b2.text}</span>`;
-
-      const name = state.name ? `${state.name}, ` : "";
-      const insight = [
-        `${name}Tight (1) = ${s1}/15, Loose = ${sL}/15, Tight (2) = ${s2}/15.`,
-        interpret(s1, sL, s2)
-      ].join(" ");
-      $("#res-text").textContent = insight;
-    }
-
-    function computeAndToast() {
-      computeAndShow();
-      const msg = document.createElement("div");
-      msg.textContent = "Delscore oppdatert";
-      Object.assign(msg.style, {
-        position:"fixed", left:"50%", bottom:"28px", transform:"translateX(-50%)",
-        padding:"10px 14px", background:"#0c1527", color:"#eef2f7",
-        border:"1px solid rgba(255,255,255,0.15)", borderRadius:"10px",
-        boxShadow:"0 10px 25px rgba(0,0,0,0.35)", zIndex:9999
-      });
-      document.body.appendChild(msg);
-      setTimeout(()=>msg.remove(), 1400);
-    }
-
-    function interpret(t1, l, t2) {
-      const parts = [];
-      if (t1 < 8) parts.push("Stram opp start-Tight: forsterk tydelige mål, roller og standarder.");
-      if (l  < 8) parts.push("Gi mer reell autonomi og trygghet til å eksperimentere i Loose-fasen.");
-      if (t2 < 8) parts.push("Forsterk oppfølging, kvalitetssikring og læring i slutt-Tight.");
-      if (parts.length === 0) return "God balanse gjennom hele T-L-T – fortsett å kalibrere etter kontekst.";
-      return parts.join(" ");
-    }
-
-    async function shareResults() {
-      // Del enkel tekst-oppsummering via Web Share API (Safari/iOS støtter dette i nettleser & homescreen)
-      const s1 = $("#score-t1 .big").textContent;
-      const sL = $("#score-loose .big").textContent;
-      const s2 = $("#score-t2 .big").textContent;
-      if (!s1 || s1 === "–") computeAndShow();
-      const text = $("#res-text").textContent || "Mine TLT-resultater er oppdatert i appen.";
-      if (navigator.share) {
-        try {
-          await navigator.share({ title: "Mine TLT-resultater", text });
-        } catch(e) { /* avbrutt */ }
-      } else {
-        // fallback: kopier til utklippstavle
-        try {
-          await navigator.clipboard.writeText(text);
-          alert("Resultatet er kopiert til utklippstavlen.");
-        } catch {
-          alert(text);
-        }
+    function updateScoreboxes(hideQuestions){
+      const s1 = sum(st.answers.t1), sL = sum(st.answers.loose), s2 = sum(st.answers.t2);
+      const sections = [ ['t1',s1], ['loose',sL], ['t2',s2] ];
+      sections.forEach(([k,s])=>{
+        const sb = document.getElementById('sb-'+k);
+        const sbb = document.getElementById('sbb-'+k);
+        const sbv = document.getElementById('sbv-'+k);
+        if(s>0){ sb.classList.remove('disabled'); const b = badge(s); sbb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; sbv.textContent = `${s}/15`; }
+        else { sb.classList.add('disabled'); sbb.textContent = '–'; sbv.textContent = '–'; }
+      })
+      if(hideQuestions){ // collapse all
+        st.expanded = { t1:false, loose:false, t2:false }; save(); renderAccordion();
       }
+      // also fill page 4 boxes
+      fillResultsPage();
     }
 
-    function resetAll() {
-      state = { name: "", answers:{ t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] } };
-      localStorage.removeItem(STATE_KEY);
-      location.reload();
+    function fillResultsPage(){
+      const scores = { t1: sum(st.answers.t1), loose: sum(st.answers.loose), t2: sum(st.answers.t2) };
+      $('#userNameInline').textContent = st.name? st.name : '';
+      Object.entries(scores).forEach(([k,s])=>{
+        const r = document.getElementById('r-'+k);
+        const rv = document.getElementById('rv-'+k);
+        const rb = document.getElementById('rb-'+k);
+        const rt = document.getElementById('rt-'+k);
+        if(s>0){ r.classList.remove('disabled'); const b = badge(s); rb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent = `${s}/15`; rt.textContent = evalText(k, s, st.name, st.lang); }
+        else { r.classList.add('disabled'); rb.textContent = '–'; rv.textContent = '–'; rt.textContent = ''; }
+      })
     }
 
-    // Service worker registrering (PWA/offline)
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(()=>{});
-      });
-    }
+    $('#btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'? 'Resultater opdateret':'Resultater oppdatert'); });
+    $('#btn-readmore').addEventListener('click', ()=> showPage(4));
+    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'? 'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:[null,null,null], loose:[null,null,null], t2:[null,null,null]}; save(); renderAccordion(); updateScoreboxes(false); } });
 
-    load();
+    function toast(msg){ const d=document.createElement('div'); d.textContent=msg; Object.assign(d.style,{position:'fixed',left:'50%',bottom:'28px',transform:'translateX(-50%)',padding:'10px 14px',background:'#0c1527',color:'#eef2f7',border:'1px solid rgba(255,255,255,.15)',borderRadius:'10px',boxShadow:'0 10px 25px rgba(0,0,0,.35)',zIndex:9999}); document.body.appendChild(d); setTimeout(()=>d.remove(),1400); }
+
+    // Service worker registration (keeps PWA behavior)
+    if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }); }
+
+    // init
+    setFlag(); applyLang(); renderAccordion(); load(); showPage(1);
   </script>
 </body>
 </html>
