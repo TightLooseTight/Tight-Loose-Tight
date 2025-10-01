@@ -37,18 +37,18 @@
       min-height:100%;
     }
     .wrap{max-width:980px;margin:0 auto;padding:24px clamp(16px,4vw,28px) 80px}
-    header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-    .logo{width:44px;height:44px;border-radius:8px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:18px;text-align:center}
+    .logo{width:132px;height:132px;border-radius:8px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
     .logo img{max-width:100%;max-height:100%;object-fit:contain}
-    .title{font-size:clamp(26px,4.8vw,38px);font-weight:800}
+    .title{font-size:clamp(26px,4.8vw,38px);font-weight:800;text-align:center}
     .subtitle{color:var(--muted);line-height:1.5}
 
     .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
     .card-inner{padding:clamp(16px,2.8vw,24px)}
     .row{display:grid;gap:12px}
 
-    .lang{display:flex;gap:10px;align-items:center}
-    .flag{width:36px;height:24px;border-radius:4px;border:1px solid rgba(255,255,255,.2);cursor:pointer;opacity:.8}
+    .lang{display:flex;gap:10px;align-items:center;justify-content:center}
+    .flag{width:108px;height:72px;border-radius:4px;border:1px solid rgba(255,255,255,.2);cursor:pointer;opacity:.8}
     .flag.active{outline:2px solid var(--brand);opacity:1}
 
     .nav-arrows{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
@@ -89,7 +89,9 @@
 
     footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
     .hidden{display:none!important}
-  </style>
+    #page-1 .row{place-items:center;text-align:center}
+  #p1-text{width:100%;text-align:center}
+</style>
 </head>
 <body>
   <div class="wrap">
@@ -114,7 +116,7 @@
             </div>
             <p id="p1-text" class="subtitle">Velg språk og gå videre.</p>
             <div class="nav-arrows">
-              <button class="arrow" id="p1-prev" disabled>← Tilbake</button>
+              
               <button class="arrow" id="p1-next">Neste →</button>
             </div>
           </div>
@@ -213,7 +215,7 @@
           </div>
           <div class="nav-arrows">
             <button class="arrow" id="p5-prev">← Tilbake</button>
-            <button class="arrow" id="p5-next" disabled>Neste →</button>
+            
           </div>
         </div>
         <!-- END PAGES -->
