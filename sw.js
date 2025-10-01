@@ -1,4 +1,4 @@
-const CACHE_NAME = "tlt-v5";
+const CACHE_NAME = "tlt-v6";
 const ASSETS = [
   "./",
   "./index.html",
