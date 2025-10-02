@@ -1,12 +1,15 @@
 // ---- Tight–Loose–Tight PWA Service Worker (v5-rollback) ----
-const CACHE_NAME = "tlt-v5-rollback";
+// f.eks.
+const CACHE_NAME = "tlt-v5-rollback-4";
 
 const ASSETS = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
   "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "./icons/icon-512.png",
+  "./flags/no.png",
+  "./flags/dk.png"
 ];
 
 self.addEventListener("install", (event) => {
