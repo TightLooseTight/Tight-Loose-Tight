@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Tight–Loose–Tight Kalkulator</title>
 
-  <!-- iPhone homescreen / PWA hooks (manifest & SW from earlier setup) -->
+  <!-- iPhone homescreen / PWA hooks -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TLT Kalkulator">
@@ -14,19 +14,12 @@
   <meta name="theme-color" content="#0a7cff" />
 
   <style>
-    :root {
-      --brand: #0a7cff;
-      --brand-2:#5cc8ff;
-      --bg: #0a0f1a;
-      --card: #101828;
-      --muted: #9aa4b2;
-      --text: #eef2f7;
-      --ok:#10b981; --warn:#f59e0b; --bad:#ef4444;
-      --radius: 16px;
-      --disabled: #1a2234;
+    :root{
+      --brand:#0a7cff; --brand-2:#5cc8ff;
+      --bg:#0a0f1a; --card:#101828; --muted:#9aa4b2; --text:#eef2f7;
+      --ok:#10b981; --warn:#f59e0b; --bad:#ef4444; --radius:16px; --disabled:#1a2234;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box} html,body{height:100%}
     body{
       margin:0; font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       color:var(--text);
@@ -38,7 +31,7 @@
     }
     .wrap{max-width:980px;margin:0 auto;padding:24px clamp(16px,4vw,28px) 80px}
     header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:18px;text-align:center}
-    .logo{width:132px;height:132px;border-radius:8px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .logo{width:132px;height:132px;border-radius:12px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
     .logo img{max-width:100%;max-height:100%;object-fit:contain}
     .title{font-size:clamp(26px,4.8vw,38px);font-weight:800;text-align:center}
     .subtitle{color:var(--muted);line-height:1.5}
@@ -48,10 +41,12 @@
     .row{display:grid;gap:12px}
 
     .lang{display:flex;gap:10px;align-items:center;justify-content:center}
-    .flag{width:108px;height:72px;border-radius:4px;border:1px solid rgba(255,255,255,.2);cursor:pointer;opacity:.8}
+    .flag{width:108px;height:72px;border-radius:6px;border:1px solid rgba(255,255,255,.2);cursor:pointer;opacity:.9}
     .flag.active{outline:2px solid var(--brand);opacity:1}
 
     .nav-arrows{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
+    #p1-prev{display:none} /* fjernet tilbake på side 1 */
+    #p5-next{display:none} /* fjernet neste på side 5 */
     .arrow{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0b1322;color:var(--text);cursor:pointer}
 
     .btn{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#0e1a33,#0b1322);color:var(--text);cursor:pointer;font-weight:700}
@@ -78,7 +73,7 @@
     .pill.active{background:color-mix(in oklab, var(--brand) 30%, transparent);border-color:var(--brand)}
 
     .scorebox{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
-    .score{ text-align:center;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0c1527}
+    .score{text-align:center;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0c1527}
     .score.disabled{background:var(--disabled);opacity:.7}
     .score h4{margin:2px 0 6px 0;color:var(--muted);font-weight:600}
     .score .big{font-size:28px;font-weight:900}
@@ -90,43 +85,38 @@
     footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
     .hidden{display:none!important}
     #page-1 .row{place-items:center;text-align:center}
-  #p1-text{width:100%;text-align:center}
-  /* Radar chart */
-    .radar-wrap{margin:16px 0 8px 0}
-    .radar-card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:12px}
-    .radar-legend{display:flex;gap:16px;align-items:center;justify-content:center;color:var(--muted);font-size:13px;margin-top:6px}
-    .legend-dot{width:10px;height:10px;border-radius:999px;display:inline-block;border:1px solid rgba(255,255,255,.4)}
+    #p1-text{width:100%;text-align:center}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
       <div class="logo" title="Bytt ut logo.png i repoet for firmalogo">
-        <img id="logo" src="logo.png" alt="Company Logo" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'44\' height=\'44\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%230b1322\'/%3E%3Ctext x=\'50%25\' y=\'56%25\' text-anchor=\'middle\' font-size=\'20\' fill=\'%239aa4b2\' font-family=\'Arial\'%3ELOGO%3C/text%3E%3C/svg%3E'">
+        <img id="logo" src="logo.png" alt="Company Logo"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2244%22 height=%2244%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%230b1322%22/%3E%3Ctext x=%2250%25%22 y=%2256%25%22 text-anchor=%22middle%22 font-size=%2220%22 fill=%22%239aa4b2%22 font-family=%22Arial%22%3ELOGO%3C/text%3E%3C/svg%3E'">
       </div>
-      <div>
-        <div class="title">Tight–Loose–Tight</div>
-        <div class="subtitle" id="subtitle">Refleksjonsverktøy for lederstil</div>
-      </div>
+      <div class="title">Tight–Loose–Tight</div>
+      <div class="subtitle" id="subtitle">Refleksjonsverktøy for lederstil</div>
     </header>
 
     <div class="card">
       <div class="card-inner">
-        <!-- PAGE CONTAINER -->
+        <!-- PAGE 1 -->
         <div id="page-1" class="page">
           <div class="row" style="gap:14px">
             <div class="lang">
-              <img id="flag-no" class="flag" src="https://flagcdn.com/w40/no.png" alt="Norsk" title="Norsk">
-              <img id="flag-dk" class="flag" src="https://flagcdn.com/w40/dk.png" alt="Dansk" title="Dansk">
+              <img id="flag-no" class="flag" src="https://flagcdn.com/w108/no.png" alt="Norsk" title="Norsk">
+              <img id="flag-dk" class="flag" src="https://flagcdn.com/w108/dk.png" alt="Dansk" title="Dansk">
             </div>
             <p id="p1-text" class="subtitle">Velg språk og gå videre.</p>
             <div class="nav-arrows">
-              
+              <button class="arrow" id="p1-prev">← Tilbake</button>
               <button class="arrow" id="p1-next">Neste →</button>
             </div>
           </div>
         </div>
 
+        <!-- PAGE 2 -->
         <div id="page-2" class="page hidden">
           <div class="row" style="gap:14px">
             <div class="field">
@@ -145,11 +135,10 @@
           </div>
         </div>
 
+        <!-- PAGE 3 -->
         <div id="page-3" class="page hidden">
           <h2 id="p3-title">Test deg selv</h2>
-          <div class="accordion" id="acc">
-            <!-- Sections injected by JS -->
-          </div>
+          <div class="accordion" id="acc"></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
             <button class="btn primary" id="btn-calc">Oppdater resultater</button>
             <button class="btn" id="btn-readmore">Les mer</button>
@@ -157,19 +146,13 @@
           </div>
           <div class="scorebox" style="margin-top:14px">
             <div class="score disabled" id="sb-t1">
-              <h4>Tight (1)</h4>
-              <div class="big" id="sbv-t1">–</div>
-              <div class="muted" id="sbb-t1">–</div>
+              <h4>Tight (1)</h4><div class="big" id="sbv-t1">–</div><div class="muted" id="sbb-t1">–</div>
             </div>
             <div class="score disabled" id="sb-loose">
-              <h4>Loose</h4>
-              <div class="big" id="sbv-loose">–</div>
-              <div class="muted" id="sbb-loose">–</div>
+              <h4>Loose</h4><div class="big" id="sbv-loose">–</div><div class="muted" id="sbb-loose">–</div>
             </div>
             <div class="score disabled" id="sb-t2">
-              <h4>Tight (2)</h4>
-              <div class="big" id="sbv-t2">–</div>
-              <div class="muted" id="sbb-t2">–</div>
+              <h4>Tight (2)</h4><div class="big" id="sbv-t2">–</div><div class="muted" id="sbb-t2">–</div>
             </div>
           </div>
           <div class="nav-arrows">
@@ -178,36 +161,21 @@
           </div>
         </div>
 
+        <!-- PAGE 4 -->
         <div id="page-4" class="page hidden">
           <h2 id="p4-title">Her er dine resultater <span id="userNameInline"></span></h2>
           <div class="scorebox" style="margin:10px 0 16px 0;grid-template-columns:1fr">
             <div class="score disabled" id="r-t1">
-              <h4>Tight (1)</h4>
-              <div class="big" id="rv-t1">–</div>
-              <div class="muted" id="rb-t1">–</div>
+              <h4>Tight (1)</h4><div class="big" id="rv-t1">–</div><div class="muted" id="rb-t1">–</div>
               <p id="rt-t1" class="subtitle" style="margin-top:8px"></p>
             </div>
             <div class="score disabled" id="r-loose">
-              <h4>Loose</h4>
-              <div class="big" id="rv-loose">–</div>
-              <div class="muted" id="rb-loose">–</div>
+              <h4>Loose</h4><div class="big" id="rv-loose">–</div><div class="muted" id="rb-loose">–</div>
               <p id="rt-loose" class="subtitle" style="margin-top:8px"></p>
             </div>
             <div class="score disabled" id="r-t2">
-              <h4>Tight (2)</h4>
-              <div class="big" id="rv-t2">–</div>
-              <div class="muted" id="rb-t2">–</div>
+              <h4>Tight (2)</h4><div class="big" id="rv-t2">–</div><div class="muted" id="rb-t2">–</div>
               <p id="rt-t2" class="subtitle" style="margin-top:8px"></p>
-            </div>
-          </div>
-          <!-- Radar chart -->
-          <div id="radar" class="radar-wrap hidden">
-            <div class="radar-card">
-              <svg id="radarSvg" viewBox="0 0 360 360" width="100%" height="auto" aria-label="Spindeldiagram"></svg>
-              <div class="radar-legend">
-                <span><span class="legend-dot" style="background:color-mix(in oklab, var(--brand) 60%, transparent);border-color:var(--brand)"></span> Min score</span>
-                <span><span class="legend-dot" style="background:transparent;border-color:var(--brand-2)"></span> Maks (15)</span>
-              </div>
             </div>
           </div>
           <div class="nav-arrows">
@@ -216,44 +184,39 @@
           </div>
         </div>
 
+        <!-- PAGE 5 -->
         <div id="page-5" class="page hidden">
           <h2 id="p5-title">Kort om TLT</h2>
           <div class="card" style="margin:10px 0">
             <div class="card-inner">
               <div id="info-text" class="subtitle"></div>
               <div style="overflow:auto;margin-top:14px">
-                <table id="info-table" style="width:100%;border-collapse:separate;border-spacing:0 8px">
-                  <!-- rows injected -->
-                </table>
+                <table id="info-table" style="width:100%;border-collapse:separate;border-spacing:0 8px"></table>
               </div>
             </div>
           </div>
           <div class="nav-arrows">
             <button class="arrow" id="p5-prev">← Tilbake</button>
-            
+            <button class="arrow" id="p5-next">Neste →</button>
           </div>
         </div>
         <!-- END PAGES -->
       </div>
     </div>
 
-    <footer id="ft">Tips: Legg på hjem-skjerm via Del → «Legg til på Hjem‑skjerm».</footer>
+    <footer id="ft">Tips: Legg på hjem-skjerm via Del → «Legg til på Hjem-skjerm».</footer>
   </div>
 
   <script>
-    // ---- Localization (NO/DK) ----
+    // ---- Localization ----
     const L = {
       no: {
-        subtitle: "Refleksjonsverktøy for lederstil",
-        p1: "Velg språk og gå videre.",
-        nameLbl: "Skriv inn ditt navn",
-        nameHelp: "Navnet lagres lokalt på enheten og brukes i resultatene.",
-        testYourself: "Test deg selv",
-        update: "Oppdater resultater",
-        readmore: "Les mer",
-        reset: "Nullstill",
-        resultsTitle: (n)=>`Her er dine resultater${n?` (${n})`:''}`,
-        infoTitle: "Kort om TLT",
+        subtitle:"Refleksjonsverktøy for lederstil",
+        p1:"Velg språk og gå videre.",
+        nameLbl:"Skriv inn ditt navn",
+        nameHelp:"Navnet lagres lokalt på enheten og brukes i resultatene.",
+        testYourself:"Test deg selv", update:"Oppdater resultater", readmore:"Les mer", reset:"Nullstill",
+        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`, infoTitle:"Kort om TLT",
         badges:{ strong:"Sterk", balanced:"Balansert", weak:"Svak" },
         table:[
           ["Fase","Hva betyr det?","Ditt fokus"],
@@ -263,16 +226,12 @@
         ],
       },
       dk: {
-        subtitle: "Refleksionsværktøj for lederstil",
-        p1: "Vælg sprog og gå videre.",
-        nameLbl: "Skriv dit navn",
-        nameHelp: "Navnet gemmes lokalt på enheden og bruges i resultaterne.",
-        testYourself: "Test dig selv",
-        update: "Opdater resultater",
-        readmore: "Læs mere",
-        reset: "Nulstil",
-        resultsTitle: (n)=>`Her er dine resultater${n?` (${n})`:''}`,
-        infoTitle: "Kort om TLT",
+        subtitle:"Refleksionsværktøj for lederstil",
+        p1:"Vælg sprog og gå videre.",
+        nameLbl:"Skriv dit navn",
+        nameHelp:"Navnet gemmes lokalt på enheden og bruges i resultaterne.",
+        testYourself:"Test dig selv", update:"Opdater resultater", readmore:"Læs mere", reset:"Nulstil",
+        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`, infoTitle:"Kort om TLT",
         badges:{ strong:"Stærk", balanced:"Afbalanceret", weak:"Svæk" },
         table:[
           ["Fase","Hvad betyder det?","Dit fokus"],
@@ -281,146 +240,117 @@
           ["Tight (slut)","Opfølgning, kvalitet og læring.","Hyppig review, korrektion og fejring af fremdrift."]
         ],
       }
-    }
+    };
 
-    // ---- Questions model ----
+    // ---- Questions ----
     const QUESTIONS = {
-      t1: [
+      t1:[
         "Jeg sikrer at teamet forstår mål, prioriteringer og forventede leveranser.",
         "Jeg definerer roller og ansvar slik at alle vet sitt bidrag.",
         "Jeg kommuniserer standarder, frister og kvalitetskrav tydelig."
       ],
-      loose: [
+      loose:[
         "Jeg gir frihet til å løse oppgaver innenfor avtalte rammer.",
         "Jeg skaper trygghet for å eksperimentere, ta risiko og foreslå nye ideer.",
         "Jeg stoler på at teamet tar beslutninger selvstendig, og griper kun inn ved behov."
       ],
-      t2: [
+      t2:[
         "Jeg følger opp progresjon systematisk og gir konstruktive tilbakemeldinger.",
         "Jeg sikrer at leveranser holder avtalte standarder, og adresserer avvik raskt.",
         "Jeg feirer prestasjoner og bruker utfordringer til læring og forbedring."
       ]
     };
 
-    // ---- Evaluation texts (9) ----
+    // ---- Evaluation texts ----
     function evalText(section, score, name, lang='no'){
-      // thresholds: weak <8, balanced 8-11, strong >=12
       const weak = score < 8, strong = score >= 12;
       const n = name || "Du";
       const T = {
-        no: {
-          t1: {
-            weak: `${n}, start‑Tight trenger å strammes inn. Gjør målene tydelige, avklar roller/ansvar og sett konkrete kvalitetskrav. Tips: begynn hvert sprint med 3–5 klare prioriteringer og skriv «eierskap pr. leveranse».`,
+        no:{
+          t1:{
+            weak: `${n}, start-Tight trenger å strammes inn. Gjør målene tydelige, avklar roller/ansvar og sett konkrete kvalitetskrav.`,
             mid: `${n}, grunnmuren er der. Forsterk presisjonen: tydeligere prioritering, «definition of done», og en enkel sjekkliste før oppstart.`,
             strong: `${n}, meget tydelig retning. Pass på at presis styring ikke kveler initiativ – sjekk at teamet forstår «hvorfor», ikke bare «hva».`
           },
-          loose: {
-            weak: `${n}, gi reell autonomi: la teamet velge metode og rekkefølge innenfor rammene. Skap trygghet for eksperimenter og små feil. Tips: innfør «beslutningsrammer» i stedet for detaljkontroll.`,
+          loose:{
+            weak: `${n}, gi reell autonomi: la teamet velge metode og rekkefølge innenfor rammene. Skap trygghet for eksperimenter og små feil.`,
             mid: `${n}, balanse på vei. Utvid psykologisk sikkerhet: spør «hva trenger dere av meg for å lykkes?» og fjern 1–2 friksjoner hver uke.`,
             strong: `${n}, sterk autonomi og tillit. Sikre at friheten kobles til effekt: korte læringssløyfer, demoer og tydelig verdihypotese per tiltak.`
           },
-          t2: {
-            weak: `${n}, styrk avslutningen: jevnlige reviews, måling mot mål, rask håndtering av avvik og læringspunkter. Tips: innfør 30‑min «fredagsreview» og synliggjør forbedringer.`,
-            mid: `${n}, god oppfølging. Løft kvaliteten ytterligere med standardiserte leveranse‑kriterier og tydelig «neste steg» etter hver review.`,
+          t2:{
+            weak: `${n}, styrk avslutningen: jevnlige reviews, måling mot mål, rask håndtering av avvik og læringspunkter.`,
+            mid: `${n}, god oppfølging. Løft kvaliteten ytterligere med standardiserte leveranse-kriterier og tydelig «neste steg» etter hver review.`,
             strong: `${n}, eksemplarisk oppfølging og læring. Vokt deg for overkontroll – hold fokus på læring, effekt og kontinuerlig forbedring.`
           }
         },
-        dk: {
-          t1: {
-            weak: `${n}, start‑Tight skal skærpes. Gør mål tydelige, afklar roller/ansvar og sæt konkrete kvalitetskrav. Tip: start hvert sprint med 3–5 klare prioriteter og «definition of done».`,
+        dk:{
+          t1:{
+            weak: `${n}, start-Tight skal skærpes. Gør mål tydelige, afklar roller/ansvar og sæt konkrete kvalitetskrav.`,
             mid: `${n}, grundlaget er der. Skru op for præcisionen: tydelig prioritering og en kort checklist før opstart.`,
             strong: `${n}, meget tydelig retning. Pas på, at styringen ikke kvæler initiativ – sikre at teamet forstår «hvorfor», ikke kun «hvad».`
           },
-          loose: {
-            weak: `${n}, giv reel autonomi: lad teamet vælge metode og rækkefølge inden for rammerne. Skab tryghed for eksperimenter og små fejl. Tip: brug «beslutningsrammer» i stedet for detaljekontrol.`,
+          loose:{
+            weak: `${n}, giv reel autonomi: lad teamet vælge metode og rækkefølge inden for rammerne. Skab tryghed for eksperimenter og små fejl.`,
             mid: `${n}, balancen er på vej. Udvid psykologisk tryghed: spørg «hvad har I brug for fra mig?» og fjern 1–2 friktioner hver uge.`,
             strong: `${n}, stærk autonomi og tillid. Sørg for at friheden kobles til effekt: korte læringsloops, demoer og tydelig værdihypotese per tiltag.`
           },
-          t2: {
-            weak: `${n}, styrk afslutningen: faste reviews, måling mod mål, hurtig håndtering af afvigelser og læringspunkter. Tip: indfør 30‑min «fredagsreview».`,
-            mid: `${n}, god opfølgning. Hæv kvaliteten med standardiserede leverance‑kriterier og klare «næste skridt» efter hver review.`,
+          t2:{
+            weak: `${n}, styrk afslutningen: faste reviews, måling mod mål, hurtig håndtering af afvigelser og læringspunkter.`,
+            mid: `${n}, god opfølgning. Hæv kvaliteten med standardiserede leverance-kriterier og klare «næste skridt» efter hver review.`,
             strong: `${n}, forbilledlig opfølgning og læring. Undgå overkontrol – hold fokus på læring, effekt og løbende forbedring.`
           }
         }
       };
-      const key = weak? 'weak' : (strong? 'strong':'mid');
+      const key = weak ? 'weak' : (strong ? 'strong' : 'mid');
       return T[lang][section][key];
     }
 
-    // ---- App state ----
+    // ---- State ----
     const STATE_KEY = 'tlt_calc_v2_multi';
-    let st = {
-      lang: 'no',
-      name: '',
-      answers: { t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] },
-      expanded: { t1:false, loose:false, t2:false }
-    };
-
-    const $ = q=>document.querySelector(q);
-    const $$ = q=>Array.from(document.querySelectorAll(q));
-
+    let st = { lang:'no', name:'', answers:{ t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] }, expanded:{t1:false,loose:false,t2:false} };
+    const $=q=>document.querySelector(q), $$=q=>Array.from(document.querySelectorAll(q));
     function save(){ localStorage.setItem(STATE_KEY, JSON.stringify(st)); }
     function load(){
       try{ const raw = localStorage.getItem(STATE_KEY); if(raw) st = JSON.parse(raw); }catch{}
-      // apply lang
       applyLang();
-      // name
       $('#name').value = st.name || '';
       $('#userNameInline').textContent = st.name? st.name : '';
-      // render acc
       renderAccordion();
-      // restore selected pills
-      Object.entries(st.answers).forEach(([k,arr])=>{
-        arr.forEach((v,i)=>{ if(v){ const el = document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } });
-      })
+      Object.entries(st.answers).forEach(([k,arr])=>arr.forEach((v,i)=>{ if(v){ const el=document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }));
       updateScoreboxes(false);
     }
 
     function applyLang(){
-      const t = L[st.lang];
-      $('#subtitle').textContent = t.subtitle;
-      $('#p1-text').textContent = t.p1;
-      $('#lbl-name').textContent = t.nameLbl;
-      $('#p2-help').textContent = t.nameHelp;
-      $('#p3-title').textContent = t.testYourself;
-      $('#btn-calc').textContent = t.update;
-      $('#btn-readmore').textContent = t.readmore;
-      $('#btn-reset').textContent = t.reset;
-      $('#p5-title').textContent = t.infoTitle;
-      // Info text & table
-      const info = {
-        no: `<p><strong>Hva er Tight–Loose–Tight?</strong> En enkel modell for å balansere tydelig retning, autonomi og oppfølging i team.</p>`,
-        dk: `<p><strong>Hvad er Tight–Loose–Tight?</strong> En enkel model til at balancere tydelig retning, autonomi og opfølgning i teams.</p>`
-      };
-      $('#info-text').innerHTML = info[st.lang];
-      const tbl = $('#info-table'); tbl.innerHTML = '';
+      const t=L[st.lang];
+      $('#subtitle').textContent=t.subtitle;
+      $('#p1-text').textContent=t.p1;
+      $('#lbl-name').textContent=t.nameLbl;
+      $('#p2-help').textContent=t.nameHelp;
+      $('#p3-title').textContent=t.testYourself;
+      $('#btn-calc').textContent=t.update;
+      $('#btn-readmore').textContent=t.readmore;
+      $('#btn-reset').textContent=t.reset;
+      $('#p5-title').textContent=t.infoTitle;
+      const tbl=$('#info-table'); tbl.innerHTML='';
       L[st.lang].table.forEach((row,ri)=>{
-        const tr = document.createElement('tr');
+        const tr=document.createElement('tr');
         row.forEach((cell,ci)=>{
-          const td = document.createElement(ri===0?'th':'td');
-          td.textContent = cell;
-          td.style.padding = '10px 12px';
-          td.style.border = '1px solid rgba(255,255,255,.08)';
-          td.style.background = ri===0? '#0b1322':'#0c1527';
-          td.style.color = ri===0? '#9aa4b2':'#eef2f7';
-          td.style.textAlign = ci===0? 'left': 'left';
-          td.style.borderRadius = ri===0? '8px':'8px';
+          const td=document.createElement(ri===0?'th':'td');
+          td.textContent=cell;
+          td.style.padding='10px 12px'; td.style.border='1px solid rgba(255,255,255,.08)';
+          td.style.background=ri===0? '#0b1322':'#0c1527'; td.style.color=ri===0? '#9aa4b2':'#eef2f7';
+          td.style.textAlign='left'; td.style.borderRadius='8px';
           tr.appendChild(td);
-        });
-        tbl.appendChild(tr);
+        }); tbl.appendChild(tr);
       });
     }
 
-    // Navigation between pages
+    // Nav mellom sider
     function showPage(i){ $$('.page').forEach((p,idx)=>p.classList.toggle('hidden', idx!==i-1)); }
-
-    // Language flags
-    $('#flag-no').addEventListener('click',()=>{ st.lang='no'; save(); applyLang(); $('#flag-no').classList.add('active'); $('#flag-dk').classList.remove('active'); })
-    $('#flag-dk').addEventListener('click',()=>{ st.lang='dk'; save(); applyLang(); $('#flag-dk').classList.add('active'); $('#flag-no').classList.remove('active'); })
-    // set active flag initial
+    $('#flag-no').addEventListener('click',()=>{ st.lang='no'; save(); applyLang(); $('#flag-no').classList.add('active'); $('#flag-dk').classList.remove('active'); });
+    $('#flag-dk').addEventListener('click',()=>{ st.lang='dk'; save(); applyLang(); $('#flag-dk').classList.add('active'); $('#flag-no').classList.remove('active'); });
     function setFlag(){ $('#flag-no').classList.toggle('active', st.lang==='no'); $('#flag-dk').classList.toggle('active', st.lang==='dk'); }
 
-    // Page nav buttons
     $('#p1-next').addEventListener('click', ()=> showPage(2));
     $('#p2-prev').addEventListener('click', ()=> showPage(1));
     $('#p2-next').addEventListener('click', ()=> showPage(3));
@@ -430,21 +360,17 @@
     $('#p4-next').addEventListener('click', ()=> showPage(5));
     $('#p5-prev').addEventListener('click', ()=> showPage(4));
 
-    // Name entry
-    $('#btn-ok').addEventListener('click', ()=>{ st.name = $('#name').value.trim(); save(); $('#userNameInline').textContent = st.name? st.name : ''; toast(st.lang==='dk'? 'Navn opdateret':'Navn oppdatert'); });
+    // Navn
+    $('#btn-ok').addEventListener('click', ()=>{ st.name=$('#name').value.trim(); save(); $('#userNameInline').textContent=st.name||''; toast(st.lang==='dk'?'Navn opdateret':'Navn oppdatert'); });
     $('#btn-edit').addEventListener('click', ()=>{ $('#name').focus(); $('#name').select(); });
 
-    // Accordion render
+    // Accordion
     function renderAccordion(){
-      const acc = $('#acc'); acc.innerHTML='';
-      const groups = [ ['t1','Tight (1)'], ['loose','Loose'], ['t2','Tight (2)'] ];
-      groups.forEach(([key,label])=>{
-        const it = document.createElement('div'); it.className='acc-item'+(st.expanded[key]? ' open':'');
+      const acc=$('#acc'); acc.innerHTML='';
+      [['t1','Tight (1)'],['loose','Loose'],['t2','Tight (2)']].forEach(([key,label])=>{
+        const it=document.createElement('div'); it.className='acc-item'+(st.expanded[key]?' open':'');
         it.innerHTML = `
-          <div class="acc-hd" data-key="${key}">
-            <h3>${label}</h3>
-            <span>${st.expanded[key]? '−' : '+'}</span>
-          </div>
+          <div class="acc-hd" data-key="${key}"><h3>${label}</h3><span>${st.expanded[key]?'−':'+'}</span></div>
           <div class="acc-bd">
             ${QUESTIONS[key].map((text,idx)=>`
               <div class="q">
@@ -456,143 +382,59 @@
             `).join('')}
           </div>`;
         acc.appendChild(it);
-      })
+      });
     }
 
-    document.body.addEventListener('click', (e)=>{
-      const hd = e.target.closest('.acc-hd');
-      if(hd){ const k = hd.dataset.key; st.expanded[k] = !st.expanded[k]; save(); renderAccordion(); // re-bind selections
-        // re-apply selected pills after re-render
-        Object.entries(st.answers).forEach(([key,arr])=>{ arr.forEach((v,i)=>{ if(v){ const el = document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }); });
+    document.body.addEventListener('click',(e)=>{
+      const hd=e.target.closest('.acc-hd');
+      if(hd){ const k=hd.dataset.key; st.expanded[k]=!st.expanded[k]; save(); renderAccordion();
+        Object.entries(st.answers).forEach(([key,arr])=>arr.forEach((v,i)=>{ if(v){ const el=document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }));
         return;
       }
-      const pill = e.target.closest('.pill');
-      if(pill){ const q = pill.dataset.q; const v = Number(pill.dataset.v);
+      const pill=e.target.closest('.pill');
+      if(pill){ const q=pill.dataset.q, v=Number(pill.dataset.v);
         $$(`.pill[data-q="${q}"]`).forEach(p=>p.classList.remove('active'));
         pill.classList.add('active');
-        const [key,idx] = q.split('-'); st.answers[key][Number(idx)] = v; save(); return; }
-    })
+        const [key,idx]=q.split('-'); st.answers[key][Number(idx)]=v; save(); return;
+      }
+    });
 
-    // Compute & score boxes
-    function sum(a){ return a.reduce((x,v)=>x+(Number(v)||0),0); }
+    function sum(a){return a.reduce((x,v)=>x+(Number(v)||0),0);}
     function badge(score){ if(score>=12) return {t:L[st.lang].badges.strong, cls:'ok'}; if(score>=8) return {t:L[st.lang].badges.balanced, cls:'warn'}; return {t:L[st.lang].badges.weak, cls:'bad'}; }
 
     function updateScoreboxes(hideQuestions){
-      const s1 = sum(st.answers.t1), sL = sum(st.answers.loose), s2 = sum(st.answers.t2);
-      const sections = [ ['t1',s1], ['loose',sL], ['t2',s2] ];
-      sections.forEach(([k,s])=>{
-        const sb = document.getElementById('sb-'+k);
-        const sbb = document.getElementById('sbb-'+k);
-        const sbv = document.getElementById('sbv-'+k);
-        if(s>0){ sb.classList.remove('disabled'); const b = badge(s); sbb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; sbv.textContent = `${s}/15`; }
-        else { sb.classList.add('disabled'); sbb.textContent = '–'; sbv.textContent = '–'; }
-      })
-      if(hideQuestions){ // collapse all
-        st.expanded = { t1:false, loose:false, t2:false }; save(); renderAccordion();
-      }
-      // also fill page 4 boxes
+      const s1=sum(st.answers.t1), sL=sum(st.answers.loose), s2=sum(st.answers.t2);
+      [['t1',s1],['loose',sL],['t2',s2]].forEach(([k,s])=>{
+        const sb=document.getElementById('sb-'+k), sbb=document.getElementById('sbb-'+k), sbv=document.getElementById('sbv-'+k);
+        if(s>0){ sb.classList.remove('disabled'); const b=badge(s); sbb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`; sbv.textContent=`${s}/15`; }
+        else { sb.classList.add('disabled'); sbb.textContent='–'; sbv.textContent='–'; }
+      });
+      if(hideQuestions){ st.expanded={t1:false,loose:false,t2:false}; save(); renderAccordion(); }
       fillResultsPage();
     }
 
     function fillResultsPage(){
-      const scores = { t1: sum(st.answers.t1), loose: sum(st.answers.loose), t2: sum(st.answers.t2) };
-      $('#userNameInline').textContent = st.name? st.name : '';
-      let any = false;
+      const scores={ t1:sum(st.answers.t1), loose:sum(st.answers.loose), t2:sum(st.answers.t2) };
+      $('#userNameInline').textContent=st.name||'';
       Object.entries(scores).forEach(([k,s])=>{
-        const r = document.getElementById('r-'+k);
-        const rv = document.getElementById('rv-'+k);
-        const rb = document.getElementById('rb-'+k);
-        const rt = document.getElementById('rt-'+k);
-        if(s>0){ any = true; r.classList.remove('disabled'); const b = badge(s); rb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent = `${s}/15`; rt.textContent = evalText(k, s, st.name, st.lang); }
-        else { r.classList.add('disabled'); rb.textContent = '–'; rv.textContent = '–'; rt.textContent = ''; }
+        const r=$('#r-'+k), rv=$('#rv-'+k), rb=$('#rb-'+k), rt=$('#rt-'+k);
+        if(s>0){ r.classList.remove('disabled'); const b=badge(s); rb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent=`${s}/15`; rt.textContent=evalText(k,s,st.name,st.lang); }
+        else { r.classList.add('disabled'); rb.textContent='–'; rv.textContent='–'; rt.textContent=''; }
       });
-      const radar = document.getElementById('radar');
-      const svg = document.getElementById('radarSvg');
-      const canDraw = any && radar && svg;
-      radar?.classList.toggle('hidden', !canDraw);
-      if (canDraw) {
-        try { drawRadar(scores); } catch(e){ console.warn('Radar disabled due to error:', e); radar.classList.add('hidden'); }
-      }
-    };
-      $('#userNameInline').textContent = st.name? st.name : '';
-      let any = false;
-      Object.entries(scores).forEach(([k,s])=>{
-        const r = document.getElementById('r-'+k);
-        const rv = document.getElementById('rv-'+k);
-        const rb = document.getElementById('rb-'+k);
-        const rt = document.getElementById('rt-'+k);
-        if(s>0){ any = true; r.classList.remove('disabled'); const b = badge(s); rb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent = `${s}/15`; rt.textContent = evalText(k, s, st.name, st.lang); }
-        else { r.classList.add('disabled'); rb.textContent = '–'; rv.textContent = '–'; rt.textContent = ''; }
-      });
-      const radar = document.getElementById('radar');
-      radar.classList.toggle('hidden', !any);
-      if (any) drawRadar(scores);
-    };
-      $('#userNameInline').textContent = st.name? st.name : '';
-      Object.entries(scores).forEach(([k,s])=>{
-        const r = document.getElementById('r-'+k);
-        const rv = document.getElementById('rv-'+k);
-        const rb = document.getElementById('rb-'+k);
-        const rt = document.getElementById('rt-'+k);
-        if(s>0){ r.classList.remove('disabled'); const b = badge(s); rb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent = `${s}/15`; rt.textContent = evalText(k, s, st.name, st.lang); }
-        else { r.classList.add('disabled'); rb.textContent = '–'; rv.textContent = '–'; rt.textContent = ''; }
-      })
     }
 
-    $('#btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'? 'Resultater opdateret':'Resultater oppdatert'); });
+    $('#btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'?'Resultater opdateret':'Resultater oppdatert'); });
     $('#btn-readmore').addEventListener('click', ()=> showPage(4));
-    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'? 'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:[null,null,null], loose:[null,null,null], t2:[null,null,null]}; save(); renderAccordion(); updateScoreboxes(false); } });
+    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'?'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:[null,null,null], loose:[null,null,null], t2:[null,null,null]}; save(); renderAccordion(); updateScoreboxes(false); } });
 
     function toast(msg){ const d=document.createElement('div'); d.textContent=msg; Object.assign(d.style,{position:'fixed',left:'50%',bottom:'28px',transform:'translateX(-50%)',padding:'10px 14px',background:'#0c1527',color:'#eef2f7',border:'1px solid rgba(255,255,255,.15)',borderRadius:'10px',boxShadow:'0 10px 25px rgba(0,0,0,.35)',zIndex:9999}); document.body.appendChild(d); setTimeout(()=>d.remove(),1400); }
 
-/* TEMP: disable SW to un-freeze page
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(()=>{});
-  });
-}
-*/
-
-    // Radar drawer
-    function drawRadar(scores){
-      const svg = document.getElementById('radarSvg');
-      if(!svg) return; // defensive
-      try {
-        const W=360,H=360,cx=180,cy=190; // litt lavere sentrum for labels
-        const R=130; const rings=6; // 0..15 skaleres til R
-        svg.innerHTML='';
-        const NS='http://www.w3.org/2000/svg';
-        const toXY=(angleDeg,ratio)=>{ const rad=(angleDeg-90)*Math.PI/180; return [cx + Math.cos(rad)*R*ratio, cy + Math.sin(rad)*R*ratio]; };
-        const axes=[{k:'t1',a:0,l:'Tight (1)'},{k:'loose',a:120,l:'Loose'},{k:'t2',a:240,l:'Tight (2)'}];
-        // grid
-        for(let i=1;i<=rings;i++){
-          const ratio=i/rings; const pts=axes.map(ax=>toXY(ax.a,ratio)).map(p=>p.join(',')).join(' ');
-          const g=document.createElementNS(NS,'polygon'); g.setAttribute('points',pts); g.setAttribute('fill','none'); g.setAttribute('stroke','rgba(255,255,255,0.12)'); g.setAttribute('stroke-width','1'); svg.appendChild(g);
-        }
-        // axes & labels
-        axes.forEach(ax=>{
-          const [x,y]=toXY(ax.a,1); const l=document.createElementNS(NS,'line'); l.setAttribute('x1',180); l.setAttribute('y1',190); l.setAttribute('x2',x); l.setAttribute('y2',y); l.setAttribute('stroke','rgba(255,255,255,0.18)'); l.setAttribute('stroke-width','1'); svg.appendChild(l);
-          const [lx,ly]=toXY(ax.a,1.15); const txt=document.createElementNS(NS,'text'); txt.setAttribute('x',lx); txt.setAttribute('y',ly); txt.setAttribute('fill','#9aa4b2'); txt.setAttribute('font-size','12'); txt.setAttribute('text-anchor','middle'); txt.textContent=ax.l; svg.appendChild(txt);
-        });
-        // max polygon
-        const maxPts=axes.map(ax=>toXY(ax.a,1)).map(p=>p.join(',')).join(' ');
-        const maxPoly=document.createElementNS(NS,'polygon'); maxPoly.setAttribute('points',maxPts); maxPoly.setAttribute('fill','none'); maxPoly.setAttribute('stroke','var(--brand-2)'); maxPoly.setAttribute('stroke-width','2'); svg.appendChild(maxPoly);
-        // user polygon
-        const ratios=axes.map(ax=> (Math.max(0, Math.min(15, scores[ax.k]||0)))/15 );
-        const userPts=axes.map((ax,i)=>toXY(ax.a,ratios[i])).map(p=>p.join(',')).join(' ');
-        const userPoly=document.createElementNS(NS,'polygon'); userPoly.setAttribute('points',userPts); userPoly.setAttribute('fill','rgba(10,124,255,0.20)'); userPoly.setAttribute('stroke','var(--brand)'); userPoly.setAttribute('stroke-width','2'); svg.appendChild(userPoly);
-      } catch(err){ console.error(err); }
-    }
-      axes.forEach(ax=>{
-        const [x,y]=toXY(ax.a,1); const l=document.createElementNS(NS,'line'); l.setAttribute('x1',cx); l.setAttribute('y1',cy); l.setAttribute('x2',x); l.setAttribute('y2',y); l.setAttribute('stroke','rgba(255,255,255,0.18)'); l.setAttribute('stroke-width','1'); svg.appendChild(l);
-        const [lx,ly]=toXY(ax.a,1.15); const txt=document.createElementNS(NS,'text'); txt.setAttribute('x',lx); txt.setAttribute('y',ly); txt.setAttribute('fill','#9aa4b2'); txt.setAttribute('font-size','12'); txt.setAttribute('text-anchor','middle'); txt.textContent=ax.l; svg.appendChild(txt);
+    // Service worker midlertidig AV for å unngå “frys”
+    /* if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(()=>{});
       });
-      const maxPts=axes.map(ax=>toXY(ax.a,1)).map(p=>p.join(',')).join(' ');
-      const maxPoly=document.createElementNS(NS,'polygon'); maxPoly.setAttribute('points',maxPts); maxPoly.setAttribute('fill','none'); maxPoly.setAttribute('stroke','var(--brand-2)'); maxPoly.setAttribute('stroke-width','2'); svg.appendChild(maxPoly);
-      const ratios=axes.map(ax=> (Math.max(0, Math.min(15, scores[ax.k]||0)))/15 );
-      const userPts=axes.map((ax,i)=>toXY(ax.a,ratios[i])).map(p=>p.join(',')).join(' ');
-      const userPoly=document.createElementNS(NS,'polygon'); userPoly.setAttribute('points',userPts); userPoly.setAttribute('fill','rgba(10,124,255,0.20)'); userPoly.setAttribute('stroke','var(--brand)'); userPoly.setAttribute('stroke-width','2'); svg.appendChild(userPoly);
-    }
+    } */
 
     // init
     setFlag(); applyLang(); renderAccordion(); load(); showPage(1);
