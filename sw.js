@@ -1,6 +1,6 @@
 // ---- Tight–Loose–Tight PWA Service Worker (v8) ----
 // ØK VERSJONEN HVER GANG DU VIL Tvinge NY CACHE
-const CACHE_NAME = "tlt-v8";
+const CACHE_NAME = "tlt-v9";
 
 // Legg til statiske ressurser som skal caches ved install
 const ASSETS = [
