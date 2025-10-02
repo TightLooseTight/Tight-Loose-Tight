@@ -545,8 +545,13 @@
 
     function toast(msg){ const d=document.createElement('div'); d.textContent=msg; Object.assign(d.style,{position:'fixed',left:'50%',bottom:'28px',transform:'translateX(-50%)',padding:'10px 14px',background:'#0c1527',color:'#eef2f7',border:'1px solid rgba(255,255,255,.15)',borderRadius:'10px',boxShadow:'0 10px 25px rgba(0,0,0,.35)',zIndex:9999}); document.body.appendChild(d); setTimeout(()=>d.remove(),1400); }
 
-    // Service worker registration (keeps PWA behavior)
-    if('serviceWorker' in navigator){ window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }); }
+/* TEMP: disable SW to un-freeze page
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  });
+}
+*/
 
     // Radar drawer
     function drawRadar(scores){
