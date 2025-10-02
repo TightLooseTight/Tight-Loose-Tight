@@ -507,6 +507,24 @@
         else { r.classList.add('disabled'); rb.textContent = '–'; rv.textContent = '–'; rt.textContent = ''; }
       });
       const radar = document.getElementById('radar');
+      const svg = document.getElementById('radarSvg');
+      const canDraw = any && radar && svg;
+      radar?.classList.toggle('hidden', !canDraw);
+      if (canDraw) {
+        try { drawRadar(scores); } catch(e){ console.warn('Radar disabled due to error:', e); radar.classList.add('hidden'); }
+      }
+    };
+      $('#userNameInline').textContent = st.name? st.name : '';
+      let any = false;
+      Object.entries(scores).forEach(([k,s])=>{
+        const r = document.getElementById('r-'+k);
+        const rv = document.getElementById('rv-'+k);
+        const rb = document.getElementById('rb-'+k);
+        const rt = document.getElementById('rt-'+k);
+        if(s>0){ any = true; r.classList.remove('disabled'); const b = badge(s); rb.innerHTML = `<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent = `${s}/15`; rt.textContent = evalText(k, s, st.name, st.lang); }
+        else { r.classList.add('disabled'); rb.textContent = '–'; rv.textContent = '–'; rt.textContent = ''; }
+      });
+      const radar = document.getElementById('radar');
       radar.classList.toggle('hidden', !any);
       if (any) drawRadar(scores);
     };
@@ -533,17 +551,33 @@
     // Radar drawer
     function drawRadar(scores){
       const svg = document.getElementById('radarSvg');
-      if(!svg) return;
-      const W=360,H=360,cx=180,cy=190; // litt lavere sentrum for labels
-      const R=130; const rings=6; // 0..15 skaleres til R
-      svg.innerHTML='';
-      const NS='http://www.w3.org/2000/svg';
-      const toXY=(angleDeg,ratio)=>{ const rad=(angleDeg-90)*Math.PI/180; return [cx + Math.cos(rad)*R*ratio, cy + Math.sin(rad)*R*ratio]; };
-      const axes=[{k:'t1',a:0,l:'Tight (1)'},{k:'loose',a:120,l:'Loose'},{k:'t2',a:240,l:'Tight (2)'}];
-      for(let i=1;i<=rings;i++){
-        const ratio=i/rings; const pts=axes.map(ax=>toXY(ax.a,ratio)).map(p=>p.join(',')).join(' ');
-        const g=document.createElementNS(NS,'polygon'); g.setAttribute('points',pts); g.setAttribute('fill','none'); g.setAttribute('stroke','rgba(255,255,255,0.12)'); g.setAttribute('stroke-width','1'); svg.appendChild(g);
-      }
+      if(!svg) return; // defensive
+      try {
+        const W=360,H=360,cx=180,cy=190; // litt lavere sentrum for labels
+        const R=130; const rings=6; // 0..15 skaleres til R
+        svg.innerHTML='';
+        const NS='http://www.w3.org/2000/svg';
+        const toXY=(angleDeg,ratio)=>{ const rad=(angleDeg-90)*Math.PI/180; return [cx + Math.cos(rad)*R*ratio, cy + Math.sin(rad)*R*ratio]; };
+        const axes=[{k:'t1',a:0,l:'Tight (1)'},{k:'loose',a:120,l:'Loose'},{k:'t2',a:240,l:'Tight (2)'}];
+        // grid
+        for(let i=1;i<=rings;i++){
+          const ratio=i/rings; const pts=axes.map(ax=>toXY(ax.a,ratio)).map(p=>p.join(',')).join(' ');
+          const g=document.createElementNS(NS,'polygon'); g.setAttribute('points',pts); g.setAttribute('fill','none'); g.setAttribute('stroke','rgba(255,255,255,0.12)'); g.setAttribute('stroke-width','1'); svg.appendChild(g);
+        }
+        // axes & labels
+        axes.forEach(ax=>{
+          const [x,y]=toXY(ax.a,1); const l=document.createElementNS(NS,'line'); l.setAttribute('x1',180); l.setAttribute('y1',190); l.setAttribute('x2',x); l.setAttribute('y2',y); l.setAttribute('stroke','rgba(255,255,255,0.18)'); l.setAttribute('stroke-width','1'); svg.appendChild(l);
+          const [lx,ly]=toXY(ax.a,1.15); const txt=document.createElementNS(NS,'text'); txt.setAttribute('x',lx); txt.setAttribute('y',ly); txt.setAttribute('fill','#9aa4b2'); txt.setAttribute('font-size','12'); txt.setAttribute('text-anchor','middle'); txt.textContent=ax.l; svg.appendChild(txt);
+        });
+        // max polygon
+        const maxPts=axes.map(ax=>toXY(ax.a,1)).map(p=>p.join(',')).join(' ');
+        const maxPoly=document.createElementNS(NS,'polygon'); maxPoly.setAttribute('points',maxPts); maxPoly.setAttribute('fill','none'); maxPoly.setAttribute('stroke','var(--brand-2)'); maxPoly.setAttribute('stroke-width','2'); svg.appendChild(maxPoly);
+        // user polygon
+        const ratios=axes.map(ax=> (Math.max(0, Math.min(15, scores[ax.k]||0)))/15 );
+        const userPts=axes.map((ax,i)=>toXY(ax.a,ratios[i])).map(p=>p.join(',')).join(' ');
+        const userPoly=document.createElementNS(NS,'polygon'); userPoly.setAttribute('points',userPts); userPoly.setAttribute('fill','rgba(10,124,255,0.20)'); userPoly.setAttribute('stroke','var(--brand)'); userPoly.setAttribute('stroke-width','2'); svg.appendChild(userPoly);
+      } catch(err){ console.error(err); }
+    }
       axes.forEach(ax=>{
         const [x,y]=toXY(ax.a,1); const l=document.createElementNS(NS,'line'); l.setAttribute('x1',cx); l.setAttribute('y1',cy); l.setAttribute('x2',x); l.setAttribute('y2',y); l.setAttribute('stroke','rgba(255,255,255,0.18)'); l.setAttribute('stroke-width','1'); svg.appendChild(l);
         const [lx,ly]=toXY(ax.a,1.15); const txt=document.createElementNS(NS,'text'); txt.setAttribute('x',lx); txt.setAttribute('y',ly); txt.setAttribute('fill','#9aa4b2'); txt.setAttribute('font-size','12'); txt.setAttribute('text-anchor','middle'); txt.textContent=ax.l; svg.appendChild(txt);
