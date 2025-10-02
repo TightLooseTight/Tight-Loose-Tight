@@ -24,15 +24,15 @@
       margin:0; font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       color:var(--text);
       background:
-        radial-gradient(1000px 600px at 90% -10%, color-mix(in oklab, var(--brand) 35%, transparent), transparent 60%),
-        radial-gradient(1000px 600px at 10% 110%, color-mix(in oklab, var(--brand-2) 35%, transparent), transparent 60%),
+        radial-gradient(1000px 600px at 90% -10%, rgba(10,124,255,.25), transparent 60%),
+        radial-gradient(1000px 600px at 10% 110%, rgba(92,200,255,.25), transparent 60%),
         linear-gradient(180deg, #0b1220 0%, #0a0f1a 60%, #070b12 100%);
       min-height:100%;
     }
     .wrap{max-width:980px;margin:0 auto;padding:24px clamp(16px,4vw,28px) 80px}
     header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:18px;text-align:center}
 
-    /* Større logo (ca. 300% fra utgangspunktet) */
+    /* Stor logo (≈300%) */
     .logo{width:132px;height:132px;border-radius:12px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
     .logo img{max-width:100%;max-height:100%;object-fit:contain}
 
@@ -44,22 +44,16 @@
     .row{display:grid;gap:12px}
 
     .lang{display:flex;gap:16px;align-items:center;justify-content:center}
-
-    /* Høyoppløste flagg (SVG via CDN) + pen størrelse */
     .flag{
-      width:160px;      /* Øk til 192/224 hvis du ønsker enda større */
-      height:106px;     /* 3:2-forhold for pene flagg */
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.2);
-      cursor:pointer;
-      opacity:.95;
-      background:#0b1322;
+      width:160px; height:106px; /* 3:2 */
+      border-radius:8px; border:1px solid rgba(255,255,255,.2);
+      cursor:pointer; opacity:.95; background:#0b1322;
     }
     .flag.active{ outline:2px solid var(--brand); opacity:1; }
 
     .nav-arrows{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
-    #p1-prev{display:none} /* fjernet tilbake på side 1 */
-    #p5-next{display:none} /* fjernet neste på side 5 */
+    #p1-prev{display:none} /* ingen "Tilbake" på side 1 */
+    #p5-next{display:none} /* ingen "Neste" på side 5 */
     .arrow{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0b1322;color:var(--text);cursor:pointer}
 
     .btn{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#0e1a33,#0b1322);color:var(--text);cursor:pointer;font-weight:700}
@@ -83,7 +77,7 @@
     .q p{margin:0 0 10px 0}
     .scale{display:flex;gap:8px;flex-wrap:wrap}
     .pill{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#0b1322;color:var(--text);cursor:pointer}
-    .pill.active{background:color-mix(in oklab, var(--brand) 30%, transparent);border-color:var(--brand)}
+    .pill.active{background:rgba(10,124,255,.30);border-color:var(--brand)}
 
     .scorebox{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
     .score{text-align:center;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0c1527}
@@ -101,6 +95,20 @@
     /* Side 1: senter flagg og tekst */
     #page-1 .row{place-items:center;text-align:center}
     #p1-text{width:100%;text-align:center}
+
+    /* Radar chart (side 4) */
+    .radar-wrap{margin:16px 0 8px 0}
+    .radar-card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;
+      padding:12px
+    }
+    .radar-legend{
+      display:flex;gap:16px;align-items:center;justify-content:center;
+      color:var(--muted);font-size:13px;margin-top:6px
+    }
+    .legend-dot{width:10px;height:10px;border-radius:999px;display:inline-block;border:1px solid rgba(255,255,255,.4)}
   </style>
 </head>
 <body>
@@ -119,13 +127,14 @@
         <!-- PAGE 1 -->
         <div id="page-1" class="page">
           <div class="row" style="gap:14px">
-        <div class="lang">
-  <img id="flag-no" class="flag"
-       src="./flags/no.png" alt="Norsk" title="Norsk"
-       onerror="this.onerror=null;this.src='https://flagcdn.com/w160/no.png'">
-  <img id="flag-dk" class="flag"
-       src="./flags/dk.png" alt="Dansk" title="Dansk"
-       onerror="this.onerror=null;this.src='https://flagcdn.com/w160/dk.png'">
+            <div class="lang">
+              <!-- Lokale flagg med CDN-fallback -->
+              <img id="flag-no" class="flag"
+                   src="./flags/no.png" alt="Norsk" title="Norsk"
+                   onerror="this.onerror=null;this.src='https://flagcdn.com/w160/no.png'">
+              <img id="flag-dk" class="flag"
+                   src="./flags/dk.png" alt="Dansk" title="Dansk"
+                   onerror="this.onerror=null;this.src='https://flagcdn.com/w160/dk.png'">
             </div>
             <p id="p1-text" class="subtitle">Velg språk og gå videre.</p>
             <div class="nav-arrows">
@@ -197,6 +206,18 @@
               <p id="rt-t2" class="subtitle" style="margin-top:8px"></p>
             </div>
           </div>
+
+          <!-- Radar chart -->
+          <div id="radar" class="radar-wrap hidden">
+            <div class="radar-card">
+              <svg id="radarSvg" viewBox="0 0 360 360" width="100%" height="auto" aria-label="Spindeldiagram"></svg>
+              <div class="radar-legend">
+                <span><span class="legend-dot" style="background:rgba(10,124,255,.6);border-color:var(--brand)"></span> Min score</span>
+                <span><span class="legend-dot" style="background:transparent;border-color:var(--brand-2)"></span> Maks (15)</span>
+              </div>
+            </div>
+          </div>
+
           <div class="nav-arrows">
             <button class="arrow" id="p4-prev">← Tilbake</button>
             <button class="arrow" id="p4-next">Neste →</button>
@@ -219,21 +240,6 @@
             <button class="arrow" id="p5-next">Neste →</button>
           </div>
         </div>
-/* Radar chart (side 4) */
-.radar-wrap{margin:16px 0 8px 0}
-.radar-card{
-  background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;
-  padding:12px
-}
-.radar-legend{
-  display:flex;gap:16px;align-items:center;justify-content:center;
-  color:var(--muted);font-size:13px;margin-top:6px
-}
-.legend-dot{width:10px;height:10px;border-radius:999px;display:inline-block;border:1px solid rgba(255,255,255,.4)}
-.hidden{display:none!important} /* hvis ikke du allerede har denne */
-
         <!-- END PAGES -->
       </div>
     </div>
@@ -342,15 +348,19 @@
     // ---- State ----
     const STATE_KEY = 'tlt_calc_v2_multi';
     let st = { lang:'no', name:'', answers:{ t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] }, expanded:{t1:false,loose:false,t2:false} };
-    const $=q=>document.querySelector(q), $$=q=>Array.from(document.querySelectorAll(q));
-    function save(){ localStorage.setItem(STATE_KEY, JSON.stringify(st)); }
+    const $=q=>document.querySelector(q);
+
+    function save(){ try{ localStorage.setItem(STATE_KEY, JSON.stringify(st)); }catch{} }
     function load(){
       try{ const raw = localStorage.getItem(STATE_KEY); if(raw) st = JSON.parse(raw); }catch{}
       applyLang();
-      $('#name').value = st.name || '';
-      $('#userNameInline').textContent = st.name? st.name : '';
+      const nameEl = $('#name'); if (nameEl) nameEl.value = st.name || '';
+      const inline = $('#userNameInline'); if (inline) inline.textContent = st.name? st.name : '';
       renderAccordion();
-      Object.entries(st.answers).forEach(([k,arr])=>arr.forEach((v,i)=>{ if(v){ const el=document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }));
+      // reaktivér valgte piller
+      Object.entries(st.answers).forEach(([k,arr])=>arr.forEach((v,i)=>{
+        if(v){ const el=document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); }
+      }));
       updateScoreboxes(false);
     }
 
@@ -365,10 +375,10 @@
       $('#btn-readmore').textContent=t.readmore;
       $('#btn-reset').textContent=t.reset;
       $('#p5-title').textContent=t.infoTitle;
-      const tbl=$('#info-table'); tbl.innerHTML='';
+      const tbl=$('#info-table'); if(!tbl) return; tbl.innerHTML='';
       L[st.lang].table.forEach((row,ri)=>{
         const tr=document.createElement('tr');
-        row.forEach((cell,ci)=>{
+        row.forEach((cell)=>{
           const td=document.createElement(ri===0?'th':'td');
           td.textContent=cell;
           td.style.padding='10px 12px'; td.style.border='1px solid rgba(255,255,255,.08)';
@@ -380,31 +390,32 @@
     }
 
     // Nav mellom sider
-    function showPage(i){ $$('.page').forEach((p,idx)=>p.classList.toggle('hidden', idx!==i-1)); }
+    function showPage(i){ document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('hidden', idx!==i-1)); }
+
     // Språkvalg
     document.addEventListener('click', (e)=>{
-      if(e.target && e.target.id==='flag-no'){ st.lang='no'; save(); applyLang(); document.getElementById('flag-no').classList.add('active'); document.getElementById('flag-dk').classList.remove('active'); }
-      if(e.target && e.target.id==='flag-dk'){ st.lang='dk'; save(); applyLang(); document.getElementById('flag-dk').classList.add('active'); document.getElementById('flag-no').classList.remove('active'); }
+      if(e.target && e.target.id==='flag-no'){ st.lang='no'; save(); applyLang(); $('#flag-no').classList.add('active'); $('#flag-dk').classList.remove('active'); }
+      if(e.target && e.target.id==='flag-dk'){ st.lang='dk'; save(); applyLang(); $('#flag-dk').classList.add('active'); $('#flag-no').classList.remove('active'); }
     });
-    function setFlag(){ document.getElementById('flag-no')?.classList.toggle('active', st.lang==='no'); document.getElementById('flag-dk')?.classList.toggle('active', st.lang==='dk'); }
+    function setFlag(){ $('#flag-no')?.classList.toggle('active', st.lang==='no'); $('#flag-dk')?.classList.toggle('active', st.lang==='dk'); }
 
     // Navigasjon
-    document.getElementById('p1-next').addEventListener('click', ()=> showPage(2));
-    document.getElementById('p2-prev').addEventListener('click', ()=> showPage(1));
-    document.getElementById('p2-next').addEventListener('click', ()=> showPage(3));
-    document.getElementById('p3-prev').addEventListener('click', ()=> showPage(2));
-    document.getElementById('p3-next').addEventListener('click', ()=> showPage(4));
-    document.getElementById('p4-prev').addEventListener('click', ()=> showPage(3));
-    document.getElementById('p4-next').addEventListener('click', ()=> showPage(5));
-    document.getElementById('p5-prev').addEventListener('click', ()=> showPage(4));
+    $('#p1-next').addEventListener('click', ()=> showPage(2));
+    $('#p2-prev').addEventListener('click', ()=> showPage(1));
+    $('#p2-next').addEventListener('click', ()=> showPage(3));
+    $('#p3-prev').addEventListener('click', ()=> showPage(2));
+    $('#p3-next').addEventListener('click', ()=> showPage(4));
+    $('#p4-prev').addEventListener('click', ()=> showPage(3));
+    $('#p4-next').addEventListener('click', ()=> showPage(5));
+    $('#p5-prev').addEventListener('click', ()=> showPage(4));
 
     // Navn
-    document.getElementById('btn-ok').addEventListener('click', ()=>{ st.name=document.getElementById('name').value.trim(); save(); document.getElementById('userNameInline').textContent=st.name||''; toast(st.lang==='dk'?'Navn opdateret':'Navn oppdatert'); });
-    document.getElementById('btn-edit').addEventListener('click', ()=>{ document.getElementById('name').focus(); document.getElementById('name').select(); });
+    $('#btn-ok').addEventListener('click', ()=>{ st.name=$('#name').value.trim(); save(); const i=$('#userNameInline'); if(i) i.textContent=st.name||''; toast(st.lang==='dk'?'Navn opdateret':'Navn oppdatert'); });
+    $('#btn-edit').addEventListener('click', ()=>{ const n=$('#name'); n?.focus(); n?.select(); });
 
     // Accordion
     function renderAccordion(){
-      const acc=document.getElementById('acc'); acc.innerHTML='';
+      const acc=$('#acc'); if(!acc) return; acc.innerHTML='';
       [['t1','Tight (1)'],['loose','Loose'],['t2','Tight (2)']].forEach(([key,label])=>{
         const it=document.createElement('div'); it.className='acc-item'+(st.expanded[key]?' open':'');
         it.innerHTML = `
@@ -424,12 +435,12 @@
     }
 
     document.body.addEventListener('click',(e)=>{
-      const hd=e.target.closest('.acc-hd');
+      const hd=e.target.closest?.('.acc-hd');
       if(hd){ const k=hd.dataset.key; st.expanded[k]=!st.expanded[k]; save(); renderAccordion();
         Object.entries(st.answers).forEach(([key,arr])=>arr.forEach((v,i)=>{ if(v){ const el=document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }));
         return;
       }
-      const pill=e.target.closest('.pill');
+      const pill=e.target.closest?.('.pill');
       if(pill){ const q=pill.dataset.q, v=Number(pill.dataset.v);
         document.querySelectorAll(`.pill[data-q="${q}"]`).forEach(p=>p.classList.remove('active'));
         pill.classList.add('active');
@@ -452,27 +463,129 @@
     }
 
     function fillResultsPage(){
-      const scores={ t1:sum(st.answers.t1), loose:sum(st.answers.loose), t2:sum(st.answers.t2) };
-      document.getElementById('userNameInline').textContent=st.name||'';
+      const scores = { t1: sum(st.answers.t1), loose: sum(st.answers.loose), t2: sum(st.answers.t2) };
+      const inline=$('#userNameInline'); if(inline) inline.textContent = st.name || '';
+
       Object.entries(scores).forEach(([k,s])=>{
-        const r=document.getElementById('r-'+k), rv=document.getElementById('rv-'+k), rb=document.getElementById('rb-'+k), rt=document.getElementById('rt-'+k);
-        if(s>0){ r.classList.remove('disabled'); const b=badge(s); rb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`; rv.textContent=`${s}/15`; rt.textContent=evalText(k,s,st.name,st.lang); }
-        else { r.classList.add('disabled'); rb.textContent='–'; rv.textContent='–'; rt.textContent=''; }
+        const r=document.getElementById('r-'+k), rv=document.getElementById('rv-'+k),
+              rb=document.getElementById('rb-'+k), rt=document.getElementById('rt-'+k);
+        if(s>0){
+          r.classList.remove('disabled');
+          const b=badge(s);
+          rb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`;
+          rv.textContent=`${s}/15`;
+          rt.textContent=evalText(k,s,st.name,st.lang);
+        } else {
+          r.classList.add('disabled');
+          rb.textContent='–'; rv.textContent='–'; rt.textContent='';
+        }
       });
+
+      // Radar trygt: vis kun når noe er besvart
+      const any = scores.t1>0 || scores.loose>0 || scores.t2>0;
+      const radar = document.getElementById('radar');
+      const svg   = document.getElementById('radarSvg');
+      if (radar) radar.classList.toggle('hidden', !(any && svg));
+      if (any && svg){
+        try { drawRadar(scores); }
+        catch(e){ console.warn('Radar disabled due to error:', e); radar?.classList.add('hidden'); }
+      }
     }
 
-    document.getElementById('btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'?'Resultater opdateret':'Resultater oppdatert'); });
-    document.getElementById('btn-readmore').addEventListener('click', ()=> showPage(4));
-    document.getElementById('btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'?'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:[null,null,null], loose:[null,null,null], t2:[null,null,null]}; save(); renderAccordion(); updateScoreboxes(false); } });
+    // Radar-tegner (defensiv)
+    function drawRadar(scores){
+      const svg = document.getElementById('radarSvg');
+      if(!svg) return;
 
-    function toast(msg){ const d=document.createElement('div'); d.textContent=msg; Object.assign(d.style,{position:'fixed',left:'50%',bottom:'28px',transform:'translateX(-50%)',padding:'10px 14px',background:'#0c1527',color:'#eef2f7',border:'1px solid rgba(255,255,255,.15)',borderRadius:'10px',boxShadow:'0 10px 25px rgba(0,0,0,.35)',zIndex:9999}); document.body.appendChild(d); setTimeout(()=>d.remove(),1400); }
+      const W=360, H=360, cx=180, cy=190;  // litt lavere sentrum
+      const R=130, rings=6;
+      const NS='http://www.w3.org/2000/svg';
 
-    // Service worker midlertidig AV (unngå frys mens vi tester)
-    /* if ('serviceWorker' in navigator) {
+      svg.innerHTML='';
+
+      const toXY = (deg, ratio) => {
+        const rad = (deg - 90) * Math.PI / 180;
+        return [ cx + Math.cos(rad)*R*ratio, cy + Math.sin(rad)*R*ratio ];
+      };
+      const axes = [
+        { k:'t1',    a:   0, l:'Tight (1)' },
+        { k:'loose', a: 120, l:'Loose'     },
+        { k:'t2',    a: 240, l:'Tight (2)' }
+      ];
+
+      // grid
+      for(let i=1;i<=rings;i++){
+        const ratio = i/rings;
+        const pts = axes.map(ax => toXY(ax.a, ratio)).map(p=>p.join(',')).join(' ');
+        const g = document.createElementNS(NS,'polygon');
+        g.setAttribute('points', pts);
+        g.setAttribute('fill', 'none');
+        g.setAttribute('stroke', 'rgba(255,255,255,0.12)');
+        g.setAttribute('stroke-width', '1');
+        svg.appendChild(g);
+      }
+
+      // akser + labels
+      axes.forEach(ax=>{
+        const [x,y] = toXY(ax.a, 1);
+        const line = document.createElementNS(NS,'line');
+        line.setAttribute('x1', cx); line.setAttribute('y1', cy);
+        line.setAttribute('x2', x ); line.setAttribute('y2', y );
+        line.setAttribute('stroke', 'rgba(255,255,255,0.18)');
+        line.setAttribute('stroke-width', '1');
+        svg.appendChild(line);
+
+        const [lx,ly] = toXY(ax.a, 1.15);
+        const txt = document.createElementNS(NS,'text');
+        txt.setAttribute('x', lx); txt.setAttribute('y', ly);
+        txt.setAttribute('fill', '#9aa4b2');
+        txt.setAttribute('font-size', '12');
+        txt.setAttribute('text-anchor', 'middle');
+        txt.textContent = ax.l;
+        svg.appendChild(txt);
+      });
+
+      // maks-polygon
+      const maxPts = axes.map(ax => toXY(ax.a, 1)).map(p=>p.join(',')).join(' ');
+      const maxPoly = document.createElementNS(NS,'polygon');
+      maxPoly.setAttribute('points', maxPts);
+      maxPoly.setAttribute('fill', 'none');
+      maxPoly.setAttribute('stroke', 'var(--brand-2)');
+      maxPoly.setAttribute('stroke-width', '2');
+      svg.appendChild(maxPoly);
+
+      // bruker-polygon
+      const clamp15 = v => Math.max(0, Math.min(15, v||0));
+      const ratios  = axes.map(ax => clamp15(scores[ax.k]) / 15);
+      const userPts = axes.map((ax,i)=> toXY(ax.a, ratios[i]) ).map(p=>p.join(',')).join(' ');
+      const userPoly = document.createElementNS(NS,'polygon');
+      userPoly.setAttribute('points', userPts);
+      userPoly.setAttribute('fill', 'rgba(10,124,255,0.20)');
+      userPoly.setAttribute('stroke', 'var(--brand)');
+      userPoly.setAttribute('stroke-width', '2');
+      svg.appendChild(userPoly);
+    }
+
+    // Knapper
+    $('#btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'?'Resultater opdateret':'Resultater oppdatert'); });
+    $('#btn-readmore').addEventListener('click', ()=> showPage(4));
+    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'?'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:[null,null,null], loose:[null,null,null], t2:[null,null,null]}; save(); renderAccordion(); updateScoreboxes(false); } });
+
+    function toast(msg){
+      const d=document.createElement('div'); d.textContent=msg;
+      Object.assign(d.style,{position:'fixed',left:'50%',bottom:'28px',transform:'translateX(-50%)',padding:'10px 14px',background:'#0c1527',color:'#eef2f7',border:'1px solid rgba(255,255,255,.15)',borderRadius:'10px',boxShadow:'0 10px 25px rgba(0,0,0,.35)',zIndex:9999});
+      document.body.appendChild(d); setTimeout(()=>d.remove(),1400);
+    }
+
+    // Service worker er AV her for å unngå “frys” under testing.
+    // Skru PÅ igjen ved å fjerne kommentaren og bump CACHE_NAME i sw.js.
+    /*
+    if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').catch(()=>{});
       });
-    } */
+    }
+    */
 
     // init
     setFlag(); applyLang(); renderAccordion(); load(); showPage(1);
