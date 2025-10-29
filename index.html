@@ -590,18 +590,8 @@
       document.body.appendChild(d); setTimeout(()=>d.remove(),1400);
     }
 
-    // Service worker er AV her for å unngå “frys” under testing.
-    // Skru PÅ igjen ved å fjerne kommentaren og bump CACHE_NAME i sw.js.
-    /*
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(()=>{});
-      });
-    }
-    */
+  <script src="./app.js"></script>
 
-    // init
-    setFlag(); applyLang(); renderAccordion(); load(); showPage(1);
   </script>
 </body>
 </html>
