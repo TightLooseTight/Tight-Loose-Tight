@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Tight–Loose–Tight Kalkulator</title>
 
-  <!-- iPhone homescreen / PWA hooks -->
+  <!-- Homescreen / PWA hooks -->
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TLT Kalkulator">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -19,9 +20,11 @@
       --bg:#0a0f1a; --card:#101828; --muted:#9aa4b2; --text:#eef2f7;
       --ok:#10b981; --warn:#f59e0b; --bad:#ef4444; --radius:16px; --disabled:#1a2234;
     }
-    *{box-sizing:border-box} html,body{height:100%}
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
-      margin:0; font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      margin:0;
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
       color:var(--text);
       background:
         radial-gradient(1000px 600px at 90% -10%, rgba(10,124,255,.25), transparent 60%),
@@ -32,6 +35,7 @@
     .wrap{max-width:980px;margin:0 auto;padding:24px clamp(16px,4vw,28px) 80px}
     header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:18px;text-align:center}
 
+    /* Logo – stor (≈300%) */
     .logo{width:132px;height:132px;border-radius:12px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
     .logo img{max-width:100%;max-height:100%;object-fit:contain}
 
@@ -52,7 +56,7 @@
 
     .nav-arrows{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
     #p1-prev{display:none} /* ingen "Tilbake" på side 1 */
-    #p5-next{display:none} /* ingen "Neste" på side 5 */
+    #p5-next{display:none} /* ingen "Neste" på siste side */
     .arrow{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0b1322;color:var(--text);cursor:pointer}
 
     .btn{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#0e1a33,#0b1322);color:var(--text);cursor:pointer;font-weight:700}
@@ -101,7 +105,7 @@
     .bullets{margin:0; padding-left:18px}
     .bullets li{margin:6px 0}
 
-    /* Radar chart (side 5) */
+    /* Radar-styling */
     .radar-wrap{margin:16px 0 8px 0}
     .radar-card{
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
@@ -109,6 +113,7 @@
       border-radius:14px;
       padding:12px
     }
+    .radar-card svg{ width:100%; height:auto; display:block; }
     .radar-legend{
       display:flex;gap:16px;align-items:center;justify-content:center;
       color:var(--muted);font-size:13px;margin-top:6px
@@ -140,9 +145,9 @@
               <img id="flag-dk" class="flag"
                    src="./flags/dk.png" alt="Dansk" title="Dansk"
                    onerror="this.onerror=null;this.src='https://flagcdn.com/w160/dk.png'">
-                <img id="flag-se" class="flag"
-       src="./flags/se.png" alt="Svensk" title="Svensk"
-       onerror="this.onerror=null;this.src='https://flagcdn.com/w160/se.png'">
+              <img id="flag-se" class="flag"
+                   src="./flags/se.png" alt="Svensk" title="Svensk"
+                   onerror="this.onerror=null;this.src='https://flagcdn.com/w160/se.png'">
             </div>
             <p id="p1-text" class="subtitle">Velg språk og gå videre.</p>
             <div class="nav-arrows">
@@ -248,7 +253,7 @@
           <!-- Radar chart -->
           <div id="radar" class="radar-wrap hidden">
             <div class="radar-card">
-              <svg id="radarSvg" viewBox="0 0 360 360" width="100%" height="auto" aria-label="Spindeldiagram"></svg>
+              <svg id="radarSvg" viewBox="0 0 360 360" preserveAspectRatio="xMidYMid meet" aria-label="Spindeldiagram"></svg>
               <div class="radar-legend">
                 <span><span class="legend-dot" style="background:rgba(10,124,255,.6);border-color:var(--brand)"></span> Min score</span>
                 <span><span class="legend-dot" style="background:transparent;border-color:var(--brand-2)"></span> Maks (25)</span>
@@ -269,334 +274,7 @@
     <footer id="ft">Tips: Legg på hjem-skjerm via Del → «Legg til på Hjem-skjerm».</footer>
   </div>
 
-  <script>
-    // ---- Localization ----
-    const L = {
-      no: {
-        subtitle:"Refleksjonsverktøy for lederstil",
-        p1:"Velg språk og gå videre.",
-        info_h1:"Om denne selvtesten",
-        info_lead:"Dette er et enkelt refleksjonsverktøy – ikke en fasit. Hensikten er å gi deg et språk og et utgangspunkt for samtale om ledelse, ikke å “måle” deg.",
-        info_p1:"Metodikken bygger på Tight–Loose–Tight-rammeverket (TLT): først tydelig retning og rammer (Tight), deretter reell autonomi og eierskap i gjennomføringen (Loose), og til slutt systematisk oppfølging, kvalitet og læring (Tight).",
-        info_ul: [
-          "Selvtest: Du vurderer deg selv – resultatene lagres kun lokalt på enheten din.",
-          "Samtalestarter: Testen er laget for dialog og refleksjon, ikke for sertifisering.",
-          "Praktisk: Skårene peker på hva du kan forsterke eller justere i hverdagen.",
-          "Effekt: Balanse mellom styring, autonomi og oppfølging gir fart, læring og kvalitet."
-        ],
-        info_foot:"Tips: Gjør testen raskt første gang, diskuter i gruppe, og vend tilbake etter noen uker for å se utvikling.",
-        nameLbl:"Skriv inn ditt navn",
-        nameHelp:"Navnet lagres lokalt på enheten og brukes i resultatene.",
-        testYourself:"Test deg selv", update:"Oppdater resultater", readmore:"Les resultater", reset:"Nullstill",
-        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`,
-        badges:{ strong:"Sterk", balanced:"Balansert", weak:"Svak" },
-      },
-      dk: {
-        subtitle:"Refleksionsværktøj for lederstil",
-        p1:"Vælg sprog og gå videre.",
-        info_h1:"Om denne selvtest",
-        info_lead:"Dette er et enkelt refleksionsværktøj – ikke en facitliste. Formålet er at give dig et sprog og et afsæt for dialog om ledelse – ikke at måle dig.",
-        info_p1:"Metoden bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), dernæst reel autonomi og ejerskab i gennemførsel (Loose), og til sidst systematisk opfølgning, kvalitet og læring (Tight).",
-        info_ul: [
-          "Selvtest: Du vurderer dig selv – resultaterne gemmes kun lokalt på din enhed.",
-          "Samtalestarter: Testen er til dialog og refleksion – ikke certificering.",
-          "Praktisk: Scorerne peger på, hvad du kan forstærke eller justere i hverdagen.",
-          "Effekt: Balance mellem styring, autonomi og opfølgning giver fart, læring og kvalitet."
-        ],
-        info_foot:"Tip: Lav testen hurtigt første gang, drøft i grupper, og vend tilbage efter nogle uger for at se udvikling.",
-        nameLbl:"Skriv dit navn",
-        nameHelp:"Navnet gemmes lokalt på enheden og bruges i resultaterne.",
-        testYourself:"Test dig selv", update:"Opdater resultater", readmore:"Læs resultater", reset:"Nulstil",
-        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`,
-        badges:{ strong:"Stærk", balanced:"Afbalanceret", weak:"Svag" },
-      }
-    };
-
-    // ---- Questions (3×5) ----
-    const QUESTIONS = {
-      t1:[
-        "Jeg sikrer at teamet forstår mål, prioriteringer og forventede leveranser.",
-        "Jeg definerer roller og ansvar slik at alle vet sitt bidrag.",
-        "Jeg kommuniserer standarder, frister og kvalitetskrav tydelig.",
-        "Jeg etablerer tydelige beslutningsarenaer og avklarer hvem som beslutter hva.",
-        "Jeg setter tydelige rammer (scope/ikke-scope) og kriterier for «definition of done»."
-      ],
-      loose:[
-        "Jeg gir frihet til å løse oppgaver innenfor avtalte rammer.",
-        "Jeg skaper trygghet for å eksperimentere, ta risiko og foreslå nye ideer.",
-        "Jeg stoler på at teamet tar beslutninger selvstendig, og griper kun inn ved behov.",
-        "Jeg fjerner hindringer og beskytter fokus slik at teamet kan levere på egne valg.",
-        "Jeg inviterer til læring underveis (demoer, deling), ikke bare ved slutt."
-      ],
-      t2:[
-        "Jeg følger opp progresjon systematisk og gir konstruktive tilbakemeldinger.",
-        "Jeg sikrer at leveranser holder avtalte standarder, og adresserer avvik raskt.",
-        "Jeg feirer prestasjoner og bruker utfordringer til læring og forbedring.",
-        "Jeg gjør målbar effekt synlig (før/etter) og korrigerer kurs basert på data.",
-        "Jeg lukker løkker: tydelige neste steg og eierskap etter hver review."
-      ]
-    };
-
-    // ---- Felles resultat-tekster (samme for T/L/T) ----
-    function evalTextGeneric(score, name, lang='no'){
-      const weak = score < 13;      // ~<52% av 25
-      const strong = score >= 20;   // >=80% av 25
-      const n = name || (lang==='dk'?'Du':'Du');
-      const T = {
-        no:{
-          weak: `${n}, her har du litt å jobbe med. Prioritér denne delen de neste ukene: gjør én konkret endring, test i liten skala, og be om tilbakemeldinger.`,
-          mid:  `${n}, du er på god vei. Velg 1–2 vaner å forsterke, og gjør dem synlige for teamet (f.eks. sjekkliste, demo eller fast review).`,
-          strong:`${n}, dette er et tydelig styrkeområde. Hold nivået ved å gjøre det repeterbart (enkle standarder/ritualer) og del praksisen med andre.`
-        },
-        dk:{
-          weak: `${n}, her er der noget at arbejde med. Prioritér dette område de næste uger: lav én konkret ændring, test i lille skala, og bed om feedback.`,
-          mid:  `${n}, du er godt på vej. Vælg 1–2 vaner at forstærke, og gør dem synlige for teamet (fx tjekliste, demo eller fast review).`,
-          strong:`${n}, dette er et klart styrkeområde. Hold niveauet ved at gøre det gentageligt (enkle standarder/ritualer) og del praksis med andre.`
-        }
-      };
-      if (strong) return T[lang].strong;
-      if (weak)   return T[lang].weak;
-      return T[lang].mid;
-    }
-
-    // ---- State ----
-    const STATE_KEY = 'tlt_calc_v3_3x5';
-    let st = { lang:'no', name:'', answers:{ t1:Array(5).fill(null), loose:Array(5).fill(null), t2:Array(5).fill(null) }, expanded:{t1:false,loose:false,t2:false} };
-    const $=q=>document.querySelector(q);
-
-    function save(){ try{ localStorage.setItem(STATE_KEY, JSON.stringify(st)); }catch{} }
-    function load(){
-      try{ const raw = localStorage.getItem(STATE_KEY); if(raw) st = JSON.parse(raw); }catch{}
-      applyLang();
-      const nameEl = $('#name'); if (nameEl) nameEl.value = st.name || '';
-      const inline = $('#userNameInline'); if (inline) inline.textContent = st.name? st.name : '';
-      renderAccordion();
-      Object.entries(st.answers).forEach(([k,arr])=>arr.forEach((v,i)=>{
-        if(v){ const el=document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); }
-      }));
-      updateScoreboxes(false);
-    }
-
-    function applyLang(){
-      const t=L[st.lang];
-      $('#subtitle').textContent=t.subtitle;
-      $('#p1-text').textContent=t.p1;
-
-      // Info side
-      $('#info-h1').textContent = t.info_h1;
-      $('#info-lead').textContent = t.info_lead;
-      $('#info-p1').textContent = t.info_p1;
-      const ul = document.getElementById('info-ul'); ul.innerHTML='';
-      t.info_ul.forEach(item => { const li=document.createElement('li'); li.textContent=item; ul.appendChild(li); });
-      $('#info-foot').textContent = t.info_foot;
-
-      // Navn & test
-      $('#lbl-name').textContent=t.nameLbl;
-      $('#p3-help').textContent=t.nameHelp;
-      $('#p4-title').textContent=t.testYourself;
-      $('#btn-calc').textContent=t.update;
-      $('#btn-readmore').textContent=t.readmore;
-      $('#btn-reset').textContent=t.reset;
-      $('#p5-title').textContent=t.resultsTitle(st.name);
-    }
-
-    // Nav mellom sider (1→2→3→4→5)
-    function showPage(i){ document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('hidden', idx!==i-1)); }
-
-    // Språkvalg
-    document.addEventListener('click', (e)=>{
-      if(e.target && e.target.id==='flag-no'){ st.lang='no'; save(); applyLang(); $('#flag-no').classList.add('active'); $('#flag-dk').classList.remove('active'); }
-      if(e.target && e.target.id==='flag-dk'){ st.lang='dk'; save(); applyLang(); $('#flag-dk').classList.add('active'); $('#flag-no').classList.remove('active'); }
-    });
-    function setFlag(){ $('#flag-no')?.classList.toggle('active', st.lang==='no'); $('#flag-dk')?.classList.toggle('active', st.lang==='dk'); }
-
-    // Navigasjon
-    $('#p1-next').addEventListener('click', ()=> showPage(2));
-    $('#p2-prev').addEventListener('click', ()=> showPage(1));
-    $('#p2-next').addEventListener('click', ()=> showPage(3));
-    $('#p3-prev').addEventListener('click', ()=> showPage(2));
-    $('#p3-next').addEventListener('click', ()=> showPage(4));
-    $('#p4-prev').addEventListener('click', ()=> showPage(3));
-    $('#p4-next').addEventListener('click', ()=> showPage(5));
-    $('#p5-prev').addEventListener('click', ()=> showPage(4));
-
-    // Navn
-    $('#btn-ok').addEventListener('click', ()=>{ st.name=$('#name').value.trim(); save(); const i=$('#userNameInline'); if(i) i.textContent=st.name||''; toast(st.lang==='dk'?'Navn opdateret':'Navn oppdatert'); });
-    $('#btn-edit').addEventListener('click', ()=>{ const n=$('#name'); n?.focus(); n?.select(); });
-
-    // Accordion (3×5)
-    function renderAccordion(){
-      const acc=$('#acc'); if(!acc) return; acc.innerHTML='';
-      [['t1','Tight (1)'],['loose','Loose'],['t2','Tight (2)']].forEach(([key,label])=>{
-        const it=document.createElement('div'); it.className='acc-item'+(st.expanded[key]?' open':'');
-        it.innerHTML = `
-          <div class="acc-hd" data-key="${key}"><h3>${label}</h3><span>${st.expanded[key]?'−':'+'}</span></div>
-          <div class="acc-bd">
-            ${QUESTIONS[key].map((text,idx)=>`
-              <div class="q">
-                <p><strong>${idx+1}.</strong> ${text}</p>
-                <div class="scale" role="group" aria-label="Skala for ${key}-${idx}">
-                  ${[1,2,3,4,5].map(v=>`<span class="pill" data-q="${key}-${idx}" data-v="${v}" tabindex="0">${v}</span>`).join('')}
-                </div>
-              </div>
-            `).join('')}
-          </div>`;
-        acc.appendChild(it);
-      });
-    }
-
-    document.body.addEventListener('click',(e)=>{
-      const hd=e.target.closest?.('.acc-hd');
-      if(hd){ const k=hd.dataset.key; st.expanded[k]=!st.expanded[k]; save(); renderAccordion();
-        Object.entries(st.answers).forEach(([key,arr])=>arr.forEach((v,i)=>{ if(v){ const el=document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); } }));
-        return;
-      }
-      const pill=e.target.closest?.('.pill');
-      if(pill){ const q=pill.dataset.q, v=Number(pill.dataset.v);
-        document.querySelectorAll(`.pill[data-q="${q}"]`).forEach(p=>p.classList.remove('active'));
-        pill.classList.add('active');
-        const [key,idx]=q.split('-'); st.answers[key][Number(idx)]=v; save(); return;
-      }
-    });
-
-    function sum(a){return a.reduce((x,v)=>x+(Number(v)||0),0);}
-    function badge25(score, lang){
-      // felles terskler for alle tre kategorier
-      if(score >= 20) return {t:L[lang].badges.strong, cls:'ok'};
-      if(score >= 13) return {t:L[lang].badges.balanced, cls:'warn'};
-      return {t:L[lang].badges.weak, cls:'bad'};
-    }
-
-    function updateScoreboxes(hideQuestions){
-      const s1=sum(st.answers.t1), sL=sum(st.answers.loose), s2=sum(st.answers.t2);
-      [['t1',s1],['loose',sL],['t2',s2]].forEach(([k,s])=>{
-        const sb=document.getElementById('sb-'+k), sbb=document.getElementById('sbb-'+k), sbv=document.getElementById('sbv-'+k);
-        if(s>0){ sb.classList.remove('disabled'); const b=badge25(s, st.lang); sbb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`; sbv.textContent=`${s}/25`; }
-        else { sb.classList.add('disabled'); sbb.textContent='–'; sbv.textContent='–'; }
-      });
-      if(hideQuestions){ st.expanded={t1:false,loose:false,t2:false}; save(); renderAccordion(); }
-      fillResultsPage();
-    }
-
-    function fillResultsPage(){
-      const scores = { t1: sum(st.answers.t1), loose: sum(st.answers.loose), t2: sum(st.answers.t2) };
-      const inline=$('#userNameInline'); if(inline) inline.textContent = st.name || '';
-
-      Object.entries(scores).forEach(([k,s])=>{
-        const r=document.getElementById('r-'+k), rv=document.getElementById('rv-'+k),
-              rb=document.getElementById('rb-'+k), rt=document.getElementById('rt-'+k);
-        if(s>0){
-          r.classList.remove('disabled');
-          const b=badge25(s, st.lang);
-          rb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`;
-          rv.textContent=`${s}/25`;
-          rt.textContent=evalTextGeneric(s, st.name, st.lang);
-        } else {
-          r.classList.add('disabled');
-          rb.textContent='–'; rv.textContent='–'; rt.textContent='';
-        }
-      });
-
-      // Radar trygt: vis kun når noe er besvart
-      const any = scores.t1>0 || scores.loose>0 || scores.t2>0;
-      const radar = document.getElementById('radar');
-      const svg   = document.getElementById('radarSvg');
-      if (radar) radar.classList.toggle('hidden', !(any && svg));
-      if (any && svg){
-        try { drawRadar(scores); }
-        catch(e){ console.warn('Radar disabled due to error:', e); radar?.classList.add('hidden'); }
-      }
-    }
-
-    // Radar-tegner (maks 25)
-    function drawRadar(scores){
-      const svg = document.getElementById('radarSvg');
-      if(!svg) return;
-
-      const cx=180, cy=190, R=130, rings=5, NS='http://www.w3.org/2000/svg';
-      svg.innerHTML='';
-
-      const toXY = (deg, ratio) => {
-        const rad = (deg - 90) * Math.PI / 180;
-        return [ cx + Math.cos(rad)*R*ratio, cy + Math.sin(rad)*R*ratio ];
-      };
-      const axes = [
-        { k:'t1',    a:   0, l:'Tight (1)' },
-        { k:'loose', a: 120, l:'Loose'     },
-        { k:'t2',    a: 240, l:'Tight (2)' }
-      ];
-
-      // grid
-      for(let i=1;i<=rings;i++){
-        const ratio = i/rings;
-        const pts = axes.map(ax => toXY(ax.a, ratio)).map(p=>p.join(',')).join(' ');
-        const g = document.createElementNS(NS,'polygon');
-        g.setAttribute('points', pts);
-        g.setAttribute('fill', 'none');
-        g.setAttribute('stroke', 'rgba(255,255,255,0.12)');
-        g.setAttribute('stroke-width', '1');
-        svg.appendChild(g);
-      }
-
-      // akser + labels
-      axes.forEach(ax=>{
-        const [x,y] = toXY(ax.a, 1);
-        const line = document.createElementNS(NS,'line');
-        line.setAttribute('x1', cx); line.setAttribute('y1', cy);
-        line.setAttribute('x2', x ); line.setAttribute('y2', y );
-        line.setAttribute('stroke', 'rgba(255,255,255,0.18)');
-        line.setAttribute('stroke-width', '1');
-        svg.appendChild(line);
-
-        const [lx,ly] = toXY(ax.a, 1.15);
-        const txt = document.createElementNS(NS,'text');
-        txt.setAttribute('x', lx); txt.setAttribute('y', ly);
-        txt.setAttribute('fill', '#9aa4b2');
-        txt.setAttribute('font-size', '12');
-        txt.setAttribute('text-anchor', 'middle');
-        txt.textContent = ax.l;
-        svg.appendChild(txt);
-      });
-
-      // maks-polygon
-      const maxPts = axes.map(ax => toXY(ax.a, 1)).map(p=>p.join(',')).join(' ');
-      const maxPoly = document.createElementNS(NS,'polygon');
-      maxPoly.setAttribute('points', maxPts);
-      maxPoly.setAttribute('fill', 'none');
-      maxPoly.setAttribute('stroke', 'var(--brand-2)');
-      maxPoly.setAttribute('stroke-width', '2');
-      svg.appendChild(maxPoly);
-
-      // bruker-polygon
-      const clamp25 = v => Math.max(0, Math.min(25, v||0));
-      const ratios  = axes.map(ax => clamp25(scores[ax.k]) / 25);
-      const userPts = axes.map((ax,i)=> toXY(ax.a, ratios[i]) ).map(p=>p.join(',')).join(' ');
-      const userPoly = document.createElementNS(NS,'polygon');
-      userPoly.setAttribute('points', userPts);
-      userPoly.setAttribute('fill', 'rgba(10,124,255,0.20)');
-      userPoly.setAttribute('stroke', 'var(--brand)');
-      userPoly.setAttribute('stroke-width', '2');
-      svg.appendChild(userPoly);
-    }
-
-    // Knapper
-    $('#btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'?'Resultater opdateret':'Resultater oppdatert'); });
-    $('#btn-readmore').addEventListener('click', ()=> showPage(5));
-    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'?'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:Array(5).fill(null), loose:Array(5).fill(null), t2:Array(5).fill(null)}; save(); renderAccordion(); updateScoreboxes(false); } });
-
-    function toast(msg){
-      const d=document.createElement('div'); d.textContent=msg;
-      Object.assign(d.style,{position:'fixed',left:'50%',bottom:'28px',transform:'translateX(-50%)',padding:'10px 14px',background:'#0c1527',color:'#eef2f7',border:'1px solid rgba(255,255,255,.15)',borderRadius:'10px',boxShadow:'0 10px 25px rgba(0,0,0,.35)',zIndex:9999});
-      document.body.appendChild(d); setTimeout(()=>d.remove(),1400);
-    }
-
-  <script<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
-    if (caches && caches.keys) { caches.keys().then(keys => keys.forEach(k => caches.delete(k))); }
-  }
-</script>
-<script src="./app.js?v=2"></script>
- src="./app.js"></script>
+  <!-- All logikk ligger i app.js -->
+  <script src="./app.js"></script>
 </body>
 </html>
