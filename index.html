@@ -590,6 +590,13 @@
       document.body.appendChild(d); setTimeout(()=>d.remove(),1400);
     }
 
-  <script src="./app.js"></script>
+  <script<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+    if (caches && caches.keys) { caches.keys().then(keys => keys.forEach(k => caches.delete(k))); }
+  }
+</script>
+<script src="./app.js?v=2"></script>
+ src="./app.js"></script>
 </body>
 </html>
