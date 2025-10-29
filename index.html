@@ -32,7 +32,6 @@
     .wrap{max-width:980px;margin:0 auto;padding:24px clamp(16px,4vw,28px) 80px}
     header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:18px;text-align:center}
 
-    /* Stor logo (≈300%) */
     .logo{width:132px;height:132px;border-radius:12px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
     .logo img{max-width:100%;max-height:100%;object-fit:contain}
 
@@ -96,7 +95,13 @@
     #page-1 .row{place-items:center;text-align:center}
     #p1-text{width:100%;text-align:center}
 
-    /* Radar chart (side 4) */
+    /* Info-side typografi */
+    .lead{font-size:clamp(16px,2.2vw,19px); color:#d9e2ef}
+    .muted{color:var(--muted)}
+    .bullets{margin:0; padding-left:18px}
+    .bullets li{margin:6px 0}
+
+    /* Radar chart (side 5) */
     .radar-wrap{margin:16px 0 8px 0}
     .radar-card{
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
@@ -124,11 +129,11 @@
 
     <div class="card">
       <div class="card-inner">
-        <!-- PAGE 1 -->
+
+        <!-- PAGE 1: språkvalg -->
         <div id="page-1" class="page">
           <div class="row" style="gap:14px">
             <div class="lang">
-              <!-- Lokale flagg med CDN-fallback -->
               <img id="flag-no" class="flag"
                    src="./flags/no.png" alt="Norsk" title="Norsk"
                    onerror="this.onerror=null;this.src='https://flagcdn.com/w160/no.png'">
@@ -144,8 +149,38 @@
           </div>
         </div>
 
-        <!-- PAGE 2 -->
+        <!-- PAGE 2: ny info-side -->
         <div id="page-2" class="page hidden">
+          <div class="row">
+            <h2 id="info-h1">Om denne selvtesten</h2>
+            <p class="lead" id="info-lead">
+              Dette er et enkelt refleksjonsverktøy – ikke en fasit. Hensikten er å gi deg et språk
+              og et utgangspunkt for samtale om ledelse, ikke å “måle” deg.
+            </p>
+            <p id="info-p1">
+              Metodikken bygger på <strong>Tight–Loose–Tight</strong>-rammeverket (TLT): først tydelig retning og rammer
+              (Tight), deretter reell autonomi og eierskap i gjennomføringen (Loose), og til slutt systematisk
+              oppfølging, kvalitet og læring (Tight).
+            </p>
+            <ul class="bullets" id="info-ul">
+              <li><strong>Selvtest:</strong> Du vurderer deg selv – resultatene lagres kun lokalt på enheten din.</li>
+              <li><strong>Samtalestarter:</strong> Testen er laget for dialog og refleksjon, ikke for sertifisering.</li>
+              <li><strong>Praktisk:</strong> Skårene peker på hva du kan forsterke eller justere i hverdagen.</li>
+              <li><strong>Effekt:</strong> Balanse mellom styring, autonomi og oppfølging gir fart, læring og kvalitet.</li>
+            </ul>
+            <p class="muted" id="info-foot">
+              Tips: Gjør testen raskt første gang, diskuter i gruppe, og vend tilbake etter noen uker for å se utvikling.
+            </p>
+
+            <div class="nav-arrows">
+              <button class="arrow" id="p2-prev">← Tilbake</button>
+              <button class="arrow" id="p2-next">Neste →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- PAGE 3: navn -->
+        <div id="page-3" class="page hidden">
           <div class="row" style="gap:14px">
             <div class="field">
               <label for="name" id="lbl-name">Skriv inn ditt navn</label>
@@ -154,22 +189,22 @@
                 <button class="btn ghost" id="btn-ok">OK</button>
                 <span id="btn-edit" class="pencil" title="Rediger" aria-label="Rediger navn">✎</span>
               </div>
-              <small class="subtitle" id="p2-help">Navnet lagres lokalt på enheten og brukes i resultatene.</small>
+              <small class="subtitle" id="p3-help">Navnet lagres lokalt på enheten og brukes i resultatene.</small>
             </div>
             <div class="nav-arrows">
-              <button class="arrow" id="p2-prev">← Tilbake</button>
-              <button class="arrow" id="p2-next">Neste →</button>
+              <button class="arrow" id="p3-prev">← Tilbake</button>
+              <button class="arrow" id="p3-next">Neste →</button>
             </div>
           </div>
         </div>
 
-        <!-- PAGE 3 -->
-        <div id="page-3" class="page hidden">
-          <h2 id="p3-title">Test deg selv</h2>
+        <!-- PAGE 4: test (3×5 spørsmål) -->
+        <div id="page-4" class="page hidden">
+          <h2 id="p4-title">Test deg selv</h2>
           <div class="accordion" id="acc"></div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
             <button class="btn primary" id="btn-calc">Oppdater resultater</button>
-            <button class="btn" id="btn-readmore">Les mer</button>
+            <button class="btn" id="btn-readmore">Les resultater</button>
             <button class="btn ghost" id="btn-reset">Nullstill</button>
           </div>
           <div class="scorebox" style="margin-top:14px">
@@ -184,14 +219,14 @@
             </div>
           </div>
           <div class="nav-arrows">
-            <button class="arrow" id="p3-prev">← Tilbake</button>
-            <button class="arrow" id="p3-next">Neste →</button>
+            <button class="arrow" id="p4-prev">← Tilbake</button>
+            <button class="arrow" id="p4-next">Neste →</button>
           </div>
         </div>
 
-        <!-- PAGE 4 -->
-        <div id="page-4" class="page hidden">
-          <h2 id="p4-title">Her er dine resultater <span id="userNameInline"></span></h2>
+        <!-- PAGE 5: resultater + radar (maks 25) -->
+        <div id="page-5" class="page hidden">
+          <h2 id="p5-title">Her er dine resultater <span id="userNameInline"></span></h2>
           <div class="scorebox" style="margin:10px 0 16px 0;grid-template-columns:1fr">
             <div class="score disabled" id="r-t1">
               <h4>Tight (1)</h4><div class="big" id="rv-t1">–</div><div class="muted" id="rb-t1">–</div>
@@ -213,34 +248,18 @@
               <svg id="radarSvg" viewBox="0 0 360 360" width="100%" height="auto" aria-label="Spindeldiagram"></svg>
               <div class="radar-legend">
                 <span><span class="legend-dot" style="background:rgba(10,124,255,.6);border-color:var(--brand)"></span> Min score</span>
-                <span><span class="legend-dot" style="background:transparent;border-color:var(--brand-2)"></span> Maks (15)</span>
+                <span><span class="legend-dot" style="background:transparent;border-color:var(--brand-2)"></span> Maks (25)</span>
               </div>
             </div>
           </div>
 
-          <div class="nav-arrows">
-            <button class="arrow" id="p4-prev">← Tilbake</button>
-            <button class="arrow" id="p4-next">Neste →</button>
-          </div>
-        </div>
-
-        <!-- PAGE 5 -->
-        <div id="page-5" class="page hidden">
-          <h2 id="p5-title">Kort om TLT</h2>
-          <div class="card" style="margin:10px 0">
-            <div class="card-inner">
-              <div id="info-text" class="subtitle"></div>
-              <div style="overflow:auto;margin-top:14px">
-                <table id="info-table" style="width:100%;border-collapse:separate;border-spacing:0 8px"></table>
-              </div>
-            </div>
-          </div>
           <div class="nav-arrows">
             <button class="arrow" id="p5-prev">← Tilbake</button>
             <button class="arrow" id="p5-next">Neste →</button>
           </div>
         </div>
         <!-- END PAGES -->
+
       </div>
     </div>
 
@@ -253,101 +272,93 @@
       no: {
         subtitle:"Refleksjonsverktøy for lederstil",
         p1:"Velg språk og gå videre.",
+        info_h1:"Om denne selvtesten",
+        info_lead:"Dette er et enkelt refleksjonsverktøy – ikke en fasit. Hensikten er å gi deg et språk og et utgangspunkt for samtale om ledelse, ikke å “måle” deg.",
+        info_p1:"Metodikken bygger på Tight–Loose–Tight-rammeverket (TLT): først tydelig retning og rammer (Tight), deretter reell autonomi og eierskap i gjennomføringen (Loose), og til slutt systematisk oppfølging, kvalitet og læring (Tight).",
+        info_ul: [
+          "Selvtest: Du vurderer deg selv – resultatene lagres kun lokalt på enheten din.",
+          "Samtalestarter: Testen er laget for dialog og refleksjon, ikke for sertifisering.",
+          "Praktisk: Skårene peker på hva du kan forsterke eller justere i hverdagen.",
+          "Effekt: Balanse mellom styring, autonomi og oppfølging gir fart, læring og kvalitet."
+        ],
+        info_foot:"Tips: Gjør testen raskt første gang, diskuter i gruppe, og vend tilbake etter noen uker for å se utvikling.",
         nameLbl:"Skriv inn ditt navn",
         nameHelp:"Navnet lagres lokalt på enheten og brukes i resultatene.",
-        testYourself:"Test deg selv", update:"Oppdater resultater", readmore:"Les mer", reset:"Nullstill",
-        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`, infoTitle:"Kort om TLT",
+        testYourself:"Test deg selv", update:"Oppdater resultater", readmore:"Les resultater", reset:"Nullstill",
+        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`,
         badges:{ strong:"Sterk", balanced:"Balansert", weak:"Svak" },
-        table:[
-          ["Fase","Hva betyr det?","Ditt fokus"],
-          ["Tight (start)","Tydelig retning, mål, roller og standarder.","Klare mål, prioriteringer og forventninger."],
-          ["Loose (midt)","Autonomi og eierskap i teamet.","Skap trygghet, psykologisk sikkerhet og frihet i rammene."],
-          ["Tight (slutt)","Oppfølging, kvalitet og læring.","Hyppig review, korrigering og feiring av fremdrift."]
-        ],
       },
       dk: {
         subtitle:"Refleksionsværktøj for lederstil",
         p1:"Vælg sprog og gå videre.",
+        info_h1:"Om denne selvtest",
+        info_lead:"Dette er et enkelt refleksionsværktøj – ikke en facitliste. Formålet er at give dig et sprog og et afsæt for dialog om ledelse – ikke at måle dig.",
+        info_p1:"Metoden bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), dernæst reel autonomi og ejerskab i gennemførsel (Loose), og til sidst systematisk opfølgning, kvalitet og læring (Tight).",
+        info_ul: [
+          "Selvtest: Du vurderer dig selv – resultaterne gemmes kun lokalt på din enhed.",
+          "Samtalestarter: Testen er til dialog og refleksion – ikke certificering.",
+          "Praktisk: Scorerne peger på, hvad du kan forstærke eller justere i hverdagen.",
+          "Effekt: Balance mellem styring, autonomi og opfølgning giver fart, læring og kvalitet."
+        ],
+        info_foot:"Tip: Lav testen hurtigt første gang, drøft i grupper, og vend tilbage efter nogle uger for at se udvikling.",
         nameLbl:"Skriv dit navn",
         nameHelp:"Navnet gemmes lokalt på enheden og bruges i resultaterne.",
-        testYourself:"Test dig selv", update:"Opdater resultater", readmore:"Læs mere", reset:"Nulstil",
-        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`, infoTitle:"Kort om TLT",
-        badges:{ strong:"Stærk", balanced:"Afbalanceret", weak:"Svæk" },
-        table:[
-          ["Fase","Hvad betyder det?","Dit fokus"],
-          ["Tight (start)","Tydelig retning, mål, roller og standarder.","Klarhed i mål, prioriteringer og forventninger."],
-          ["Loose (midt)","Autonomi og ejerskab i teamet.","Skab tryghed og frihed inden for rammerne."],
-          ["Tight (slut)","Opfølgning, kvalitet og læring.","Hyppig review, korrektion og fejring af fremdrift."]
-        ],
+        testYourself:"Test dig selv", update:"Opdater resultater", readmore:"Læs resultater", reset:"Nulstil",
+        resultsTitle:(n)=>`Her er dine resultater${n?` (${n})`:''}`,
+        badges:{ strong:"Stærk", balanced:"Afbalanceret", weak:"Svag" },
       }
     };
 
-    // ---- Questions ----
+    // ---- Questions (3×5) ----
     const QUESTIONS = {
       t1:[
         "Jeg sikrer at teamet forstår mål, prioriteringer og forventede leveranser.",
         "Jeg definerer roller og ansvar slik at alle vet sitt bidrag.",
-        "Jeg kommuniserer standarder, frister og kvalitetskrav tydelig."
+        "Jeg kommuniserer standarder, frister og kvalitetskrav tydelig.",
+        "Jeg etablerer tydelige beslutningsarenaer og avklarer hvem som beslutter hva.",
+        "Jeg setter tydelige rammer (scope/ikke-scope) og kriterier for «definition of done»."
       ],
       loose:[
         "Jeg gir frihet til å løse oppgaver innenfor avtalte rammer.",
         "Jeg skaper trygghet for å eksperimentere, ta risiko og foreslå nye ideer.",
-        "Jeg stoler på at teamet tar beslutninger selvstendig, og griper kun inn ved behov."
+        "Jeg stoler på at teamet tar beslutninger selvstendig, og griper kun inn ved behov.",
+        "Jeg fjerner hindringer og beskytter fokus slik at teamet kan levere på egne valg.",
+        "Jeg inviterer til læring underveis (demoer, deling), ikke bare ved slutt."
       ],
       t2:[
         "Jeg følger opp progresjon systematisk og gir konstruktive tilbakemeldinger.",
         "Jeg sikrer at leveranser holder avtalte standarder, og adresserer avvik raskt.",
-        "Jeg feirer prestasjoner og bruker utfordringer til læring og forbedring."
+        "Jeg feirer prestasjoner og bruker utfordringer til læring og forbedring.",
+        "Jeg gjør målbar effekt synlig (før/etter) og korrigerer kurs basert på data.",
+        "Jeg lukker løkker: tydelige neste steg og eierskap etter hver review."
       ]
     };
 
-    // ---- Evaluation texts ----
-    function evalText(section, score, name, lang='no'){
-      const weak = score < 8, strong = score >= 12;
-      const n = name || "Du";
+    // ---- Felles resultat-tekster (samme for T/L/T) ----
+    function evalTextGeneric(score, name, lang='no'){
+      const weak = score < 13;      // ~<52% av 25
+      const strong = score >= 20;   // >=80% av 25
+      const n = name || (lang==='dk'?'Du':'Du');
       const T = {
         no:{
-          t1:{
-            weak: `${n}, start-Tight trenger å strammes inn. Gjør målene tydelige, avklar roller/ansvar og sett konkrete kvalitetskrav.`,
-            mid: `${n}, grunnmuren er der. Forsterk presisjonen: tydeligere prioritering, «definition of done», og en enkel sjekkliste før oppstart.`,
-            strong: `${n}, meget tydelig retning. Pass på at presis styring ikke kveler initiativ – sjekk at teamet forstår «hvorfor», ikke bare «hva».`
-          },
-          loose:{
-            weak: `${n}, gi reell autonomi: la teamet velge metode og rekkefølge innenfor rammene. Skap trygghet for eksperimenter og små feil.`,
-            mid: `${n}, balanse på vei. Utvid psykologisk sikkerhet: spør «hva trenger dere av meg for å lykkes?» og fjern 1–2 friksjoner hver uke.`,
-            strong: `${n}, sterk autonomi og tillit. Sikre at friheten kobles til effekt: korte læringssløyfer, demoer og tydelig verdihypotese per tiltak.`
-          },
-          t2:{
-            weak: `${n}, styrk avslutningen: jevnlige reviews, måling mot mål, rask håndtering av avvik og læringspunkter.`,
-            mid: `${n}, god oppfølging. Løft kvaliteten ytterligere med standardiserte leveranse-kriterier og tydelig «neste steg» etter hver review.`,
-            strong: `${n}, eksemplarisk oppfølging og læring. Vokt deg for overkontroll – hold fokus på læring, effekt og kontinuerlig forbedring.`
-          }
+          weak: `${n}, her har du litt å jobbe med. Prioritér denne delen de neste ukene: gjør én konkret endring, test i liten skala, og be om tilbakemeldinger.`,
+          mid:  `${n}, du er på god vei. Velg 1–2 vaner å forsterke, og gjør dem synlige for teamet (f.eks. sjekkliste, demo eller fast review).`,
+          strong:`${n}, dette er et tydelig styrkeområde. Hold nivået ved å gjøre det repeterbart (enkle standarder/ritualer) og del praksisen med andre.`
         },
         dk:{
-          t1:{
-            weak: `${n}, start-Tight skal skærpes. Gør mål tydelige, afklar roller/ansvar og sæt konkrete kvalitetskrav.`,
-            mid: `${n}, grundlaget er der. Skru op for præcisionen: tydelig prioritering og en kort checklist før opstart.`,
-            strong: `${n}, meget tydelig retning. Pas på, at styringen ikke kvæler initiativ – sikre at teamet forstår «hvorfor», ikke kun «hvad».`
-          },
-          loose:{
-            weak: `${n}, giv reel autonomi: lad teamet vælge metode og rækkefølge inden for rammerne. Skab tryghed for eksperimenter og små fejl.`,
-            mid: `${n}, balancen er på vej. Udvid psykologisk tryghed: spørg «hvad har I brug for fra mig?» og fjern 1–2 friktioner hver uge.`,
-            strong: `${n}, stærk autonomi og tillid. Sørg for at friheden kobles til effekt: korte læringsloops, demoer og tydelig værdihypotese per tiltag.`
-          },
-          t2:{
-            weak: `${n}, styrk afslutningen: faste reviews, måling mod mål, hurtig håndtering af afvigelser og læringspunkter.`,
-            mid: `${n}, god opfølgning. Hæv kvaliteten med standardiserede leverance-kriterier og klare «næste skridt» efter hver review.`,
-            strong: `${n}, forbilledlig opfølgning og læring. Undgå overkontrol – hold fokus på læring, effekt og løbende forbedring.`
-          }
+          weak: `${n}, her er der noget at arbejde med. Prioritér dette område de næste uger: lav én konkret ændring, test i lille skala, og bed om feedback.`,
+          mid:  `${n}, du er godt på vej. Vælg 1–2 vaner at forstærke, og gør dem synlige for teamet (fx tjekliste, demo eller fast review).`,
+          strong:`${n}, dette er et klart styrkeområde. Hold niveauet ved at gøre det gentageligt (enkle standarder/ritualer) og del praksis med andre.`
         }
       };
-      const key = weak ? 'weak' : (strong ? 'strong' : 'mid');
-      return T[lang][section][key];
+      if (strong) return T[lang].strong;
+      if (weak)   return T[lang].weak;
+      return T[lang].mid;
     }
 
     // ---- State ----
-    const STATE_KEY = 'tlt_calc_v2_multi';
-    let st = { lang:'no', name:'', answers:{ t1:[null,null,null], loose:[null,null,null], t2:[null,null,null] }, expanded:{t1:false,loose:false,t2:false} };
+    const STATE_KEY = 'tlt_calc_v3_3x5';
+    let st = { lang:'no', name:'', answers:{ t1:Array(5).fill(null), loose:Array(5).fill(null), t2:Array(5).fill(null) }, expanded:{t1:false,loose:false,t2:false} };
     const $=q=>document.querySelector(q);
 
     function save(){ try{ localStorage.setItem(STATE_KEY, JSON.stringify(st)); }catch{} }
@@ -357,7 +368,6 @@
       const nameEl = $('#name'); if (nameEl) nameEl.value = st.name || '';
       const inline = $('#userNameInline'); if (inline) inline.textContent = st.name? st.name : '';
       renderAccordion();
-      // reaktivér valgte piller
       Object.entries(st.answers).forEach(([k,arr])=>arr.forEach((v,i)=>{
         if(v){ const el=document.querySelector(`.pill[data-q="${k}-${i}"][data-v="${v}"]`); if(el) el.classList.add('active'); }
       }));
@@ -368,28 +378,26 @@
       const t=L[st.lang];
       $('#subtitle').textContent=t.subtitle;
       $('#p1-text').textContent=t.p1;
+
+      // Info side
+      $('#info-h1').textContent = t.info_h1;
+      $('#info-lead').textContent = t.info_lead;
+      $('#info-p1').textContent = t.info_p1;
+      const ul = document.getElementById('info-ul'); ul.innerHTML='';
+      t.info_ul.forEach(item => { const li=document.createElement('li'); li.textContent=item; ul.appendChild(li); });
+      $('#info-foot').textContent = t.info_foot;
+
+      // Navn & test
       $('#lbl-name').textContent=t.nameLbl;
-      $('#p2-help').textContent=t.nameHelp;
-      $('#p3-title').textContent=t.testYourself;
+      $('#p3-help').textContent=t.nameHelp;
+      $('#p4-title').textContent=t.testYourself;
       $('#btn-calc').textContent=t.update;
       $('#btn-readmore').textContent=t.readmore;
       $('#btn-reset').textContent=t.reset;
-      $('#p5-title').textContent=t.infoTitle;
-      const tbl=$('#info-table'); if(!tbl) return; tbl.innerHTML='';
-      L[st.lang].table.forEach((row,ri)=>{
-        const tr=document.createElement('tr');
-        row.forEach((cell)=>{
-          const td=document.createElement(ri===0?'th':'td');
-          td.textContent=cell;
-          td.style.padding='10px 12px'; td.style.border='1px solid rgba(255,255,255,.08)';
-          td.style.background=ri===0? '#0b1322':'#0c1527'; td.style.color=ri===0? '#9aa4b2':'#eef2f7';
-          td.style.textAlign='left'; td.style.borderRadius='8px';
-          tr.appendChild(td);
-        }); tbl.appendChild(tr);
-      });
+      $('#p5-title').textContent=t.resultsTitle(st.name);
     }
 
-    // Nav mellom sider
+    // Nav mellom sider (1→2→3→4→5)
     function showPage(i){ document.querySelectorAll('.page').forEach((p,idx)=>p.classList.toggle('hidden', idx!==i-1)); }
 
     // Språkvalg
@@ -413,7 +421,7 @@
     $('#btn-ok').addEventListener('click', ()=>{ st.name=$('#name').value.trim(); save(); const i=$('#userNameInline'); if(i) i.textContent=st.name||''; toast(st.lang==='dk'?'Navn opdateret':'Navn oppdatert'); });
     $('#btn-edit').addEventListener('click', ()=>{ const n=$('#name'); n?.focus(); n?.select(); });
 
-    // Accordion
+    // Accordion (3×5)
     function renderAccordion(){
       const acc=$('#acc'); if(!acc) return; acc.innerHTML='';
       [['t1','Tight (1)'],['loose','Loose'],['t2','Tight (2)']].forEach(([key,label])=>{
@@ -449,13 +457,18 @@
     });
 
     function sum(a){return a.reduce((x,v)=>x+(Number(v)||0),0);}
-    function badge(score){ if(score>=12) return {t:L[st.lang].badges.strong, cls:'ok'}; if(score>=8) return {t:L[st.lang].badges.balanced, cls:'warn'}; return {t:L[st.lang].badges.weak, cls:'bad'}; }
+    function badge25(score, lang){
+      // felles terskler for alle tre kategorier
+      if(score >= 20) return {t:L[lang].badges.strong, cls:'ok'};
+      if(score >= 13) return {t:L[lang].badges.balanced, cls:'warn'};
+      return {t:L[lang].badges.weak, cls:'bad'};
+    }
 
     function updateScoreboxes(hideQuestions){
       const s1=sum(st.answers.t1), sL=sum(st.answers.loose), s2=sum(st.answers.t2);
       [['t1',s1],['loose',sL],['t2',s2]].forEach(([k,s])=>{
         const sb=document.getElementById('sb-'+k), sbb=document.getElementById('sbb-'+k), sbv=document.getElementById('sbv-'+k);
-        if(s>0){ sb.classList.remove('disabled'); const b=badge(s); sbb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`; sbv.textContent=`${s}/15`; }
+        if(s>0){ sb.classList.remove('disabled'); const b=badge25(s, st.lang); sbb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`; sbv.textContent=`${s}/25`; }
         else { sb.classList.add('disabled'); sbb.textContent='–'; sbv.textContent='–'; }
       });
       if(hideQuestions){ st.expanded={t1:false,loose:false,t2:false}; save(); renderAccordion(); }
@@ -471,10 +484,10 @@
               rb=document.getElementById('rb-'+k), rt=document.getElementById('rt-'+k);
         if(s>0){
           r.classList.remove('disabled');
-          const b=badge(s);
+          const b=badge25(s, st.lang);
           rb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`;
-          rv.textContent=`${s}/15`;
-          rt.textContent=evalText(k,s,st.name,st.lang);
+          rv.textContent=`${s}/25`;
+          rt.textContent=evalTextGeneric(s, st.name, st.lang);
         } else {
           r.classList.add('disabled');
           rb.textContent='–'; rv.textContent='–'; rt.textContent='';
@@ -492,15 +505,12 @@
       }
     }
 
-    // Radar-tegner (defensiv)
+    // Radar-tegner (maks 25)
     function drawRadar(scores){
       const svg = document.getElementById('radarSvg');
       if(!svg) return;
 
-      const W=360, H=360, cx=180, cy=190;  // litt lavere sentrum
-      const R=130, rings=6;
-      const NS='http://www.w3.org/2000/svg';
-
+      const cx=180, cy=190, R=130, rings=5, NS='http://www.w3.org/2000/svg';
       svg.innerHTML='';
 
       const toXY = (deg, ratio) => {
@@ -555,8 +565,8 @@
       svg.appendChild(maxPoly);
 
       // bruker-polygon
-      const clamp15 = v => Math.max(0, Math.min(15, v||0));
-      const ratios  = axes.map(ax => clamp15(scores[ax.k]) / 15);
+      const clamp25 = v => Math.max(0, Math.min(25, v||0));
+      const ratios  = axes.map(ax => clamp25(scores[ax.k]) / 25);
       const userPts = axes.map((ax,i)=> toXY(ax.a, ratios[i]) ).map(p=>p.join(',')).join(' ');
       const userPoly = document.createElementNS(NS,'polygon');
       userPoly.setAttribute('points', userPts);
@@ -568,8 +578,8 @@
 
     // Knapper
     $('#btn-calc').addEventListener('click', ()=>{ updateScoreboxes(true); toast(st.lang==='dk'?'Resultater opdateret':'Resultater oppdatert'); });
-    $('#btn-readmore').addEventListener('click', ()=> showPage(4));
-    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'?'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:[null,null,null], loose:[null,null,null], t2:[null,null,null]}; save(); renderAccordion(); updateScoreboxes(false); } });
+    $('#btn-readmore').addEventListener('click', ()=> showPage(5));
+    $('#btn-reset').addEventListener('click', ()=>{ if(confirm(st.lang==='dk'?'Nulstil alle svar?':'Nullstill alle svar?')){ st.answers={t1:Array(5).fill(null), loose:Array(5).fill(null), t2:Array(5).fill(null)}; save(); renderAccordion(); updateScoreboxes(false); } });
 
     function toast(msg){
       const d=document.createElement('div'); d.textContent=msg;
