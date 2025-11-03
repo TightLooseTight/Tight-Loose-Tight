@@ -294,6 +294,27 @@ Fortsätt dialogen med teamet kring kontinuerlig förbättring, utforskning och 
     }
   }
 };
+// Hjelpefunksjoner for å velge riktig resultat-tekst (svak / balansert / sterk)
+function bucketFromScore(score){
+  if (score >= 20) return 'strong';   // ≥ 80 % av 25
+  if (score < 13)  return 'weak';     // < 52 % av 25
+  return 'balanced';
+}
+
+function getResultText(category, score, name, lang='no'){
+  const langKey = (lang && RES_TEXT[lang]) ? lang : 'no';
+  const bucket = bucketFromScore(score);
+
+  const cat = RES_TEXT[langKey] && RES_TEXT[langKey][category];
+  if (!cat) return '';
+
+  let template = cat[bucket] || '';
+  const displayName = (name && name.trim && name.trim().length > 0)
+    ? name.trim()
+    : (langKey === 'dk' ? 'Du' : 'Du'); // evt. særbehandling senere
+
+  return template.replaceAll('{name}', displayName);
+}
 
 
 // ---- Felles resultat-tekster (samme for T/L/T) ----
