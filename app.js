@@ -76,30 +76,81 @@ const L = {
   }
 };
 
-// ---- Questions (3×5) ----
+// Alle spørsmål – tre språk
 const QUESTIONS = {
-  t1:[
-    "Jeg sikrer at teamet forstår mål, prioriteringer og forventede leveranser.",
-    "Jeg definerer roller og ansvar slik at alle vet sitt bidrag.",
-    "Jeg kommuniserer standarder, frister og kvalitetskrav tydelig.",
-    "Jeg etablerer tydelige beslutningsarenaer og avklarer hvem som beslutter hva.",
-    "Jeg setter tydelige rammer (scope/ikke-scope) og kriterier for «definition of done»."
-  ],
-  loose:[
-    "Jeg gir frihet til å løse oppgaver innenfor avtalte rammer.",
-    "Jeg skaper trygghet for å eksperimentere, ta risiko og foreslå nye ideer.",
-    "Jeg stoler på at teamet tar beslutninger selvstendig, og griper kun inn ved behov.",
-    "Jeg fjerner hindringer og beskytter fokus slik at teamet kan levere på egne valg.",
-    "Jeg inviterer til læring underveis (demoer, deling), ikke bare ved slutt."
-  ],
-  t2:[
-    "Jeg følger opp progresjon systematisk og gir konstruktive tilbakemeldinger.",
-    "Jeg sikrer at leveranser holder avtalte standarder, og adresserer avvik raskt.",
-    "Jeg feirer prestasjoner og bruker utfordringer til læring og forbedring.",
-    "Jeg gjør målbar effekt synlig (før/etter) og korrigerer kurs basert på data.",
-    "Jeg lukker løkker: tydelige neste steg og eierskap etter hver review."
-  ]
+  no: {
+    t1: [
+      "Jeg tar ansvar for at vi har en felles forståelse av strategisk retning",
+      "Jeg sikrer at vi er enige om vårt mandat og formål",
+      "Jeg sikrer tydelighet i prioriteringer og forventede resultater",
+      "Jeg tar ansvar for at roller og grensesnitt er avklart",
+      "Jeg tar ansvar for at rammer og arbeidsform er klare og hensiktsmessige"
+    ],
+    loose: [
+      "Jeg gir rom og har tillit til at de som har ansvar finner gode løsninger",
+      "Jeg skaper et trygt miljø for utforskning, testing og deling",
+      "Jeg fjerner hindringer som bremser fart og flyt",
+      "Jeg bidrar til åpenhet og transparens i alle retninger",
+      "Jeg er tilgjengelig når teamet trenger støtte"
+    ],
+    t2: [
+      "Jeg følger opp resultater og sikrer at tilbakemeldinger deles",
+      "Jeg skaper rom for refleksjon og læring",
+      "Jeg sikrer utvikling ved å identifisere suksess og forbedringsområder",
+      "Jeg deler suksesshistorier og læring med andre",
+      "Jeg gjennomfører nødvendige endringer, selv når det er krevende"
+    ]
+  },
+
+  dk: {
+    t1: [
+      "Jeg tager ansvar for, at vi har en fælles forståelse af strategisk retning",
+      "Jeg sikrer, at vi er enige om vores mandat og formål",
+      "Jeg sikrer tydelighed i prioriteringer og forventede resultater",
+      "Jeg tager ansvar for, at roller og grænseflader er afklarede",
+      "Jeg tager ansvar for, at rammer og arbejdsform er klare og hensigtsmæssige"
+    ],
+    loose: [
+      "Jeg giver rum og har tillid til, at dem som har ansvar finder gode løsninger",
+      "Jeg skaber et trygt miljø for udforskning, test og deling",
+      "Jeg fjerner hindringer, som bremser fart og flow",
+      "Jeg bidrager til åbenhed og transparens i alle retninger",
+      "Jeg er tilgængelig, når teamet har brug for støtte"
+    ],
+    t2: [
+      "Jeg følger op på resultater og sikrer, at tilbagemeldinger deles",
+      "Jeg skaber rum for refleksion og læring",
+      "Jeg sikrer udvikling ved at identificere succes og forbedringsområder",
+      "Jeg deler succeshistorier og læring med andre",
+      "Jeg gennemfører nødvendige ændringer, selv når det er krævende"
+    ]
+  },
+
+  se: {
+    t1: [
+      "Jag tar ansvar för att vi har en gemensam förståelse för den strategiska riktningen",
+      "Jag ser till att vi är överens om vårt mandat och ändamål",
+      "Jag säkerställer tydlighet i prioriteringar och förväntade resultat",
+      "Jag tar ansvar för att roller och gränssnitt är klara",
+      "Jag tar ansvar för att ramar och arbetsform är tydliga och ändamålsenliga"
+    ],
+    loose: [
+      "Jag skapar utrymme och har förtroende för att de som har ansvar hittar bra lösningar",
+      "Jag skapar en trygg miljö för utforskning, testning och delning",
+      "Jag undanröjer hinder som bromsar fart och flyt",
+      "Jag bidrar till öppenhet och transparens åt alla håll",
+      "Jag finns tillgänglig när teamet behöver stöd"
+    ],
+    t2: [
+      "Jag följer upp resultat och säkerställer att feedback delas",
+      "Jag skapar utrymme för reflektion och lärande",
+      "Jag säkerställer utveckling genom att identifiera framgångar och förbättringsområden",
+      "Jag delar framgångshistorier och lärdomar med andra",
+      "Jag genomför nödvändiga förändringar, även när det är krävande"
+    ]
+  }
 };
+
 
 // ---- Felles resultat-tekster (samme for T/L/T) ----
 function evalTextGeneric(score, name, lang='no'){
