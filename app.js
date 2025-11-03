@@ -157,6 +157,143 @@ const QUESTIONS = {
     ]
   }
 };
+// Resultat-tekster per språk og kategori
+const RES_TEXT = {
+  no: {
+    t1: {
+      weak: `{name}, du har nok ikke tydeliggjort retning, mandat og prioriteringer godt nok. Roller og grensesnitt fremstår uklare. Dette skaper usikkerhet. Erfarer du at dere går i samme retning?
+
+Praktisk tips:
+Ta ansvar for dialog om retning og mål, kommuniser hvorfor før hva, involver teamet i målsetting, og avklar roller og grensesnitt tydelig. Spør om hva som trengs for skape klarhet.`,
+      balanced: `{name}, du har tatt ansvar for tydelig retning og mandat, men kanskje er det ikke helt forankret? Roller og rammer er kjent, men gir noe tvil. Du har kanskje skapt delvis klarhet – hva mangler for å gi full trygghet?
+
+Praktisk tips:
+Bli omforent rundt mandatet. Avklar prioriteringer sammen, bruk korte refleksjonsrunder for forankring, og sikre tydelighet – det gir rom for autonomi.`,
+      strong: `{name}, du har samlet teamet rundt retning og gir trygghet til autonomi i arbeidet. Roller og rammer er tydelige, og samhandling effektiv. Hvordan holder du dette levende over tid?
+
+Praktisk tips:
+Fortsett å invitere til dialog om retning og mål, bruk læring fra teamet til å justere rammer og grensesnitt – det sikrer felles retning og eierskap på tvers av Gjensidige.`
+    },
+    loose: {
+      weak: `{name}, du har nok ikke brukt nok tid på å bygge tillit og støtte frem autonomi, noe som kan hemme eierskap og selvstendig utforskning. Stoler du egentlig på dine ansatte? 
+
+Praktisk tips:
+Velg ett område hvor du bevisst lar andre bestemme løsning — og reflekter sammen etterpå. Skap trygghet ved å anerkjenne initiativ og læring. Still åpne spørsmål.`,
+      balanced: `{name}, du gir handlingsrom, men kan ha en tendens til å bli detaljstyrende når presset øker. Hvordan kan du unngå detaljstyring?
+
+Praktisk tips:
+Formaliser arenaer for deling og åpenhet. Tren på å “stå i” ubehaget av å ikke ha full kontroll – det bygger gjensidig tillit.`,
+      strong: `{name}, du balanserer frihet og ansvar slik at andre har rom til å utforske og utvikle løsninger. Det oppleves at du viser tillit og legger til rette for autonomi og eierskap. Hvordan sikrer du at frihet og ansvar er i balanse over tid?
+
+Praktisk tips:
+Fortsett å invitere til dialog om hvordan du kan støtte andre i å fjerne barrierer for å sette fart. Bruk teamets læring til å forbedre prosesser.`
+    },
+    t2: {
+      weak: `{name}, du følger nok opp, men det oppleves sporadisk og med lite refleksjon og læring. Du følger kanskje opp i form av kontroll eller rapportering?
+
+Praktisk tips:
+Sett av tid til refleksjon i møter. Inviter andre til å dele læring. Flytt fokus fra “hva gikk galt” til “hva lærte vi” – læring skaper fremdrift og trygghet. Tør å dele egne feil.`,
+      balanced: `{name}, du har følger opp, men refleksjon, læring og forbedring skjer sporadisk. Fører læringen til faktiske endringer? 
+
+Praktisk tips:
+Etabler en fast rytme for refleksjon og tilbakemelding under og etter leveranser. Tør å dele egne feil. Vis at læring skaper endringer.`,
+      strong: `{name}, du kombinerer tydelig ansvar med læringskultur og utviklingsorientert oppfølging. Hvordan kan du styrke læring utover eget team?
+
+Praktisk tips:
+Fortsett dialogen med teamet rundt kontinuerlig forbedring, utforsking og samhandling. Inviter andre team til å lære av deres erfaringer.`
+    }
+  },
+
+  dk: {
+    t1: {
+      weak: `{name}, du har nok ikke tydeliggjort retning, mandat og prioriteringer godt nok. Roller og grænseflader fremstår uklare. Det skaber usikkerhed. Oplever du, at I bevæger jer i samme retning?
+
+Praktisk tip:
+Tag ansvar for dialog om retning og mål, kommuniker hvorfor før hvad, involver teamet i målsætningen, og afklar roller og grænseflader tydeligt. Spørg, hvad der skal til for at skabe klarhed.`,
+      balanced: `{name}, du har taget ansvar for tydelig retning og mandat, men måske er det ikke helt forankret? Roller og rammer er kendte, men skaber lidt tvivl. Du har måske skabt delvis klarhed – hvad mangler for at skabe fuld tryghed?
+
+Praktisk tip:
+Skab enighed om mandatet. Afklar prioriteringer sammen, brug korte refleksionsrunder til forankring, og sikr tydelighed – det giver rum for autonomi.`,
+      strong: `{name}, du har samlet teamet omkring retningen og giver tryghed til autonomi i arbejdet. Roller og rammer er tydelige, og samarbejdet fungerer godt. Hvordan holder du dette levende over tid?
+
+Praktisk tip:
+Fortsæt med at invitere til dialog om retning og mål. Brug læring fra teamet til at justere rammer og grænseflader – det sikrer fælles retning og ejerskab på tværs af Gjensidige.`
+    },
+    loose: {
+      weak: `{name}, du har nok ikke brugt nok tid på at opbygge tillid og støtte autonomi, hvilket kan hæmme ejerskab og selvstændig udforskning. Stoler du egentlig på dine medarbejdere?
+
+Praktisk tip:
+Vælg ét område, hvor du bevidst lader andre finde løsningen – og reflekter sammen bagefter. Skab tryghed ved at anerkende initiativ og læring. Stil åbne spørgsmål.`,
+      balanced: `{name}, du giver handlefrihed, men kan have en tendens til at blive detaljestyret, når presset stiger. Hvordan kan du undgå detaljestyring?
+
+Praktisk tip:
+Formaliser arenaer for deling og åbenhed. Træn i at “stå i” ubehaget ved ikke at have fuld kontrol – det styrker gensidig tillid.`,
+      strong: `{name}, du balancerer frihed og ansvar på en måde, der giver andre rum til at udforske og udvikle løsninger. Det opleves, at du viser tillid og fremmer autonomi og ejerskab. Hvordan sikrer du, at frihed og ansvar forbliver i balance over tid?
+
+Praktisk tip:
+Fortsæt med at invitere til dialog om, hvordan du kan støtte andre i at fjerne barrierer, der hindrer fremdrift. Brug teamets læring til at forbedre processer.`
+    },
+    t2: {
+      weak: `{name}, du følger nok op, men det opleves sporadisk og med lidt refleksion og læring. Du følger måske op gennem kontrol eller rapportering?
+
+Praktisk tip:
+Sæt tid af til refleksion i møder. Inviter andre til at dele læring. Flyt fokus fra “hvad gik galt” til “hvad lærte vi” – læring skaber fremdrift og tryghed. Vov at dele egne fejl.`,
+      balanced: `{name}, du følger op, men refleksion, læring og forbedring sker sporadisk. Leder læringen til faktiske ændringer?
+
+Praktisk tip:
+Etabler en fast rytme for refleksion og tilbagemelding under og efter leverancer. Vov at dele egne fejl. Vis at læring fører til ændringer.`,
+      strong: `{name}, du kombinerer tydeligt ansvar med læringskultur og udviklingsorienteret opfølgning. Hvordan kan du styrke læring ud over dit eget team?
+
+Praktisk tip:
+Fortsæt dialogen med teamet om kontinuerlig forbedring, udforskning og samarbejde. Inviter andre teams til at lære af jeres erfaringer.`
+    }
+  },
+
+  se: {
+    t1: {
+      weak: `{name}, du har kanske inte tydliggjort riktning, mandat och prioriteringar tillräckligt. Roller och gränssnitt framstår oklara. Detta skapar osäkerhet. Upplever du att ni går åt samma håll?
+
+Praktiskt tips:
+Ta ansvar för dialog om riktning och mål, kommunicera varför före vad, involvera teamet i målsättning och klargör roller och gränssnitt tydligt. Fråga vad som behövs för att skapa klarhet.`,
+      balanced: `{name}, du har tagit ansvar för tydlig riktning och mandat, men kanske är det inte helt förankrat? Roller och ramar är kända men skapar viss tvekan. Du har kanske skapat delvis tydlighet – vad saknas för att skapa full trygghet?
+
+Praktiskt tips:
+Bli överens om mandatet. Klargör prioriteringar tillsammans, använd korta reflektionsrundor för förankring och säkerställ tydlighet – det ger utrymme för autonomi.`,
+      strong: `{name}, du har samlat teamet kring riktningen och skapat trygghet för autonomi i arbetet. Roller och ramar är tydliga och samarbetet effektivt. Hur håller du detta levande över tid?
+
+Praktiskt tips:
+Fortsätt bjuda in till dialog om riktning och mål. Använd lärdomar från teamet för att justera ramar och gränssnitt – det säkerställer gemensam riktning och ägarskap inom Gjensidige.`
+    },
+    loose: {
+      weak: `{name}, du har kanske inte lagt tillräckligt med tid på att bygga förtroende och stödja autonomi, något som kan hämma ägarskap och självständig utforskning. Litar du verkligen på dina medarbetare?
+
+Praktiskt tips:
+Välj ett område där du medvetet låter andra bestämma lösning – och reflektera tillsammans efteråt. Skapa trygghet genom att erkänna initiativ och lärande. Ställ öppna frågor.`,
+      balanced: `{name}, du ger handlingsutrymme, men kan ha en tendens att bli detaljstyrande när trycket ökar. Hur kan du undvika detaljstyrning?
+
+Praktiskt tips:
+Formaliser arenor för delning och öppenhet. Öva på att “stå i” obehaget av att inte ha full kontroll – det bygger ömsesidigt förtroende.`,
+      strong: `{name}, du balanserar frihet och ansvar så att andra har utrymme att utforska och utveckla lösningar. Du visar förtroende och stödjer autonomi och ägarskap. Hur säkerställer du att frihet och ansvar förblir i balans över tid?
+
+Praktiskt tips:
+Fortsätt bjuda in till dialog om hur du kan stödja andra i att ta bort hinder som bromsar framsteg. Använd teamets lärdomar för att förbättra processer.`
+    },
+    t2: {
+      weak: `{name}, du följer upp men det känns sporadiskt och med lite reflektion och lärande. Följer du kanske upp genom kontroll eller rapportering?
+
+Praktiskt tips:
+Sätt av tid för reflektion i möten. Bjud in andra att dela lärande. Flytta fokus från “vad gick fel” till “vad lärde vi oss” – lärande skapar framsteg och trygghet. Våga dela egna misstag.`,
+      balanced: `{name}, du följer upp, men reflektion, lärande och förbättring sker sporadiskt. Leder lärandet till faktiska förändringar?
+
+Praktiskt tips:
+Etablera en fast rytm för reflektion och återkoppling under och efter leveranser. Våga dela egna misstag. Visa att lärande leder till förändring.`,
+      strong: `{name}, du kombinerar tydligt ansvar med lärandekultur och utvecklingsorienterad uppföljning. Hur kan du stärka lärandet utöver ditt eget team?
+
+Praktiskt tips:
+Fortsätt dialogen med teamet kring kontinuerlig förbättring, utforskning och samarbete. Bjud in andra team att lära av era erfarenheter.`
+    }
+  }
+};
 
 
 // ---- Felles resultat-tekster (samme for T/L/T) ----
