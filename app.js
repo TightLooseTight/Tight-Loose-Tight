@@ -5,16 +5,21 @@ const L = {
   no: {
     subtitle:"Refleksjonsverktøy for lederstil",
     p1:"Velg språk og gå videre.",
-    info_h1:"Om denne selvtesten",
-    info_lead:"Dette er et enkelt refleksjonsverktøy – ikke en fasit. Hensikten er å gi deg et språk og et utgangspunkt for samtale om ledelse, ikke å “måle” deg.",
-    info_p1:"Metodikken bygger på Tight–Loose–Tight-rammeverket (TLT): først tydelig retning og rammer (Tight), deretter reell autonomi og eierskap i gjennomføringen (Loose), og til slutt systematisk oppfølging, kvalitet og læring (Tight).",
+    info_h1: "Refleksjonsverktøy for ledelse",
+    info_lead: `Tight–Loose–Tight er en tilnærming til ledelse som brukes for å balansere styring og frihet i gjennomføring av oppgaver. Dette er spesielt nyttig for oss i Gjensidige, hvor vi ønsker både tydelig retning, rom for autonomi og kontinuerlig læring.`,
+    info_p1: `Metodikken bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), deretter reell autonomi og eierskap i gjennomføringen (Loose), og til slutt systematisk oppfølging, kvalitet og læring (Tight).`,
     info_ul: [
-      "Selvtest: Du vurderer deg selv – resultatene lagres kun lokalt på enheten din.",
-      "Samtalestarter: Testen er laget for dialog og refleksjon, ikke for sertifisering.",
-      "Praktisk: Skårene peker på hva du kan forsterke eller justere i hverdagen.",
-      "Effekt: Balanse mellom styring, autonomi og oppfølging gir fart, læring og kvalitet."
+      "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
+      `Verktøyet hjelper deg til å utforske hvordan du balanserer Tight–Loose–Tight i din hverdag:
+Tight: Hvor tydelig er du på retning, mandat og rammer?
+Loose: Hvordan legger du til rette for frihet, autonomi og eierskap?
+Tight: Hvordan sikrer du oppfølging, læring og endring?`,
+      "Selvevaluering: Du vurderer deg selv på en skala fra 1–5, der 1 er lav og 5 er høy. Poenget er starte en refleksjon om hva som du har styrker, og hvor du kan utvikle din ledelse.",
+      `Samtalestarter: Verktøyet er laget for refleksjon og dialog.
+Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
     ],
-    info_foot:"Tips: Gjør testen raskt første gang, diskuter i gruppe, og vend tilbake etter noen uker for å se utvikling.",
+    info_foot: "Tips: Gjør testen raskt første gang, og vend tilbake etter noen uker for å se utvikling.",
+
     nameLbl:"Skriv inn ditt navn",
     nameHelp:"Navnet lagres lokalt på enheten og brukes i resultatene.",
     testYourself:"Test deg selv",
@@ -29,16 +34,17 @@ const L = {
   dk: {
     subtitle:"Refleksionsværktøj for lederstil",
     p1:"Vælg sprog og gå videre.",
-    info_h1:"Om denne selvtest",
-    info_lead:"Dette er et enkelt refleksionsværktøj – ikke en facitliste. Formålet er at give dig et sprog og et afsæt for dialog om ledelse – ikke at måle dig.",
-    info_p1:"Metoden bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), dernæst reel autonomi og ejerskab i gennemførsel (Loose), og til sidst systematisk opfølgning, kvalitet og læring (Tight).",
+    info_h1: "Om denne selvtest",
+    info_lead: "Dette er et enkelt refleksionsværktøj – ikke en facitliste. Formålet er at give dig et sprog og et afsæt for dialog om ledelse – ikke at “måle” dig.",
+    info_p1: "Metoden bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), derefter reel autonomi og ejerskab i gennemførelsen (Loose), og til sidst systematisk opfølgning, kvalitet og læring (Tight).",
     info_ul: [
       "Selvtest: Du vurderer dig selv – resultaterne gemmes kun lokalt på din enhed.",
-      "Samtalestarter: Testen er til dialog og refleksion – ikke certificering.",
-      "Praktisk: Scorerne peger på, hvad du kan forstærke eller justere i hverdagen.",
+      "Samtalestarter: Testen er lavet til dialog og refleksion, ikke certificering.",
+      "Praktisk: Dine scorer peger på, hvad du kan forstærke eller justere i hverdagen.",
       "Effekt: Balance mellem styring, autonomi og opfølgning giver fart, læring og kvalitet."
     ],
-    info_foot:"Tip: Lav testen hurtigt første gang, drøft i grupper, og vend tilbage efter nogle uger for at se udvikling.",
+    info_foot: "Tip: Udfør testen hurtigt første gang, og vend tilbage efter et par uger for at se fremskridt.",
+
     nameLbl:"Skriv dit navn",
     nameHelp:"Navnet gemmes lokalt på enheden og bruges i resultaterne.",
     testYourself:"Test dig selv",
@@ -53,16 +59,17 @@ const L = {
   se: {
     subtitle:"Reflektionsverktyg för ledarskap",
     p1:"Välj språk och gå vidare.",
-    info_h1:"Om detta självtest",
-    info_lead:"Detta är ett enkelt reflektionsverktyg – inte en facit. Syftet är att ge dig ett språk och en startpunkt för samtal om ledarskap – inte att ”mäta” dig.",
-    info_p1:"Metodiken bygger på Tight–Loose–Tight (TLT): först tydlig riktning och ramar (Tight), därefter verklig autonomi och ägarskap i genomförandet (Loose), och till sist systematisk uppföljning, kvalitet och lärande (Tight).",
+     info_h1: "Om detta självtest",
+    info_lead: "Detta är ett enkelt reflektionsverktyg – inte en facit. Syftet är att ge dig ett språk och en startpunkt för samtal om ledarskap – inte att ”mäta” dig.",
+    info_p1: "Metodiken bygger på Tight–Loose–Tight (TLT): först tydlig riktning och ramar (Tight), därefter verklig autonomi och ägarskap i genomförandet (Loose), och till sist systematisk uppföljning, kvalitet och lärande (Tight).",
     info_ul: [
       "Självtest: Du bedömer dig själv – resultaten sparas endast lokalt på din enhet.",
       "Samtalsstartare: Testet är gjort för dialog och reflektion, inte certifiering.",
-      "Praktiskt: Dina poäng pekar ut vad du kan förstärka eller justera i vardagen.",
+      "Praktiskt: Dina poäng visar vad du kan förstärka eller justera i vardagen.",
       "Effekt: Balans mellan styrning, autonomi och uppföljning ger fart, lärande och kvalitet."
     ],
-    info_foot:"Tips: Gör testet snabbt första gången, diskutera i grupp, och återvänd efter några veckor för att se utveckling.",
+    info_foot: "Tips: Gjør testen raskt første gang, og vend tilbake etter noen uker for å se utvikling.",
+
     nameLbl:"Skriv in ditt namn",
     nameHelp:"Namnet sparas lokalt på enheten och används i resultaten.",
     testYourself:"Testa dig själv",
