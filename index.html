@@ -287,6 +287,22 @@
 
     <footer id="ft">Tips: Legg på hjem-skjerm via Del → «Legg til på Hjem-skjerm».</footer>
   </div>
+<script>
+  // Midlertidig: drep gamle service workers + cache
+  (function(){
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(regs){
+        regs.forEach(function(r){ r.unregister(); });
+      });
+    }
+    if (window.caches && caches.keys) {
+      caches.keys().then(function(keys){
+        keys.forEach(function(k){ caches.delete(k); });
+      });
+    }
+  })();
+</script>
+<script src="./app.js?v=20241103"></script>
 
   <!-- All logikk ligger i app.js -->
   <script src="./app.js"></script>
