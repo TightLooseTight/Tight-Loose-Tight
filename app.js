@@ -104,7 +104,7 @@ const QUESTIONS = {
       "Jeg følger opp resultater og sikrer at tilbakemeldinger deles",
       "Jeg skaper rom for refleksjon og læring",
       "Jeg sikrer utvikling ved å identifisere suksess og forbedringsområder",
-      "Jeg deler suksesshistorier og læring med andre",
+      "Jeg sikrer at tilbakemeldinger gis",
       "Jeg gjennomfører nødvendige endringer, selv når det er krevende"
     ]
   },
@@ -128,7 +128,7 @@ const QUESTIONS = {
       "Jeg følger op på resultater og sikrer, at tilbagemeldinger deles",
       "Jeg skaber rum for refleksion og læring",
       "Jeg sikrer udvikling ved at identificere succes og forbedringsområder",
-      "Jeg deler succeshistorier og læring med andre",
+      "Jeg sørger for, at der gives feedback",
       "Jeg gennemfører nødvendige ændringer, selv når det er krævende"
     ]
   },
@@ -152,7 +152,7 @@ const QUESTIONS = {
       "Jag följer upp resultat och säkerställer att feedback delas",
       "Jag skapar utrymme för reflektion och lärande",
       "Jag säkerställer utveckling genom att identifiera framgångar och förbättringsområden",
-      "Jag delar framgångshistorier och lärdomar med andra",
+      "Jag ser till att feedback ges",
       "Jag genomför nödvändiga förändringar, även när det är krävande"
     ]
   }
