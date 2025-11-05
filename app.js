@@ -7,9 +7,9 @@ const L = {
     p1:"Velg språk og gå videre.",
     info_h1: "Refleksjonsverktøy for ledelse",
     info_lead: `Tight–Loose–Tight er en tilnærming til ledelse som brukes for å balansere styring og frihet i gjennomføring av oppgaver. Dette er spesielt nyttig for oss i Gjensidige, hvor vi ønsker både tydelig retning, rom for autonomi og kontinuerlig læring.`,
-    info_p1: `Metodikken bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), deretter reell autonomi og eierskap i gjennomføringen (Loose), og til slutt systematisk oppfølging, kvalitet og læring (Tight).`,
+    info_p1:      "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
     info_ul: [
-      "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
+ ,
       `Verktøyet hjelper deg til å utforske hvordan du balanserer Tight–Loose–Tight i din hverdag:
 Tight: Hvor tydelig er du på retning, mandat og rammer?
 Loose: Hvordan legger du til rette for frihet, autonomi og eierskap?
