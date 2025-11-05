@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="no">
 <head>
   <meta charset="utf-8" />
@@ -36,13 +36,25 @@
     header{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:18px;text-align:center}
 
     /* Logo – stor (≈300%) */
-    .logo{width:132px;height:132px;border-radius:12px;background:#0b1322;border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .logo{
+      width:132px;height:132px;border-radius:12px;
+      background:#0b1322;border:1px solid rgba(255,255,255,.1);
+      display:flex;align-items:center;justify-content:center;overflow:hidden
+    }
     .logo img{max-width:100%;max-height:100%;object-fit:contain}
 
     .title{font-size:clamp(26px,4.8vw,38px);font-weight:800;text-align:center}
     .subtitle{color:var(--muted);line-height:1.5}
 
-    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.07);border-radius:var(--radius);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(6px)}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:var(--radius);
+      box-shadow:0 10px 30px rgba(0,0,0,.35);
+      backdrop-filter:blur(6px);
+      max-width:640px;
+      margin:0 auto;
+    }
     .card-inner{padding:clamp(16px,2.8vw,24px)}
     .row{display:grid;gap:12px}
 
@@ -57,33 +69,65 @@
     .nav-arrows{display:flex;justify-content:space-between;gap:12px;margin-top:18px}
     #p1-prev{display:none} /* ingen "Tilbake" på side 1 */
     #p5-next{display:none} /* ingen "Neste" på siste side */
-    .arrow{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0b1322;color:var(--text);cursor:pointer}
+    .arrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 14px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.1);
+      background:#0b1322;color:var(--text);cursor:pointer
+    }
 
-    .btn{padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,#0e1a33,#0b1322);color:var(--text);cursor:pointer;font-weight:700}
+    .btn{
+      padding:12px 16px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg,#0e1a33,#0b1322);
+      color:var(--text);cursor:pointer;font-weight:700
+    }
     .btn.primary{background:linear-gradient(180deg,var(--brand),var(--brand-2));color:#041123;border-color:transparent}
     .btn.ghost{background:transparent;border-color:rgba(255,255,255,.2)}
     .btn[disabled]{opacity:.5;cursor:not-allowed}
 
     .field{display:grid;gap:8px}
-    input[type="text"]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:#0b1322;color:var(--text);outline:none}
+    input[type="text"]{
+      width:100%;padding:12px 14px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#0b1322;color:var(--text);outline:none
+    }
     .name-row{display:flex;gap:10px;align-items:center}
     .pencil{cursor:pointer;opacity:.8}
 
     .accordion{display:grid;gap:12px}
-    .acc-item{border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0c1527}
-    .acc-hd{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
-    .acc-hd h3{margin:0;font-size:16px}
+    .acc-item{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      background:#0c1527
+    }
+    .acc-hd{
+      display:flex;justify-content:space-between;
+      align-items:center;padding:14px 16px;cursor:pointer
+    }
     .acc-bd{display:none;padding:0 16px 16px 16px}
     .acc-item.open .acc-bd{display:block}
 
-    .q{padding:12px;border-radius:12px;border:1px dashed rgba(255,255,255,.12);margin-top:10px}
+    .q{
+      padding:12px;border-radius:12px;
+      border:1px dashed rgba(255,255,255,.12);
+      margin-top:10px
+    }
     .q p{margin:0 0 10px 0}
     .scale{display:flex;gap:8px;flex-wrap:wrap}
-    .pill{display:inline-flex;align-items:center;justify-content:center;min-width:42px;padding:8px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:#0b1322;color:var(--text);cursor:pointer}
+    .pill{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:42px;padding:8px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#0b1322;color:var(--text);cursor:pointer
+    }
     .pill.active{background:rgba(10,124,255,.30);border-color:var(--brand)}
 
     .scorebox{display:grid;gap:10px;grid-template-columns:repeat(3,1fr)}
-    .score{text-align:center;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0c1527}
+    .score{
+      text-align:center;padding:12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.1);background:#0c1527
+    }
     .score.disabled{background:var(--disabled);opacity:.7}
     .score h4{margin:2px 0 6px 0;color:var(--muted);font-weight:600}
     .score .big{font-size:28px;font-weight:900}
@@ -118,28 +162,31 @@
       display:flex;gap:16px;align-items:center;justify-content:center;
       color:var(--muted);font-size:13px;margin-top:6px
     }
-    .legend-dot{width:10px;height:10px;border-radius:999px;display:inline-block;border:1px solid rgba(255,255,255,.4)}
+    .legend-dot{
+      width:10px;height:10px;border-radius:999px;
+      display:inline-block;border:1px solid rgba(255,255,255,.4)
+    }
+
     @media (max-width: 480px) {
-  .lang {
-    flex-direction: column;
-    gap:12px;
-  }
+      .lang {
+        flex-direction: column;
+        gap:12px;
+      }
+      .flag {
+        width:140px;
+        height:auto;
+      }
+    }
 
-  .flag {
-    width:140px;
-    height:auto;
-  }
-}
-#info-ul li {
-  white-space: pre-line;
-}
-.acc-hd h3 {
-  display: none;
-}
-.acc-hd span {
-  display: none;
-}
-
+    #info-ul li {
+      white-space: pre-line;
+    }
+    .acc-hd h3 {
+      display: none;
+    }
+    .acc-hd span {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -178,26 +225,22 @@
           </div>
         </div>
 
-        <!-- PAGE 2: ny info-side -->
-       <div class="page hidden" id="p2">
-  <header class="page-header">
-    <h1 id="info-h1"></h1>
-    <p id="info-lead" class="lead"></p>
-  </header>
+        <!-- PAGE 2: info-side (dynamisk tekst fra app.js) -->
+        <div class="page hidden" id="p2">
+          <header class="page-header">
+            <h1 id="info-h1"></h1>
+            <p id="info-lead" class="lead"></p>
+          </header>
 
-  <main class="info-body">
-    <p id="info-p1"></p>
-    <ul id="info-ul"></ul>
-    <p id="info-foot" class="muted"></p>
-  </main>
+          <main class="info-body">
+            <p id="info-p1"></p>
+            <ul id="info-ul"></ul>
+            <p id="info-foot" class="muted"></p>
+          </main>
 
-  <footer class="nav-footer">
-    <button id="p2-prev" class="nav-btn secondary">Tilbake</button>
-    <button id="p2-next" class="nav-btn primary">Neste</button>
-  </footer>
-</div>
-
-            </div>
+          <div class="nav-arrows">
+            <button class="arrow" id="p2-prev">← Tilbake</button>
+            <button class="arrow" id="p2-next">Neste →</button>
           </div>
         </div>
 
@@ -280,31 +323,29 @@
             <button class="arrow" id="p5-next">Neste →</button>
           </div>
         </div>
-        <!-- END PAGES -->
 
+        <!-- END PAGES -->
       </div>
     </div>
 
     <footer id="ft">Tips: Legg på hjem-skjerm via Del → «Legg til på Hjem-skjerm».</footer>
   </div>
-<script>
-  // Midlertidig: drep gamle service workers + cache
-  (function(){
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(regs){
-        regs.forEach(function(r){ r.unregister(); });
-      });
-    }
-    if (window.caches && caches.keys) {
-      caches.keys().then(function(keys){
-        keys.forEach(function(k){ caches.delete(k); });
-      });
-    }
-  })();
-</script>
-<script src="./app.js?v=20241103"></script>
 
-  <!-- All logikk ligger i app.js -->
-  <script src="./app.js"></script>
+  <!-- Kill switch for gamle service workers + cache -->
+  <script>
+    (function(){
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(regs){
+          regs.forEach(function(r){ r.unregister(); });
+        });
+      }
+      if (window.caches && caches.keys) {
+        caches.keys().then(function(keys){
+          keys.forEach(function(k){ caches.delete(k); });
+        });
+      }
+    })();
+  </script>
+  <script src="./app.js?v=20241103"></script>
 </body>
 </html>
