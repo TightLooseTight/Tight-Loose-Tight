@@ -34,14 +34,18 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
   dk: {
     subtitle:"Refleksionsværktøj for lederstil",
     p1:"Vælg sprog og gå videre.",
-    info_h1: "Om denne selvtest",
-    info_lead: "Dette er et enkelt refleksionsværktøj – ikke en facitliste. Formålet er at give dig et sprog og et afsæt for dialog om ledelse – ikke at “måle” dig.",
-    info_p1: "Metoden bygger på Tight–Loose–Tight (TLT): først tydelig retning og rammer (Tight), derefter reel autonomi og ejerskab i gennemførelsen (Loose), og til sidst systematisk opfølgning, kvalitet og læring (Tight).",
+    info_h1: "Refleksionsværktøj til ledelse",
+    info_lead: "Tight-Loose-Tight er en tilgang til ledelse, der bruges til at balancere kontrol og frihed i udførelsen af ​​opgaver. Dette er især nyttigt for os hos Gjensidige, hvor vi ønsker både klar retning, plads til autonomi og kontinuerlig læring.",
+    info_p1: "Formålet med dette værktøj er at give dig et sprog og et udgangspunkt for at reflektere over din måde at lede på.",
     info_ul: [
-      "Selvtest: Du vurderer dig selv – resultaterne gemmes kun lokalt på din enhed.",
-      "Samtalestarter: Testen er lavet til dialog og refleksion, ikke certificering.",
-      "Praktisk: Dine scorer peger på, hvad du kan forstærke eller justere i hverdagen.",
-      "Effekt: Balance mellem styring, autonomi og opfølgning giver fart, læring og kvalitet."
+    ,
+      `Værktøjet hjælper dig med at udforske, hvordan du balancerer Tight-Loose-Tight i din hverdag:
+Tight: Hvor tydelig er du på retning, mandat og rammer?
+Loose: Hvordan faciliterer du frihed, autonomi og ejerskab?
+Tight: Hvordan sikrer du opfølgning, læring og forandring?`,
+      "Selvvurdering: Du vurderer dig selv på en skala fra 1-5, hvor 1 er lav og 5 er høj. Pointen er at starte en refleksion over, hvad dine styrker er, og hvor du kan udvikle dit lederskab.",
+      `Samtalestarter: Værktøjet er designet til refleksion og dialog..
+Dine svar er anonyme, og kun du kan se dine scorer/feedback.`
     ],
     info_foot: "Tip: Udfør testen hurtigt første gang, og vend tilbage efter et par uger for at se fremskridt.",
 
@@ -59,14 +63,18 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
   se: {
     subtitle:"Reflektionsverktyg för ledarskap",
     p1:"Välj språk och gå vidare.",
-    info_h1: "Om detta självtest",
-    info_lead: "Detta är ett enkelt reflektionsverktyg – inte en facit. Syftet är att ge dig ett språk och en startpunkt för samtal om ledarskap – inte att ”mäta” dig.",
-    info_p1: "Metodiken bygger på Tight–Loose–Tight (TLT): först tydlig riktning och ramar (Tight), därefter verklig autonomi och ägarskap i genomförandet (Loose), och till sist systematisk uppföljning, kvalitet och lärande (Tight).",
+    info_h1: "Reflektionsverktyg för ledarskap",
+    info_lead: "Tight–Loose–Tight är ett ledarskapsperspektiv som används för att balansera kontroll och frihet i utförandet av uppgifter. Detta är särskilt användbart för oss på Gjensidige, där vi vill ha både tydlig riktning, utrymme för autonomi och kontinuerligt lärande.",
+    info_p1: "Syftet med detta verktyg är att ge dig ett språk och en utgångspunkt för att reflektera över ditt sätt att leda.",
     info_ul: [
-      "Självtest: Du bedömer dig själv – resultaten sparas endast lokalt på din enhet.",
-      "Samtalsstartare: Testet är gjort för dialog och reflektion, inte certifiering.",
-      "Praktiskt: Dina poäng visar vad du kan förstärka eller justera i vardagen.",
-      "Effekt: Balans mellan styrning, autonomi och uppföljning ger fart, lärande och kvalitet."
+ ,
+      `Verktyget hjälper dig att utforska hur du balanserar Tight–Loose–Tight i din vardag:
+Tight: Hur tydlig är du med riktning, mandat och ramverk?
+Loose: Hur underlättar du frihet, autonomi och ägarskap?
+Tight: Hur säkerställer du uppföljning, lärande och förändring?`,
+      "Självbedömning: Du bedömer dig själv på en skala från 1–5, där 1 är låg och 5 är hög. Poängen är att starta en reflektion över vad dina styrkor är och var du kan utveckla ditt ledarskap.",
+      `Samtalsstartare: Verktyget är utformat för reflektion och dialog.
+Dina svar är anonyma och bara du kan se dina poäng/feedback.`
     ],
     info_foot: "Tips: Gjør testen raskt første gang, og vend tilbake etter noen uker for å se utvikling.",
 
