@@ -22,7 +22,7 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
 
     nameLbl:"Skriv inn ditt navn",
     nameHelp:"Navnet lagres lokalt på enheten og brukes i resultatene.",
-    testYourself:"Test deg selv",
+    testYourself:"Test deg selv – (1 = Lite enig, 5 = Helt enig)",
     update:"Oppdater resultater",
     readmore:"Les resultater",
     reset:"Nullstill",
@@ -47,7 +47,7 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
 
     nameLbl:"Skriv dit navn",
     nameHelp:"Navnet gemmes lokalt på enheden og bruges i resultaterne.",
-    testYourself:"Test dig selv",
+    testYourself:"Test dig selv – (1 = Helt uenig, 5 = Helt enig)",
     update:"Opdater resultater",
     readmore:"Læs resultater",
     reset:"Nulstil",
@@ -72,7 +72,7 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
 
     nameLbl:"Skriv in ditt namn",
     nameHelp:"Namnet sparas lokalt på enheten och används i resultaten.",
-    testYourself:"Testa dig själv",
+    testYourself:"Testa dig själv – (1 = Håller inte med, 5 = Håller helt med)",
     update:"Uppdatera resultat",
     readmore:"Visa resultat",
     reset:"Nollställ",
