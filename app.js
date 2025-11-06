@@ -7,14 +7,13 @@ const L = {
     p1:"Velg språk og gå videre.",
     info_h1: "Refleksjonsverktøy for ledelse",
     info_lead: `Tight–Loose–Tight er en tilnærming til ledelse som brukes for å balansere styring og frihet i gjennomføring av oppgaver. Dette er spesielt nyttig for oss i Gjensidige, hvor vi ønsker både tydelig retning, rom for autonomi og kontinuerlig læring.`,
-    info_p1:      "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
+    info_p1: "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
     info_ul: [
- ,
       `Verktøyet hjelper deg til å utforske hvordan du balanserer Tight–Loose–Tight i din hverdag:
 Tight: Hvor tydelig er du på retning, mandat og rammer?
 Loose: Hvordan legger du til rette for frihet, autonomi og eierskap?
 Tight: Hvordan sikrer du oppfølging, læring og endring?`,
-      "Selvevaluering: Du vurderer deg selv på en skala fra 1–5, der 1 er lav og 5 er høy. Poenget er starte en refleksjon om hva som du har styrker, og hvor du kan utvikle din ledelse.",
+      "Selvevaluering: Du vurderer deg selv på en skala fra 1–5, der 1 er lav og 5 er høy. Poenget er å starte en refleksjon om hva som er styrkene dine, og hvor du kan utvikle din ledelse.",
       `Samtalestarter: Verktøyet er laget for refleksjon og dialog.
 Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
     ],
@@ -35,16 +34,15 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
     subtitle:"Refleksionsværktøj for lederstil",
     p1:"Vælg sprog og gå videre.",
     info_h1: "Refleksionsværktøj til ledelse",
-    info_lead: "Tight-Loose-Tight er en tilgang til ledelse, der bruges til at balancere kontrol og frihed i udførelsen af ​​opgaver. Dette er især nyttigt for os hos Gjensidige, hvor vi ønsker både klar retning, plads til autonomi og kontinuerlig læring.",
+    info_lead: "Tight–Loose–Tight er en tilgang til ledelse, der bruges til at balancere kontrol og frihed i udførelsen af opgaver. Dette er især nyttigt for os hos Gjensidige, hvor vi ønsker både klar retning, plads til autonomi og kontinuerlig læring.",
     info_p1: "Formålet med dette værktøj er at give dig et sprog og et udgangspunkt for at reflektere over din måde at lede på.",
     info_ul: [
-    ,
-      `Værktøjet hjælper dig med at udforske, hvordan du balancerer Tight-Loose-Tight i din hverdag:
+      `Værktøjet hjælper dig med at udforske, hvordan du balancerer Tight–Loose–Tight i din hverdag:
 Tight: Hvor tydelig er du på retning, mandat og rammer?
 Loose: Hvordan faciliterer du frihed, autonomi og ejerskab?
 Tight: Hvordan sikrer du opfølgning, læring og forandring?`,
-      "Selvvurdering: Du vurderer dig selv på en skala fra 1-5, hvor 1 er lav og 5 er høj. Pointen er at starte en refleksion over, hvad dine styrker er, og hvor du kan udvikle dit lederskab.",
-      `Samtalestarter: Værktøjet er designet til refleksion og dialog..
+      "Selvvurdering: Du vurderer dig selv på en skala fra 1–5, hvor 1 er lav og 5 er høj. Pointen er at starte en refleksion over, hvad dine styrker er, og hvor du kan udvikle dit lederskab.",
+      `Samtalestarter: Værktøjet er designet til refleksion og dialog.
 Dine svar er anonyme, og kun du kan se dine scorer/feedback.`
     ],
     info_foot: "Tip: Udfør testen hurtigt første gang, og vend tilbage efter et par uger for at se fremskridt.",
@@ -67,7 +65,6 @@ Dine svar er anonyme, og kun du kan se dine scorer/feedback.`
     info_lead: "Tight–Loose–Tight är ett ledarskapsperspektiv som används för att balansera kontroll och frihet i utförandet av uppgifter. Detta är särskilt användbart för oss på Gjensidige, där vi vill ha både tydlig riktning, utrymme för autonomi och kontinuerligt lärande.",
     info_p1: "Syftet med detta verktyg är att ge dig ett språk och en utgångspunkt för att reflektera över ditt sätt att leda.",
     info_ul: [
- ,
       `Verktyget hjälper dig att utforska hur du balanserar Tight–Loose–Tight i din vardag:
 Tight: Hur tydlig är du med riktning, mandat och ramverk?
 Loose: Hur underlättar du frihet, autonomi och ägarskap?
@@ -76,7 +73,7 @@ Tight: Hur säkerställer du uppföljning, lärande och förändring?`,
       `Samtalsstartare: Verktyget är utformat för reflektion och dialog.
 Dina svar är anonyma och bara du kan se dina poäng/feedback.`
     ],
-    info_foot: "Tips: Gjør testen raskt første gang, og vend tilbake etter noen uker for å se utvikling.",
+    info_foot: "Tips: Gör testet snabbt första gången, och återvänd efter några veckor för att se utveckling.",
 
     nameLbl:"Skriv in ditt namn",
     nameHelp:"Namnet sparas lokalt på enheten och används i resultaten.",
@@ -202,7 +199,7 @@ Fortsett å invitere til dialog om hvordan du kan støtte andre i å fjerne barr
 
 Praktisk tips:
 Sett av tid til refleksjon i møter. Inviter andre til å dele læring. Flytt fokus fra “hva gikk galt” til “hva lærte vi” – læring skaper fremdrift og trygghet. Tør å dele egne feil.`,
-      balanced: `{name}, du har følger opp, men refleksjon, læring og forbedring skjer sporadisk. Fører læringen til faktiske endringer? 
+      balanced: `{name}, du følger opp, men refleksjon, læring og forbedring skjer sporadisk. Fører læringen til faktiske endringer? 
 
 Praktisk tips:
 Etabler en fast rytme for refleksjon og tilbakemelding under og etter leveranser. Tør å dele egne feil. Vis at læring skaper endringer.`,
@@ -321,7 +318,7 @@ function getResultText(category, score, name, lang='no'){
   let template = cat[bucket] || '';
   const displayName = (name && name.trim && name.trim().length > 0)
     ? name.trim()
-    : (langKey === 'dk' ? 'Du' : 'Du'); // evt. særbehandling senere
+    : (langKey === 'dk' ? 'Du' : 'Du');
 
   return template.replaceAll('{name}', displayName);
 }
@@ -446,7 +443,9 @@ function wireName(){
   $('#btn-ok')?.addEventListener('click', ()=>{
     st.name=$('#name').value.trim(); save();
     const i=$('#userNameInline'); if(i) i.textContent=st.name||'';
-    const toastMsg = (st.lang==='dk') ? L.dk.toastName : (st.lang==='se' ? L.se.toastName : L.no.toastName);
+    const toastMsg = (st.lang==='dk')
+      ? L.dk.toastName
+      : (st.lang==='se' ? L.se.toastName : L.no.toastName);
     toast(toastMsg);
   });
   $('#btn-edit')?.addEventListener('click', ()=>{
@@ -454,7 +453,7 @@ function wireName(){
   });
 }
 
-// ---- Accordion (3×5) ----
+// ---- Accordion (3×5) – alltid åpne, spørsmål 1–15 ----
 function renderAccordion(){
   const acc = $('#acc');
   if (!acc) return;
@@ -470,14 +469,13 @@ function renderAccordion(){
     ['t2', 'Tight (2)']
   ];
 
-  // Ny global teller (1–15 i stedet for 1–5 × 3)
   let globalIndex = 1;
 
   sections.forEach(([key, label]) => {
     const questions = currentQs[key];
 
     const it = document.createElement('div');
-    it.className = 'acc-item open'; // alltid åpne (CSS skjuler headeren uansett)
+    it.className = 'acc-item open'; // alltid åpne (CSS skjuler headeren)
 
     const innerHtml = questions.map((text, idx) => {
       const qHtml = `
@@ -504,37 +502,17 @@ function renderAccordion(){
   });
 }
 
-}
-
-
-
-
-// Toggle accordion + choose scale pills
+// Kun håndter pill-klikk (accordion-header finnes ikke lenger visuelt)
 document.body.addEventListener('click',(e)=>{
-  const hd=e.target.closest?.('.acc-hd');
-  if(hd){
-    const k=hd.dataset.key;
-    st.expanded[k]=!st.expanded[k];
-    save();
-    renderAccordion();
-    Object.entries(st.answers).forEach(([key,arr])=>arr.forEach((v,i)=>{
-      if(v){
-        const el=document.querySelector(`.pill[data-q="${key}-${i}"][data-v="${v}"]`);
-        if(el) el.classList.add('active');
-      }
-    }));
-    return;
-  }
   const pill=e.target.closest?.('.pill');
-  if(pill){
-    const q=pill.dataset.q, v=Number(pill.dataset.v);
-    document.querySelectorAll(`.pill[data-q="${q}"]`).forEach(p=>p.classList.remove('active'));
-    pill.classList.add('active');
-    const [key,idx]=q.split('-');
-    st.answers[key][Number(idx)]=v;
-    save();
-    return;
-  }
+  if(!pill) return;
+
+  const q=pill.dataset.q, v=Number(pill.dataset.v);
+  document.querySelectorAll(`.pill[data-q="${q}"]`).forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active');
+  const [key,idx]=q.split('-');
+  st.answers[key][Number(idx)]=v;
+  save();
 });
 
 // ---- Scores & badges ----
@@ -592,7 +570,6 @@ function fillResultsPage(){
         const b=badge25(s, st.lang);
         rb.innerHTML=`<span class="badge ${b.cls}">${b.t}</span>`;
         rv.textContent=`${s}/25`;
-        // BRUK NYE KATEGORI-SPESIFIKKE TEKSTER
         rt.textContent = getResultText(k, s, st.name, st.lang);
       } else {
         r.classList.add('disabled');
@@ -699,7 +676,9 @@ function wireButtons(){
   });
   $('#btn-readmore')?.addEventListener('click', ()=> showPage(5));
   $('#btn-reset')?.addEventListener('click', ()=>{
-    const ask = (st.lang==='dk') ? L.dk.confirmReset : (st.lang==='se' ? L.se.confirmReset : L.no.confirmReset);
+    const ask = (st.lang==='dk')
+      ? L.dk.confirmReset
+      : (st.lang==='se' ? L.se.confirmReset : L.no.confirmReset);
     if(confirm(ask)){
       st.answers={ t1:Array(5).fill(null), loose:Array(5).fill(null), t2:Array(5).fill(null) };
       save();
