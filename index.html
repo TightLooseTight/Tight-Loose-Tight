@@ -167,7 +167,7 @@
       display:inline-block;border:1px solid rgba(255,255,255,.4)
     }
 
-    @media (max-width: 480px) {
+      @media (max-width: 480px) {
       .lang {
         flex-direction: column;
         gap:12px;
@@ -178,15 +178,21 @@
       }
     }
 
+    /* Info-listen skal respektere linjeskift */
     #info-ul li {
       white-space: pre-line;
     }
-    .acc-hd h3 {
+
+    /* Skjul hele headeren på hver blokk (ikke klikkbar lenger) */
+    .acc-hd {
       display: none;
     }
-    .acc-hd span {
-      display: none;
+
+    /* Alltid vis innholdet i hver blokk (alltid "åpen") */
+    .acc-bd {
+      display: block !important;
     }
+  
   </style>
 </head>
 <body>
