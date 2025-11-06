@@ -455,11 +455,59 @@ function wireName(){
 }
 
 // ---- Accordion (3×5) ----
+// ---- Accordion (3×5) ----
 function renderAccordion(){
   const acc = $('#acc');
   if (!acc) return;
 
   acc.innerHTML = '';
+
+  // Spørsmål for valgt språk, faller tilbake til norsk hvis noe mangler
+  const currentQs = QUESTIONS[st.lang] || QUESTIONS.no;
+
+  const sections = [
+    ['t1', 'Tight (1)'],
+    ['loose', 'Loose'],
+    ['t2', 'Tight (2)']
+  ];
+
+  // Ny global teller (1–15 i stedet for 1–5 × 3)
+  let globalIndex = 1;
+
+  sections.forEach(([key, label]) => {
+    const questions = currentQs[key];
+    const isOpen = true; // vi vil ha alle åpne
+
+    const it = document.createElement('div');
+    it.className = 'acc-item open'; // alltid åpne
+
+    it.innerHTML = `
+      <div class="acc-hd" data-key="${key}">
+        <h3>${label}</h3>
+        <span>${isOpen ? '−' : '+'}</span>
+      </div>
+      <div class="acc-bd">
+        ${questions.map((text, idx) => {
+          const qHTML = `
+            <div class="q">
+              <p><strong>${globalIndex}.</strong> ${text}</p>
+              <div class="scale" role="group" aria-label="Skala for ${key}-${idx}">
+                ${[1,2,3,4,5].map(v => `
+                  <span class="pill" data-q="${key}-${idx}" data-v="${v}" tabindex="0">${v}</span>
+                `).join('')}
+              </div>
+            </div>
+          `;
+          globalIndex++;
+          return qHTML;
+        }).join('')}
+      </div>
+    `;
+
+    acc.appendChild(it);
+  });
+}
+
 
   // Spørsmål for valgt språk, faller tilbake til norsk hvis noe mangler
   const currentQs = QUESTIONS[st.lang] || QUESTIONS.no;
