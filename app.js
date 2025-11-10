@@ -452,7 +452,6 @@ function wireName(){
     const n=$('#name'); n?.focus(); n?.select();
   });
 }
-
 // ---- Accordion (1×15) – én blokk med alle spørsmål ----
 function renderAccordion(){
   const acc = $('#acc');
@@ -491,9 +490,26 @@ function renderAccordion(){
   `;
 
   acc.appendChild(it);
-});
 }
 
+// Kun håndter pill-klikk (accordion-header finnes ikke lenger visuelt)
+document.body.addEventListener('click',(e)=>{
+  const pill = e.target.closest?.('.pill');
+  if(!pill) return;
+
+  const q = pill.dataset.q;
+  const v = Number(pill.dataset.v);
+
+  document
+    .querySelectorAll(`.pill[data-q="${q}"]`)
+    .forEach(p => p.classList.remove('active'));
+
+  pill.classList.add('active');
+
+  const [key, idx] = q.split('-');
+  st.answers[key][Number(idx)] = v;
+  save();
+});
 
 // Kun håndter pill-klikk (accordion-header finnes ikke lenger visuelt)
 document.body.addEventListener('click',(e)=>{
