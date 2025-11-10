@@ -453,7 +453,7 @@ function wireName(){
   });
 }
 
-// ---- Accordion (3×5) – alltid åpne, spørsmål 1–15 ----
+// ---- Accordion (1×15) – én blokk med alle spørsmål ----
 function renderAccordion(){
   const acc = $('#acc');
   if (!acc) return;
@@ -463,44 +463,37 @@ function renderAccordion(){
   // Spørsmål for valgt språk, faller tilbake til norsk hvis noe mangler
   const currentQs = QUESTIONS[st.lang] || QUESTIONS.no;
 
-  const sections = [
-    ['t1', 'Tight (1)'],
-    ['loose', 'Loose'],
-    ['t2', 'Tight (2)']
+  // Samle alle spørsmål i én liste (t1 + loose + t2)
+  const allQuestions = [
+    ...currentQs.t1.map((q, i) => ({ text: q, key: 't1', idx: i })),
+    ...currentQs.loose.map((q, i) => ({ text: q, key: 'loose', idx: i })),
+    ...currentQs.t2.map((q, i) => ({ text: q, key: 't2', idx: i }))
   ];
 
   let globalIndex = 1;
 
-  sections.forEach(([key, label]) => {
-    const questions = currentQs[key];
+  const it = document.createElement('div');
+  it.className = 'acc-item open'; // én blokk, alltid åpen
 
-    const it = document.createElement('div');
-    it.className = 'acc-item open'; // alltid åpne (CSS skjuler headeren)
-
-    const innerHtml = questions.map((text, idx) => {
-      const qHtml = `
+  it.innerHTML = `
+    <div class="acc-bd">
+      ${allQuestions.map(q => `
         <div class="q">
-          <p><strong>${globalIndex}.</strong> ${text}</p>
-          <div class="scale" role="group" aria-label="Skala for ${key}-${idx}">
-            ${[1,2,3,4,5].map(v =>
-              `<span class="pill" data-q="${key}-${idx}" data-v="${v}" tabindex="0">${v}</span>`
-            ).join('')}
+          <p><strong>${globalIndex++}.</strong> ${q.text}</p>
+          <div class="scale" role="group" aria-label="Skala for ${q.key}-${q.idx}">
+            ${[1,2,3,4,5].map(v => `
+              <span class="pill" data-q="${q.key}-${q.idx}" data-v="${v}" tabindex="0">${v}</span>
+            `).join('')}
           </div>
         </div>
-      `;
-      globalIndex++;
-      return qHtml;
-    }).join('');
+      `).join('')}
+    </div>
+  `;
 
-    it.innerHTML = `
-      <div class="acc-bd">
-        ${innerHtml}
-      </div>
-    `;
-
-    acc.appendChild(it);
-  });
+  acc.appendChild(it);
+});
 }
+
 
 // Kun håndter pill-klikk (accordion-header finnes ikke lenger visuelt)
 document.body.addEventListener('click',(e)=>{
