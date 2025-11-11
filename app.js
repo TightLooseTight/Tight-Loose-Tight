@@ -3,9 +3,9 @@
 // ---- Localization ----
 const L = {
   no: {
-    subtitle:"Refleksjonsverktøy for lederstil",
+    subtitle:"Refleksjonsverktøy for Ledelse",
     p1:"Velg språk og gå videre.",
-    info_h1: "Refleksjonsverktøy for ledelse",
+    info_h1: "",
     info_lead: `Tight–Loose–Tight er en tilnærming til ledelse som brukes for å balansere styring og frihet i gjennomføring av oppgaver. Dette er spesielt nyttig for oss i Gjensidige, hvor vi ønsker både tydelig retning, rom for autonomi og kontinuerlig læring.`,
     info_p1: "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
     info_ul: [
@@ -31,9 +31,9 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
     confirmReset:"Nullstill alle svar?",
   },
   dk: {
-    subtitle:"Refleksionsværktøj for lederstil",
+    subtitle:"Refleksionsværktøj for Ledelse",
     p1:"Vælg sprog og gå videre.",
-    info_h1: "Refleksionsværktøj til ledelse",
+    info_h1: "",
     info_lead: "Tight–Loose–Tight er en tilgang til ledelse, der bruges til at balancere kontrol og frihed i udførelsen af opgaver. Dette er især nyttigt for os hos Gjensidige, hvor vi ønsker både klar retning, plads til autonomi og kontinuerlig læring.",
     info_p1: "Formålet med dette værktøj er at give dig et sprog og et udgangspunkt for at reflektere over din måde at lede på.",
     info_ul: [
@@ -59,9 +59,9 @@ Dine svar er anonyme, og kun du kan se dine scorer/feedback.`
     confirmReset:"Nulstil alle svar?",
   },
   se: {
-    subtitle:"Reflektionsverktyg för ledarskap",
+    subtitle:"Reflektionsverktyg för Förvaltning",
     p1:"Välj språk och gå vidare.",
-    info_h1: "Reflektionsverktyg för ledarskap",
+    info_h1: "",
     info_lead: "Tight–Loose–Tight är ett ledarskapsperspektiv som används för att balansera kontroll och frihet i utförandet av uppgifter. Detta är särskilt användbart för oss på Gjensidige, där vi vill ha både tydlig riktning, utrymme för autonomi och kontinuerligt lärande.",
     info_p1: "Syftet med detta verktyg är att ge dig ett språk och en utgångspunkt för att reflektera över ditt sätt att leda.",
     info_ul: [
