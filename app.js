@@ -8,15 +8,13 @@ const L = {
     info_h1: "",
     info_lead: `Tight–Loose–Tight er en tilnærming til ledelse som brukes for å balansere styring og frihet i gjennomføring av oppgaver. Dette er spesielt nyttig for oss i Gjensidige, hvor vi ønsker både tydelig retning, rom for autonomi og kontinuerlig læring.`,
     info_p1: "Hensikten med dette verktøyet er å gi deg et språk og et utgangspunkt for å reflektere rundt din måte å lede på.",
-    info_ul: [
-      `Verktøyet hjelper deg til å utforske hvordan du balanserer Tight–Loose–Tight i din hverdag:
-Tight: Hvor tydelig er du på retning, mandat og rammer?
-Loose: Hvordan legger du til rette for frihet, autonomi og eierskap?
-Tight: Hvordan sikrer du oppfølging, læring og endring?`,
-      "Selvevaluering: Du vurderer deg selv på en skala fra 1–5, der 1 er lav og 5 er høy. Poenget er å starte en refleksjon om hva som er styrkene dine, og hvor du kan utvikle din ledelse.",
-      `Samtalestarter: Verktøyet er laget for refleksjon og dialog.
-Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
-    ],
+info_ul: [
+  `Tight: Hvor tydelig er du på retning, mandat og rammer?`,
+  `Loose: Hvordan legger du til rette for frihet, autonomi og eierskap?`,
+  `Tight: Hvordan sikrer du oppfølging, læring og endring?`,
+  `Selvevaluering: Dine svar er anonyme og det er kun du som kan se din score/feedback.`
+],
+
     info_foot: "Tips: Gjør testen raskt første gang, og vend tilbake etter noen uker for å se utvikling.",
 
     nameLbl:"Skriv inn ditt navn",
@@ -36,15 +34,13 @@ Dine svar er anonyme og det er kun du som kan se dine score/feedback.`
     info_h1: "",
     info_lead: "Tight–Loose–Tight er en tilgang til ledelse, der bruges til at balancere kontrol og frihed i udførelsen af opgaver. Dette er især nyttigt for os hos Gjensidige, hvor vi ønsker både klar retning, plads til autonomi og kontinuerlig læring.",
     info_p1: "Formålet med dette værktøj er at give dig et sprog og et udgangspunkt for at reflektere over din måde at lede på.",
-    info_ul: [
-      `Værktøjet hjælper dig med at udforske, hvordan du balancerer Tight–Loose–Tight i din hverdag:
-Tight: Hvor tydelig er du på retning, mandat og rammer?
-Loose: Hvordan faciliterer du frihed, autonomi og ejerskab?
-Tight: Hvordan sikrer du opfølgning, læring og forandring?`,
-      "Selvvurdering: Du vurderer dig selv på en skala fra 1–5, hvor 1 er lav og 5 er høj. Pointen er at starte en refleksion over, hvad dine styrker er, og hvor du kan udvikle dit lederskab.",
-      `Samtalestarter: Værktøjet er designet til refleksion og dialog.
-Dine svar er anonyme, og kun du kan se dine scorer/feedback.`
-    ],
+info_ul: [
+  `Tight: Hvor tydelig er du på retning, mandat og rammer?`,
+  `Loose: Hvordan lægger du til rette for frihed, autonomi og ejerskab?`,
+  `Tight: Hvordan sikrer du opfølgning, læring og forandring?`,
+  `Selvevaluering: Dine svar er anonyme, og det er kun du, der kan se din score/feedback.`
+],
+
     info_foot: "Tip: Udfør testen hurtigt første gang, og vend tilbage efter et par uger for at se fremskridt.",
 
     nameLbl:"Skriv dit navn",
@@ -64,15 +60,13 @@ Dine svar er anonyme, og kun du kan se dine scorer/feedback.`
     info_h1: "",
     info_lead: "Tight–Loose–Tight är ett ledarskapsperspektiv som används för att balansera kontroll och frihet i utförandet av uppgifter. Detta är särskilt användbart för oss på Gjensidige, där vi vill ha både tydlig riktning, utrymme för autonomi och kontinuerligt lärande.",
     info_p1: "Syftet med detta verktyg är att ge dig ett språk och en utgångspunkt för att reflektera över ditt sätt att leda.",
-    info_ul: [
-      `Verktyget hjälper dig att utforska hur du balanserar Tight–Loose–Tight i din vardag:
-Tight: Hur tydlig är du med riktning, mandat och ramverk?
-Loose: Hur underlättar du frihet, autonomi och ägarskap?
-Tight: Hur säkerställer du uppföljning, lärande och förändring?`,
-      "Självbedömning: Du bedömer dig själv på en skala från 1–5, där 1 är låg och 5 är hög. Poängen är att starta en reflektion över vad dina styrkor är och var du kan utveckla ditt ledarskap.",
-      `Samtalsstartare: Verktyget är utformat för reflektion och dialog.
-Dina svar är anonyma och bara du kan se dina poäng/feedback.`
-    ],
+info_ul: [
+  `Tight: Hur tydlig är du med riktning, mandat och ramar?`,
+  `Loose: Hur möjliggör du frihet, autonomi och ägarskap?`,
+  `Tight: Hur säkerställer du uppföljning, lärande och förändring?`,
+  `Självbedömning: Dina svar är anonyma och det är bara du som kan se din score/feedback.`
+],
+
     info_foot: "Tips: Gör testet snabbt första gången, och återvänd efter några veckor för att se utveckling.",
 
     nameLbl:"Skriv in ditt namn",
